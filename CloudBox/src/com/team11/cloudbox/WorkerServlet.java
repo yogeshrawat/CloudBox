@@ -14,6 +14,8 @@ import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 
 /**
@@ -24,7 +26,7 @@ public class WorkerServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private static final Charset UTF_8 = Charset.forName("UTF-8");
-    
+    WorkRequest workRequest= null;
     /**
      * A client to use to access Amazon S3. Pulls credentials from the
      * {@code AwsCredentials.properties} file if found on the classpath,
@@ -51,7 +53,7 @@ public class WorkerServlet extends HttpServlet {
 
             // Parse the work to be done from the POST request body.
             
-            WorkRequest workRequest = WorkRequest.fromJson(request.getInputStream());
+        	workRequest  = WorkRequest.fromJson(request.getInputStream());
 
             // Simulate doing some work.
             
@@ -92,6 +94,15 @@ public class WorkerServlet extends HttpServlet {
             		throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.getWriter().print("Hello World " + new java.util.Date());
+		ListObjectsRequest req = new ListObjectsRequest().withBucketName(workRequest.getBucket());
+		ObjectListing listing = null;
+
+		while((listing == null) || (req.getMarker() != null)) {
+		  listing = s3.listObjects(req);
+		  response.getWriter().print(listing.getBucketName());
+		  // do stuff with listing
+		  req.setMarker(listing.getNextMarker());
+		}
 //		response.getWriter().print("Hello CloudBox");
     	
     }
