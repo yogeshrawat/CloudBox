@@ -94,16 +94,6 @@ public class WorkerServlet extends HttpServlet {
             		throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.getWriter().print("Hello World " + new java.util.Date());
-		ListObjectsRequest req = new ListObjectsRequest().withBucketName(workRequest.getBucket());
-		ObjectListing listing = null;
-
-		while((listing == null) || (req.getMarker() != null)) {
-		  listing = s3.listObjects(req);
-		  response.getWriter().print(listing.getBucketName());
-		  // do stuff with listing
-		  req.setMarker(listing.getNextMarker());
-		}
-//		response.getWriter().print("Hello CloudBox");
     	
     }
     
