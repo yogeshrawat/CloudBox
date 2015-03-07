@@ -38,6 +38,8 @@
 		<span class="subtitle">CloudBox<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Your stuff, anywhere</span>
 		<a id="modal_trigger" href="#modal" class="btn">Click here to Login or register</a>
 	</div>
+	
+	<div class="fb-like" data-href="#" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
 
 	<div id="modal" class="popupContainer" style="display:none;">
 		<header class="popupHeader">
@@ -110,10 +112,10 @@
 					<input type="password" />
 					<br />
 
-					<div class="checkbox">
+					<!-- <div class="checkbox">
 						<input id="send_updates" type="checkbox" />
 						<label for="send_updates">Send me occasional email updates</label>
-					</div>
+					</div> -->
 
 					<div class="action_btns">
 						<div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
