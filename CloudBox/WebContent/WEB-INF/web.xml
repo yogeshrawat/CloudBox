@@ -19,4 +19,14 @@
     <servlet-name>MainEntryServlet</servlet-name>
     <url-pattern>/index.html</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>FBLoginProcessServlet</display-name>
+    <servlet-name>FBLoginProcessServlet</servlet-name>
+    <servlet-class>com.team11.cloudbox.FBLoginProcessServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FBLoginProcessServlet</servlet-name>
+    <url-pattern>/FBLoginProcessServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

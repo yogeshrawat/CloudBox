@@ -52,8 +52,7 @@
     // fr FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      testAPI();
-      window.location.replace("CloudBoxHome.jsp");
+      fetchUserFBInfo();
     }
   }
 
@@ -66,15 +65,17 @@
     });
   }
   
-  // Here we run a very simple test of the Graph API after login is
-  // successful.  See statusChangeCallback() for when this call is made.
-  function testAPI() {
+  var FBUserName, FbUserID, FBUserEmail;
+  // Send user name and id as well as friends list to server
+  function fetchUserFBInfo() {
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
 	  console.log(JSON.stringify(response));
-
-	 <% session.setAttribute("isFBLoggedIn", true);%>
-	 
+	  //Set var userName, fbID, userEmail
+	  FBUserName = response.name;
+	  FbUserID = response.id;
+	  FBUserEmail = response.email;
+	  console.log(FBUserName+","+FbUserID+","+FBUserEmail);
     });
     
 	/* make the API call */
@@ -83,8 +84,24 @@
 		"/me/friends",
 		function (response) {
 		  if (response && !response.error) {
-			console.log(JSON.stringify(response));
-			//Fetch each Friend-Name and ID send to server??
+			console.log(JSON.stringify(response.data));
+			
+			//Fetch each Friend-Name and ID send to server - ajax
+			var sendInfo = {UserName:FBUserName, 
+							Id:FbUserID, 
+							Email:FBUserEmail,
+							Friends:JSON.stringify(response.data)
+						   };
+			  $.ajax({
+	                url:"FBLoginProcessServlet",
+	                type:"POST",
+	                dataType:'json',
+	                data:{userInfo:sendInfo},
+	                success:function(data){
+	                	window.location.replace(data.redirectURL);
+	                }
+	               });
+					
 		  }
 		}
 	);
