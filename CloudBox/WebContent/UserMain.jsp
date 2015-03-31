@@ -6,7 +6,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
-		<title>User-Main Page</title>
+		<title>CloudBox User-Main</title>
 		<%!        
 			public void GetDirectory(String a_Path, Vector<String> a_files, Vector<String> a_folders) {
 			    File l_Directory = new File(a_Path);

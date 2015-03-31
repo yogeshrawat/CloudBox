@@ -1,11 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%> 
 <%
-	boolean fBLogin=true;
-	if(session.getAttribute("UserName")== null || session.getAttribute("UserName").equals(""))
+	boolean fBLogin=false;
+	if(session.getAttribute("isFBLoggedIn")!=null && session.getAttribute("isFBLoggedIn").equals(true))
+	{
+	  	fBLogin = true;
+	}
+	else if(session.getAttribute("isCBLoggedIn")==null || !session.getAttribute("isCBLoggedIn").equals(true))
 	{
 	//	response.sendRedirect("Login.jsp");
-	  	fBLogin = false;
+	//	fBLogin = true;//For test purpose
 	}
 %>
 <%
@@ -18,7 +22,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>CloudBox</title>
+	<title>CloudBox User-Home</title>
 	<link rel="icon" type="image/png" href="res/favicon.png">
 	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
@@ -33,6 +37,14 @@
           xfbml      : true,
           version    : 'v2.2'
         });
+        
+        //Additional initialization
+  	  	FB.Event.subscribe("auth.logout", function() {
+    	  window.location = 'Logout.jsp';
+    	  });
+        
+  	    FB.getLoginStatus(function() {
+  		  });
       };
 
       (function(d, s, id){
@@ -42,7 +54,8 @@
          js.src = "//connect.facebook.net/en_US/sdk.js";
          fjs.parentNode.insertBefore(js, fjs);
        }(document, 'script', 'facebook-jssdk'));
-	   
+      
+      
 </script>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -62,7 +75,7 @@
 	<div id="main">
 		<span class="icon"><img class="logo" src="res/favicon.png"></img></span>
 		<span class="subtitle">CloudBox<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Your stuff, anywhere</span>
-		<a id="modal_trigger" href="#modal" class="btn">View your Stuff on CloudBox</a>
+		<a id="modal_trigger" href="UserMain.jsp" class="btn">View your Stuff on CloudBox</a>
 	</div>
 	
 	<div id="fbShareLike">
@@ -70,8 +83,8 @@
 	</div>
 	
 	<div id="logout_btns">
-		<div class="one_half"><a href="#" id="logout" class="btn">Logout</a></div>
-    	<div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="true" data-auto-logout-link="true" onlogin="checkLoginState();" scope="public_profile,email,user_friends"></div>
+		<div class="one_half"><a href="Logout.jsp" id="logout" class="btn">Logout</a></div>
+    	<div class="fb-login-button" data-max-rows="1" data-size="large" data-auto-logout-link="true"></div>
 	</div>
 </div>
 

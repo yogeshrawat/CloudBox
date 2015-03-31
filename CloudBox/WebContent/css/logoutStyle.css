@@ -1,0 +1,39 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic);
+
+body {font-family: 'Source Sans Pro', sans-serif; font-size: 15px; color: #666;}
+
+.logo {
+	width: auto;
+	height: 40px;
+	vertical-align: middle;
+}
+.subtitle {
+	text-align: center;
+    font-size: 30px;
+    color: #33536D;
+}
+
+#main {margin:100px auto; width:300px; display:block;}
+
+#modal_trigger {
+	margin:30px auto; 
+	width:200px; 
+	display:block;
+	background: linear-gradient(to bottom, #1269A8 0%, #007EE5 100%) repeat scroll 0% 0% transparent;
+	border: 1px solid #0C6EBE;
+	color: #FFF;
+}
+
+.btn {padding:10px 20px; background: #F4F4F2;}
+
+.btn:hover {background: #E4E4E2;}
+
+a.btn {color:#666; text-align: center; text-decoration: none;}
+
+/* FB like and share*/
+h1 {
+  width: 300px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
