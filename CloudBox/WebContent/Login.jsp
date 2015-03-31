@@ -72,7 +72,9 @@
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
 	  console.log(JSON.stringify(response));
-	  //Fetch User-Name and ID send to Server??
+
+	 <% session.setAttribute("isFBLoggedIn", true);%>
+	 
     });
     
 	/* make the API call */

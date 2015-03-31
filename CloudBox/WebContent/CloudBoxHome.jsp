@@ -8,8 +8,7 @@
 	}
 	else if(session.getAttribute("isCBLoggedIn")==null || !session.getAttribute("isCBLoggedIn").equals(true))
 	{
-	//	response.sendRedirect("Login.jsp");
-	//	fBLogin = true;//For test purpose
+		response.sendRedirect("Login.jsp");
 	}
 %>
 <%
@@ -87,7 +86,6 @@
     	<div class="fb-login-button" data-max-rows="1" data-size="large" data-auto-logout-link="true"></div>
 	</div>
 </div>
-
 
 </body>
 </html>
