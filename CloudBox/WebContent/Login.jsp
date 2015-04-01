@@ -21,6 +21,7 @@
 	<link rel="icon" type="image/png" href="res/favicon.png">
 	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 	<script type="text/javascript" src="js/jquery.leanModal.min.js"></script>
+	<script type="text/javascript" src="js/gen_validatorv4.js"></script>
 	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
 	<link type="text/css" rel="stylesheet" href="css/loginStyle.css" />
 </head>
@@ -68,7 +69,6 @@
   var FBUserName, FbUserID, FBUserEmail;
   // Send user name and id as well as friends list to server
   function fetchUserFBInfo() {
-    console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
 	  console.log(JSON.stringify(response));
 	  //Set var userName, fbID, userEmail
@@ -79,7 +79,6 @@
     });
     
 	/* make the API call */
-	console.log('Welcome!  Fetching your friend information.... ');
 	FB.api(
 		"/me/friends",
 		function (response) {
@@ -105,8 +104,7 @@
 		  }
 		}
 	);
-  }
-	   
+  }   
 </script>
 
 <div class="container">
@@ -130,11 +128,6 @@
 						<span class="icon"><i class="fa fa-facebook"></i></span>
 						<span class="icon_title">Connect with Facebook</span>	
 					</a>
-
-					<!--<a href="#" class="social_box google">
-						<span class="icon"><i class="fa fa-google-plus"></i></span>
-						<span class="icon_title">Connect with Google</span>
-					</a>-->
 				</div>
 
 				<div class="centeredText">
@@ -149,57 +142,35 @@
 			
 			<!-- Username & Password Login form -->
 			<div class="user_login">
-				<form>
+				<form name="LoginForm" action="CBLoginServlet" method="post">
 					<label>Email / Username</label>
-					<input type="text" />
+					<input type="text" name="EmailOrUsername" />
 					<br />
-
 					<label>Password</label>
-					<input type="password" />
+					<input type="password" name="Password" />
 					<br />
-					
-					<!--  
-					<div class="checkbox">
-						<input id="remember" type="checkbox" />
-						<label for="remember">Remember me on this computer</label>
-					</div>
-					-->
-
 					<div class="action_btns">
 						<div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
-						<div class="one_half last"><a href="#" class="btn btn_red">Login</a></div>
+						<div class="one_half last"><a href="javascript: submitLogin()" class="btn btn_red">Login</a></div>
 					</div>
 				</form>
-				
-				<!-- 
-				<a href="#" class="forgot_password">Forgot password?</a>
-				-->
 			</div>
 
 			<!-- Register Form -->
 			<div class="user_register">
-				<form>
+				<form name="RegisterForm" action="CBRegServlet" method="post">
 					<label>Full Name</label>
-					<input type="text" />
+					<input type="text" name="UserName" />
 					<br />
-
 					<label>Email Address</label>
-					<input type="email" />
+					<input type="email" name="Email" />
 					<br />
-
 					<label>Password</label>
-					<input type="password" />
+					<input type="password" name="Password" />
 					<br />
-
-					<!-- <div class="checkbox">
-						<input id="send_updates" type="checkbox" />
-						<label for="send_updates">Send me occasional email updates</label>
-					</div> 
-					-->
-
 					<div class="action_btns">
 						<div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a></div>
-						<div class="one_half last"><a href="#" class="btn btn_red">Register</a></div>
+						<div class="one_half last"><a href="javascript: submitRegister()" class="btn btn_red">Register</a></div>
 					</div>
 				</form>
 			</div>
@@ -217,6 +188,47 @@
 		</section>
 	</div>
 </div>
+
+<script type="text/javascript">
+	var loginFormValidator = new Validator("LoginForm");
+	loginFormValidator.addValidation("EmailOrUsername","req", 
+	"Please enter the full name or email");
+	loginFormValidator.addValidation("Password","req", 
+			"Please enter the password");
+	loginFormValidator.addValidation("Password", "alnum", 
+			"Password can only include alpha-number");
+	
+	function submitLogin()
+	{
+	  if(document.LoginForm.onsubmit())
+	  {
+	    document.LoginForm.submit();
+	  }
+	}
+
+	var registerformValidator = new Validator("RegisterForm");
+	registerformValidator.addValidation("UserName","req", 
+			"Please enter the full name");
+	registerformValidator.addValidation("UserName", "alnum_s", 
+			"Full name can only include alpha-number and a space");
+	registerformValidator.addValidation("Email","req", 
+			"Please enter the email address");
+	registerformValidator.addValidation("Email", "email", 
+			"Email should follow email format");
+	registerformValidator.addValidation("Password","req", 
+			"Please enter the password");
+	registerformValidator.addValidation("Password", "alnum", 
+			"Password can only include alpha-number");
+	
+	function submitRegister()
+	{
+	  if(document.RegisterForm.onsubmit())
+	  {
+	    document.RegisterForm.submit();
+	  }
+	}
+	
+</script>
 
 <script type="text/javascript">
 	$("#modal_trigger").leanModal({top : 200, overlay : 0.6, closeButton: ".modal_close" });

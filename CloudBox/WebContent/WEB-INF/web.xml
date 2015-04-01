@@ -29,4 +29,24 @@
     <servlet-name>FBLoginProcessServlet</servlet-name>
     <url-pattern>/FBLoginProcessServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CBRegServlet</display-name>
+    <servlet-name>CBRegServlet</servlet-name>
+    <servlet-class>com.team11.cloudbox.CBRegServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CBRegServlet</servlet-name>
+    <url-pattern>/CBRegServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CBLoginServlet</display-name>
+    <servlet-name>CBLoginServlet</servlet-name>
+    <servlet-class>com.team11.cloudbox.CBLoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CBLoginServlet</servlet-name>
+    <url-pattern>/CBLoginServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
