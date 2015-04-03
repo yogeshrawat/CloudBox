@@ -24,38 +24,11 @@
 	<title>CloudBox User-Home</title>
 	<link rel="icon" type="image/png" href="res/favicon.png">
 	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="js/fblogout.js"></script>
 	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
 	<link type="text/css" rel="stylesheet" href="css/homePageStyle.css" />
 </head>
 <body>
-<script type="text/javascript">
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '421083851380864',
-		  cookie     : true,
-          xfbml      : true,
-          version    : 'v2.2'
-        });
-        
-        //Additional initialization
-  	  	FB.Event.subscribe("auth.logout", function() {
-    	  window.location = 'Logout.jsp';
-    	  });
-        
-  	    FB.getLoginStatus(function() {
-  		  });
-      };
-
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "//connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-      
-      
-</script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		var fBLogin = <%= fBLogin%>;
@@ -74,11 +47,11 @@
 	<div id="main">
 		<span class="icon"><img class="logo" src="res/favicon.png"></img></span>
 		<span class="subtitle">CloudBox<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Your stuff, anywhere</span>
-		<a id="modal_trigger" href="UserMain.jsp" class="btn">View your Stuff on CloudBox</a>
+		<a id="modal_trigger" href="FileDisplayServlet" class="btn">View your Stuff on CloudBox</a>
 	</div>
 	
 	<div id="fbShareLike">
-		<div class="fb-like" data-href="#" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+		<div class="fb-like" data-href="http://localhost:8080/CloudBox/CloudBoxHome.jsp" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
 	</div>
 	
 	<div id="logout_btns">

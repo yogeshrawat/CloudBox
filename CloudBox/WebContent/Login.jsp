@@ -86,9 +86,10 @@
 			console.log(JSON.stringify(response.data));
 			
 			//Fetch each Friend-Name and ID send to server - ajax
-			var sendInfo = {UserName:FBUserName, 
-							Id:FbUserID, 
-							Email:FBUserEmail,
+			var sendInfo = {
+							UserName:JSON.stringify(FBUserName), 
+							Id:JSON.stringify(FbUserID), 
+							Email:JSON.stringify(FBUserEmail),
 							Friends:JSON.stringify(response.data)
 						   };
 			  $.ajax({
@@ -227,7 +228,6 @@
 	    document.RegisterForm.submit();
 	  }
 	}
-	
 </script>
 
 <script type="text/javascript">

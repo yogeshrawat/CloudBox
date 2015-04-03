@@ -60,7 +60,7 @@ public class FBLoginProcessServlet extends HttpServlet {
 			System.err.println("Parse friends list error with msg:"+e.getMessage());
 		}
 		
-		if(fbUserName!="" && fbUserID !="")
+		if(fbUserName != null && fbUserID !=null)
 		{
 			session.setAttribute("isFBLoggedIn", true);
 			

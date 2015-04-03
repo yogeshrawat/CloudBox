@@ -49,4 +49,14 @@
     <servlet-name>CBLoginServlet</servlet-name>
     <url-pattern>/CBLoginServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>FileDisplayServlet</display-name>
+    <servlet-name>FileDisplayServlet</servlet-name>
+    <servlet-class>com.team11.cloudbox.FileDisplayServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FileDisplayServlet</servlet-name>
+    <url-pattern>/FileDisplayServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

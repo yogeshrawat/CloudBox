@@ -1,11 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.io.*" %> 
-<%@ page import="java.util.*" %> 
+<%@ page import="java.util.*" %>
+<%
+	boolean fBLogin=false;
+	if(session.getAttribute("isFBLoggedIn")!=null && session.getAttribute("isFBLoggedIn").equals(true))
+	{
+	  	fBLogin = true;
+	}
+	else if(session.getAttribute("isCBLoggedIn")==null || !session.getAttribute("isCBLoggedIn").equals(true))
+	{
+		response.sendRedirect("Login.jsp");
+	}
+%>
+<%
+	response.setHeader("Pragma", "No-cache");
+	response.setHeader("Cache-Control", "no-cache");
+	response.setHeader("Cache-Control", "must-revalidate");
+	response.setDateHeader("Expires",0);
+%> 
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="js/fblogout.js"></script>
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
+		<link type="text/css" rel="stylesheet" href="css/usermain.css" />
 		<title>CloudBox User-Main</title>
 		<%!        
 			public void GetDirectory(String a_Path, Vector<String> a_files, Vector<String> a_folders) {
@@ -24,23 +44,10 @@
         <%
             Vector<String> l_Files = new Vector<String>(), l_Folders = new Vector<String>();
             GetDirectory("/home/leon/Documents/SOEN6441/", l_Files, l_Folders);
-			/*
-            out.println("<Folders>");
-            for (int a = 0; a < l_Folders.size(); a++) {
-                out.println("<Folder>" + l_Folders.elementAt(a).toString() + "</Folder>");
-            }
-            out.println("</Folders>");            
-            out.println("<Files>");
-            for (int a = 0; a < l_Files.size(); a++) {
-                out.println("<file>" + l_Files.elementAt(a).toString() + "</file>");
-            }
-            out.println("</Files>"); 
-            */
         %>
 		<script type="text/javascript">
 		function insertTable()
 		{
-			document.getElementById("DisplayFiles").style.display = 'none';
 		    var num_rows = <%=l_Folders.size()+l_Files.size()%>;
 		    var num_cols = 4;
 		    
@@ -127,31 +134,30 @@
 		    var tfooter = "</table>";
 		    document.getElementById('wrapper').innerHTML = theader + tbody + tfooter;
 		}
+		
+		$(document).ready(insertTable);
 		</script>
-		<style>
-		#table1
-		{
-		    border:solid 1px;
-		    border-collapse:collapse;
-		}
-		
-		#table1 th
-		{
-		    border:solid 1px;
-		    border-collapse:collapse;
-		}
-		
-		#table1 td
-		{
-		    border:solid 1px;
-		    vertical-align:top;
-		}
-		
-		</style> 
 	</head>
 	<body>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var fBLogin = <%= fBLogin%>;
+	    	if(fBLogin){
+				$(".fb-login-button").show();
+				$(".one_half").hide();
+			}
+	    	else{
+	    		$(".fb-login-button").hide();
+				$(".one_half").show();
+	    	}
+	  	});
+	</script>
+		<div id="logout_btns">
+			<div class="one_half"><a href="Logout.jsp" id="logout" class="btn">Logout</a></div>
+    		<div class="fb-login-button" data-max-rows="1" data-size="large" data-auto-logout-link="true"></div>
+		</div>
 		<form name="tableForm" class="dynTblForm">
-		    <button id="DisplayFiles" type="button" onclick="insertTable()">Create Table</button>
+		   <!--  <button id="DisplayFiles" type="button" onclick="insertTable()">Create Table</button> -->
 		    <div id="wrapper"></div>
 		</form>
 	</body>
