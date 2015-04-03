@@ -1,4 +1,4 @@
-package com.team11.cloudbox;
+package com.app.dynamoDb;
 
 
 /*
@@ -43,7 +43,7 @@ import com.amazonaws.services.dynamodbv2.model.TableDescription;
 import com.amazonaws.services.dynamodbv2.util.Tables;
 
 
-public class UserAuthority {
+public class DynamoUserAuthority {
 
    
     static AmazonDynamoDBClient dynamoDB;
