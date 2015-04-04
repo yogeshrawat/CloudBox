@@ -18,11 +18,6 @@
 	text-align: left;
 }
 
-.highlight
-{
-    visibility: visible;
-}
-
 /* Logout buttons */
 #logout_btns {
     position: absolute;
