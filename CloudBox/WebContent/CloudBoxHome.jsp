@@ -55,7 +55,7 @@
 	</div>
 	
 	<div id="logout_btns">
-		<div class="one_half"><a href="Logout.jsp" id="logout" class="btn">Logout</a></div>
+		<div class="one_half"><a href="Logout.jsp" id="logout"><i class="fa fa-sign-out"></i></a></div>
     	<div class="fb-login-button" data-max-rows="1" data-size="large" data-auto-logout-link="true"></div>
 	</div>
 </div>

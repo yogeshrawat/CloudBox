@@ -46,9 +46,3 @@ a.btn {color:#666; text-align: center; text-decoration: none;}
     top: 0px;
     right: 0px;
 }
-
-#logout {
-	background: linear-gradient(to bottom, #2e2e7d 0%, #2e2e7d 100%) repeat scroll 0% 0% transparent;
-	border: 1px solid #0C6EBE;
-	color: #FFF;
-}
