@@ -124,7 +124,7 @@
 		        			tbody += "<td>";
 		        			 if(i >= <%=l_Folders.size()%>)
 		        			 {
-						            tbody += "<a href='#' style='display:none;'><i class='download icon'></i></a>";    	
+						            tbody += "<div class='ui button' style='display:none;'><i class='download blue icon'></i></div>";    	
 				             }
 				            tbody += "</td>";
 		        			break;
@@ -132,7 +132,14 @@
 		        			tbody += "<td>";
 		        			if(i >= <%=l_Folders.size()%>)
 		        			{
-				            	tbody += "<a href='#' style='display:none;'><i class='undo icon'></i><p>Version</p></a>";
+				            	tbody += "<div class='ui floating dropdown icon button' style='display:none;'>"+
+				            	            "<i class='undo icon'></i><p>Version</p>"+
+				            	            "<div class='menu'>"+
+				            	            "	<div class='header'>Versions</div>"+
+				            	            "   <div class='item'>v1</div>"+
+				            	            "   <div class='item'>v2</div>"+
+				            	            "</div>"+
+				            	         "</div>";
 				            }
 				            tbody += "</td>";
 		        			break;
@@ -140,7 +147,14 @@
 				            tbody += "<td>";
 				            if(i >= <%=l_Folders.size()%>)
 				            {
-					            tbody += "<a href='#' style='display:none;'><i class='share alternate icon'></i><p>share</p></a>";
+				            	tbody += "<div class='ui floating dropdown icon button' style='display:none;'>"+
+				            	            "<i class='share alternate icon'></i><p>share</p>"+
+				            	            "<div class='menu'>"+
+				            	            "	<div class='header'>Share Method</div>"+
+				            	            "   <div class='item'>FB</div>"+
+				            	            "   <div class='item'>CB</div>"+
+				            	            "</div>"+
+				            	         "</div>";
 				            }
 				            tbody += "</td>";
 				            break;
@@ -156,7 +170,7 @@
 				            tbody += "<td class='right aligned collapsing'>";
 				            if(i >= <%=l_Folders.size()%>)
 				            {
-					            tbody += "<a href='#' style='display:none;'><i class='trash icon'></i></a>";
+					            tbody += "<div class='ui button' style='display:none;'><i class='trash red icon'></i></div>";
 			            	}
 				            tbody += "</td>";
 				            break;
@@ -190,14 +204,18 @@
 		$(document).ready(function(){
 			$("tr").hover(
 				function() {
-					$(this).find("td:nth-child(4) a:first-child").css("display", "block");
-					$(this).find("td:nth-child(2n+1) a:first-child").css("display", "block");
+					$(this).find(".ui.button").css("display", "block");
+					//$(this).find("td:nth-child(3) a:first-child").css("display", "block");
 				}, 
 				function() {
-					$(this).find("td:nth-child(4) a:first-child").css("display", "none");
-					$(this).find("td:nth-child(2n+1) a:first-child").css("display", "none");
+					$(this).find(".ui.button").css("display", "none");
 				}
 			);
+			
+			$('.dropdown')
+			  .dropdown({
+			    transition: 'drop'
+			  });
 					
 			$("#logout").click(function(){
 				window.location.replace("Logout.jsp");
