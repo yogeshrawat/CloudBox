@@ -35,6 +35,7 @@ public class FileDisplayServlet extends HttpServlet {
 		
 		if(isCredentialValid){
 		    nextPage = "UserMain.jsp";
+		    session.setAttribute("S3BucketRoot", "/home/leon/Documents/SOEN6441/");
 		}else{
 		    nextPage = "Login.jsp";
 		}

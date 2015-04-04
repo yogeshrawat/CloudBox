@@ -25,6 +25,7 @@
 		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 		<script type="text/javascript" src="js/semantic.js"></script>
 		<script type="text/javascript" src="js/fblogout.js"></script>
+		<script type="text/javascript" src="js/userfilepage.js"></script>		
 		<link type="text/css" rel="stylesheet" href="css/semantic.css" />
 		<link type="text/css" rel="stylesheet" href="css/usermain.css" />
 		<title>CloudBox User-Main</title>
@@ -43,7 +44,7 @@
 			}
 		 %>
         <%
-        	String S3BucketRoot = "/home/leon/Documents/SOEN6441/";
+    		String S3BucketRoot = (String)session.getAttribute("S3BucketRoot");
             Vector<String> l_Files = new Vector<String>(), l_Folders = new Vector<String>();
             GetDirectory(S3BucketRoot, l_Files, l_Folders);
         %>
@@ -132,10 +133,9 @@
 		        			tbody += "<td>";
 		        			if(i >= <%=l_Folders.size()%>)
 		        			{
-				            	tbody += "<div class='ui floating dropdown icon button' style='display:none;'>"+
+				            	tbody += "<div class='ui left floating dropdown icon button' style='display:none;'>"+
 				            	            "<i class='undo icon'></i><p>Version</p>"+
 				            	            "<div class='menu'>"+
-				            	            "	<div class='header'>Versions</div>"+
 				            	            "   <div class='item'>v1</div>"+
 				            	            "   <div class='item'>v2</div>"+
 				            	            "</div>"+
@@ -147,11 +147,13 @@
 				            tbody += "<td>";
 				            if(i >= <%=l_Folders.size()%>)
 				            {
-				            	tbody += "<div class='ui floating dropdown icon button' style='display:none;'>"+
+				            	tbody += "<div class='ui right pointing dropdown icon button' style='display:none;'>"+
 				            	            "<i class='share alternate icon'></i><p>share</p>"+
 				            	            "<div class='menu'>"+
-				            	            "	<div class='header'>Share Method</div>"+
-				            	            "   <div class='item'>FB</div>"+
+				            	            "   <div class='item'>"+
+				            	            "		<div class='fb-share-button' data-href='https://developers.facebook.com/docs/plugins/' data-layout='button'>"+
+				            	            "		</div>"+
+				            	            "	</div>"+
 				            	            "   <div class='item'>CB</div>"+
 				            	            "</div>"+
 				            	         "</div>";
@@ -199,30 +201,26 @@
 	    		$(".fb-login-button").hide();
 				$("#logout").show();
 	    	}
-	  	});
-		
-		$(document).ready(function(){
-			$("tr").hover(
-				function() {
-					$(this).find(".ui.button").css("display", "block");
-					//$(this).find("td:nth-child(3) a:first-child").css("display", "block");
-				}, 
-				function() {
-					$(this).find(".ui.button").css("display", "none");
-				}
-			);
-			
-			$('.dropdown')
-			  .dropdown({
-			    transition: 'drop'
-			  });
-					
-			$("#logout").click(function(){
-				window.location.replace("Logout.jsp");
-			});
-		
-		});
-		
+	    	
+	    	$("tr").hover(
+	    			function() {
+	    				$(this).find(".ui.button").css("display", "block");
+	    			}, 
+	    			function() {
+	    				$(this).find(".ui.button").css("display", "none");
+	    			}
+	    		);
+	    	$('.dropdown')
+		  	  .dropdown({
+		  	    transition: 'drop',
+		  	  	duration: 500,
+			  	delay: {
+			  	  show: 200,
+			  	  hide: 3000,
+			  	  touch: 50
+			  	}
+		  	  });
+	  	});		
 	</script>
 	
 		<div id="logout_btns">
@@ -233,6 +231,10 @@
     		<div class="fb-login-button" data-max-rows="1" data-size="large" data-auto-logout-link="true"></div>
 		</div>
 		
+		<div id="home" class="ui animated fade button">
+		  <div class="visible content"><i class="home icon"></i></div>
+		  <div class="hidden content">Home Page</div>
+		</div>
 		<div id="newfolder" class="ui animated fade button">
 		  <div class="visible content">New</div>
 		  <div class="hidden content">Folder</div>
@@ -243,7 +245,7 @@
 		</div>
 		
 		<form name="tableForm" class="dynTblForm">
-		    <div id="wrapper"></div>
+		  <div id="wrapper"></div>
 		</form>
 		
 	</body>
