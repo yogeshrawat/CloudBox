@@ -35,7 +35,19 @@ public class FileDisplayServlet extends HttpServlet {
 		
 		if(isCredentialValid){
 		    nextPage = "UserMain.jsp";
-		    session.setAttribute("S3BucketRoot", "/home/leon/Documents/SOEN6441/");
+		    String userRoot= "/home/leon/Documents/SOEN6441/";
+		    String curFolder= (String) session.getAttribute("currentDir");
+		    
+		    String subFolderName= request.getParameter("folder");
+		    if(subFolderName==null)
+		    {
+		    	 session.setAttribute("currentDir", userRoot);
+		    }
+		    else
+		    {		    	 
+		    	 session.setAttribute("currentDir", curFolder + subFolderName + "/");
+		    }
+		    
 		}else{
 		    nextPage = "Login.jsp";
 		}

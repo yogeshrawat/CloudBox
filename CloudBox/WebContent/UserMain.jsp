@@ -44,9 +44,9 @@
 			}
 		 %>
         <%
-    		String S3BucketRoot = (String)session.getAttribute("S3BucketRoot");
+    		String S3BucketFolder = (String)session.getAttribute("currentDir");
             Vector<String> l_Files = new Vector<String>(), l_Folders = new Vector<String>();
-            GetDirectory(S3BucketRoot, l_Files, l_Folders);
+            GetDirectory(S3BucketFolder, l_Files, l_Folders);
         %>
 		<script type="text/javascript">
 		function insertTable()
@@ -125,7 +125,7 @@
 		        			tbody += "<td>";
 		        			 if(i >= <%=l_Folders.size()%>)
 		        			 {
-						            tbody += "<div class='ui button' style='display:none;'><i class='download blue icon'></i></div>";    	
+						            tbody += "<div class='ui button download' style='display:none;'><i class='download blue icon'></i></div>";    	
 				             }
 				            tbody += "</td>";
 		        			break;
@@ -154,7 +154,9 @@
 				            	            "		<div class='fb-share-button' data-href='https://developers.facebook.com/docs/plugins/' data-layout='button'>"+
 				            	            "		</div>"+
 				            	            "	</div>"+
-				            	            "   <div class='item'>CB</div>"+
+				            	            "   <div class='item'>"+
+				            	            "		<div class='mini ui button CB Share'>CB Share</div>"+
+				            	            "	</div>"+
 				            	            "</div>"+
 				            	         "</div>";
 				            }
@@ -172,7 +174,7 @@
 				            tbody += "<td class='right aligned collapsing'>";
 				            if(i >= <%=l_Folders.size()%>)
 				            {
-					            tbody += "<div class='ui button' style='display:none;'><i class='trash red icon'></i></div>";
+					            tbody += "<div class='ui button trash' style='display:none;'><i class='trash red icon'></i></div>";
 			            	}
 				            tbody += "</td>";
 				            break;
