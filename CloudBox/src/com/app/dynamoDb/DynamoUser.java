@@ -1,4 +1,7 @@
 package com.app.dynamoDb;
+import com.app.amazonS3.CommunicateS3;
+
+
 /*
  * Copyright 2012-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -97,7 +100,6 @@ public class DynamoUser {
 //            // Add another item
 //            insert("1004", "coen691p", "cloud_computing", "coen691p@gmail.com");
 
-            
             validate("1002","Pratik");
 
 
@@ -131,7 +133,8 @@ public class DynamoUser {
 
     }
     
-    private static void validate(String UserID, String Password){
+    @SuppressWarnings("null")
+	private static void validate(String UserID, String Password){
     	
         
         ScanRequest scanRequest = new ScanRequest("Users");
@@ -146,6 +149,11 @@ public class DynamoUser {
 
         for(Map<String, AttributeValue> item : scanResult.getItems()) {
             System.out.println(item);
+            if(!item.isEmpty()){
+                CommunicateS3 validates3 = null;
+            	validates3.validatedUser();
+            	
+            }
         }
 
     }
