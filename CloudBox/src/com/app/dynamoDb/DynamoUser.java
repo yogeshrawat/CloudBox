@@ -48,12 +48,6 @@ public class DynamoUser {
     static AmazonDynamoDBClient dynamoDB;
 
     /**
-     * The only information needed to create a client are security credentials
-     * consisting of the AWS Access Key ID and Secret Access Key. All other
-     * configuration, such as the service endpoints, are performed
-     * automatically. Client parameters, such as proxies, can be specified in an
-     * optional ClientConfiguration object when constructing a client.
-     *
      * @see com.amazonaws.auth.BasicAWSCredentials
      * @see com.amazonaws.auth.ProfilesConfigFile
      * @see com.amazonaws.ClientConfiguration
@@ -84,21 +78,8 @@ public class DynamoUser {
 
         try {
 //            String tableName = "Users";
-
-
-            // Describe our new table
-//            DescribeTableRequest describeTableRequest = new DescribeTableRequest().withTableName(tableName);
-//            TableDescription tableDescription = dynamoDB.describeTable(describeTableRequest).getTable();
-//            System.out.println("Table Description: " + tableDescription);
-
-            // Add an item
-//            insert("1003", "Leon", "Leon123", "Leon@gmail.com");
-//
-//            // Add another item
-//            insert("1004", "coen691p", "cloud_computing", "coen691p@gmail.com");
-
-            
-            validate("1002","Pratik");
+           
+            getUserID("Pratik");
 
 
         } catch (AmazonServiceException ase) {
@@ -131,14 +112,14 @@ public class DynamoUser {
 
     }
     
-    private static void validate(String UserID, String Password){
+    private static boolean validate(String Email, String Password){
     	
         
         ScanRequest scanRequest = new ScanRequest("Users");
         scanRequest.setConditionalOperator(ConditionalOperator.AND);
 
         Map<String, Condition> scanFilter = new HashMap<String, Condition>();
-        scanFilter.put("UserID", new Condition().withAttributeValueList(new AttributeValue(UserID)).withComparisonOperator(ComparisonOperator.EQ));
+        scanFilter.put("Email", new Condition().withAttributeValueList(new AttributeValue(Email)).withComparisonOperator(ComparisonOperator.EQ));
         scanFilter.put("Password", new Condition().withAttributeValueList(new AttributeValue(Password)).withComparisonOperator(ComparisonOperator.EQ));
 
         scanRequest.setScanFilter(scanFilter);
@@ -146,8 +127,32 @@ public class DynamoUser {
 
         for(Map<String, AttributeValue> item : scanResult.getItems()) {
             System.out.println(item);
+            if(!item.isEmpty())    	
+            	return true;
         }
+		return false;
+        
 
+    }
+    
+    public static void getUserID(String UserName)
+    {
+    	 
+        ScanRequest scanRequest = new ScanRequest("Users");
+        scanRequest.setConditionalOperator(ConditionalOperator.OR);
+
+        Map<String, Condition> scanFilter = new HashMap<String, Condition>();
+        scanFilter.put("Email", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
+        scanFilter.put("Password", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
+
+        scanRequest.setScanFilter(scanFilter);
+        ScanResult scanResult = dynamoDB.scan(scanRequest);
+
+        for(Map<String, AttributeValue> item : scanResult.getItems()) {
+            System.out.println(item.get("UserID"));
+            //return item.get("UserID");
+    	
+        }
     }
  
 }
