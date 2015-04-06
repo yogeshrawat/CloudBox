@@ -73,11 +73,6 @@ public class AmazonS3User {
 		this.uid = uid;
 	}
 
-	/**
-	 * @return the usWest2
-	 */
-	public Region getUsWest2() {
-		return usWest2;
-	}
+	
 
 }
