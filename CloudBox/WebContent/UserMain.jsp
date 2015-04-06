@@ -17,37 +17,37 @@
 	response.setHeader("Cache-Control", "no-cache");
 	response.setHeader("Cache-Control", "must-revalidate");
 	response.setDateHeader("Expires",0);
-%> 
+%>
+	<%!        
+		public void GetDirectory(String a_Path, Vector<String> a_files, Vector<String> a_folders) {
+		    File l_Directory = new File(a_Path);
+		    File[] l_files = l_Directory.listFiles();
+		
+		    for (int c = 0; c < l_files.length; c++) {
+		        if (l_files[c].isDirectory()) {
+		            a_folders.add(l_files[c].getName());
+		        } else {
+		            a_files.add(l_files[c].getName());
+		        }
+		    }
+		}
+	 %>
+     <%
+ 		String S3BucketFolder = (String)session.getAttribute("currentDir");
+         Vector<String> l_Files = new Vector<String>(), l_Folders = new Vector<String>();
+         GetDirectory(S3BucketFolder, l_Files, l_Folders);
+     %> 
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 		<script type="text/javascript" src="js/semantic.js"></script>
-		<script type="text/javascript" src="js/fblogout.js"></script>
-		<script type="text/javascript" src="js/userfilepage.js"></script>		
+		<script type="text/javascript" src="js/fblogout.js"></script>		
 		<link type="text/css" rel="stylesheet" href="css/semantic.css" />
 		<link type="text/css" rel="stylesheet" href="css/usermain.css" />
 		<title>CloudBox User-Main</title>
-		<%!        
-			public void GetDirectory(String a_Path, Vector<String> a_files, Vector<String> a_folders) {
-			    File l_Directory = new File(a_Path);
-			    File[] l_files = l_Directory.listFiles();
-			
-			    for (int c = 0; c < l_files.length; c++) {
-			        if (l_files[c].isDirectory()) {
-			            a_folders.add(l_files[c].getName());
-			        } else {
-			            a_files.add(l_files[c].getName());
-			        }
-			    }
-			}
-		 %>
-        <%
-    		String S3BucketFolder = (String)session.getAttribute("currentDir");
-            Vector<String> l_Files = new Vector<String>(), l_Folders = new Vector<String>();
-            GetDirectory(S3BucketFolder, l_Files, l_Folders);
-        %>
+
 		<script type="text/javascript">
 		function insertTable()
 		{
@@ -113,7 +113,7 @@
 				            tbody += "<td>";
 				            if(i < <%=l_Folders.size()%>)
 			            	{
-					            tbody += "<a class='traverseFolder' href='"+folder[i]+"'>"+folder[i]+"</a>";     	
+					            tbody += "<a class='traverseFolder'>"+folder[i]+"</a>";     	
 			            	}
 			          		else
 			            	{
@@ -187,51 +187,25 @@
 		    var tfooter = "</table>";
 		    document.getElementById('wrapper').innerHTML = theader + tbody + tfooter;
 		}
-		
-		$(document).ready(insertTable);
 		</script>
 	</head>
-	<body>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			var fBLogin = <%= fBLogin%>;
-	    	if(fBLogin){
-				$(".fb-login-button").show();
-				$("#logout").hide();
-			}
-	    	else{
-	    		$(".fb-login-button").hide();
-				$("#logout").show();
-	    	}
-	    	
-	    	$("tr").hover(
-	    			function() {
-	    				$(this).find(".ui.button").css("display", "block");
-	    			}, 
-	    			function() {
-	    				$(this).find(".ui.button").css("display", "none");
-	    			}
-	    		);
-	    	$('.dropdown')
-		  	  .dropdown({
-		  	    transition: 'drop',
-		  	  	duration: 500,
-			  	delay: {
-			  	  show: 200,
-			  	  hide: 3000,
-			  	  touch: 50
-			  	}
-		  	  });
-	    	
-			$(".traverseFolder").click(function(){
-				var subFolder = $(this).closest("a").text();
-				$.get("FileDisplayServlet", 
-						{folder: subFolder}, 
-						function(){ location.reload();}
-				);
-			});
-	  	});
-	</script>
+	<body>		
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var fBLogin = <%= fBLogin%>;
+		    	if(fBLogin){
+					$(".fb-login-button").show();
+					$("#logout").hide();
+				}
+		    	else{
+		    		$(".fb-login-button").hide();
+					$("#logout").show();
+		    	}
+		    	
+		    	insertTable();
+		  	});
+		</script>
+		<script type="text/javascript" src="js/userfilepage.js"></script>
 	
 		<div id="logout_btns">
 			<div id="logout" class="ui animated button">
@@ -257,6 +231,22 @@
 		<form name="tableForm" class="dynTblForm">
 		  <div id="wrapper"></div>
 		</form>
+		
+		<div class="small ui modal">
+		  <i class="close icon"></i>
+		  <div class="header">
+		    Share to CloudBox user
+		  </div>
+		  <div class="content">
+		    <div class="ui large fluid input share">
+		  	<input placeholder="Email/Full Name" type="text">
+		    </div>
+		  </div>
+		  <div class="actions">
+		    <div class="ui button">Cancel</div>
+		    <div class="ui button">OK</div>
+		  </div>
+		</div>
 		
 	</body>
 </html>
