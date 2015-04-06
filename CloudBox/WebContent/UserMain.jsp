@@ -36,6 +36,7 @@
  		String S3BucketFolder = (String)session.getAttribute("currentDir");
          Vector<String> l_Files = new Vector<String>(), l_Folders = new Vector<String>();
          GetDirectory(S3BucketFolder, l_Files, l_Folders);
+         int versions= 2;
      %> 
 <!DOCTYPE html>
 <html>
@@ -133,12 +134,17 @@
 		        			tbody += "<td>";
 		        			if(i >= <%=l_Folders.size()%>)
 		        			{
-				            	tbody += "<div class='ui left floating dropdown icon button' style='display:none;'>"+
+		        				var versionNum = <%= versions %>;
+		        				var latestVer= versionNum-1;
+		        				var content= "";		        				
+		        				for(var k=0; k<versionNum;k++)
+		        				{
+		        					content += "<div class='item version number'>"+k+"</div>";
+		        				}
+		        				
+				            	tbody += "<div class='ui left floating dropdown icon button file version' style='display:none;' data-version='"+latestVer+"'>"+
 				            	            "<i class='undo icon'></i><p>Version</p>"+
-				            	            "<div class='menu'>"+
-				            	            "   <div class='item'>v1</div>"+
-				            	            "   <div class='item'>v2</div>"+
-				            	            "</div>"+
+				            	            "<div class='menu'>"+content+"</div>"+
 				            	         "</div>";
 				            }
 				            tbody += "</td>";
