@@ -16,6 +16,7 @@ import com.app.amazonS3.CommunicateS3;
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,79 +49,59 @@ import com.amazonaws.services.dynamodbv2.util.Tables;
 public class DynamoUser {
 
    
-    static AmazonDynamoDBClient dynamoDB;
+	public String UserID;
+	public String UserName;
+	public String Password;
+	public String Email;
 
-    /**
-     * The only information needed to create a client are security credentials
-     * consisting of the AWS Access Key ID and Secret Access Key. All other
-     * configuration, such as the service endpoints, are performed
-     * automatically. Client parameters, such as proxies, can be specified in an
-     * optional ClientConfiguration object when constructing a client.
-     *
-     * @see com.amazonaws.auth.BasicAWSCredentials
-     * @see com.amazonaws.auth.ProfilesConfigFile
-     * @see com.amazonaws.ClientConfiguration
-     */
-    private static void init() throws Exception {
-        /*
-         * The ProfileCredentialsProvider will return your [default]
-         * credential profile by reading from the credentials file located at
-         * (C:\\Users\\yogeshrawat\\.aws\\credentials).
-         */
-        AWSCredentials credentials = null;
-        try {
-            credentials = new ProfileCredentialsProvider("default").getCredentials();
-        } catch (Exception e) {
-            throw new AmazonClientException(
-                    "Cannot load the credentials from the credential profiles file. " +
-                    "Please make sure that your credentials file is at the correct " +
-                    "location (C:\\Users\\yogeshrawat\\.aws\\credentials), and is in valid format.",
-                    e);
-        }
-        dynamoDB = new AmazonDynamoDBClient(credentials);
-        Region usWest2 = Region.getRegion(Regions.US_WEST_2);
-        dynamoDB.setRegion(usWest2);
-    }
+	public AmazonDynamoDBClient dynamoDB;
+	public AWSCredentials credentials;
+	public DynamoUser(){
+	   
+	    credentials = new ProfileCredentialsProvider("default").getCredentials();
+	    dynamoDB = new AmazonDynamoDBClient(credentials);
+	    Region usWest2 = Region.getRegion(Regions.US_WEST_2);
+	    dynamoDB.setRegion(usWest2);		    
+	}
+	
 
-    public static void main(String[] args) throws Exception {
-        init();        
+    public String getUserID() {
+		return UserID;
+	}
 
-        try {
-//            String tableName = "Users";
+	public void setUserID(String userID) {
+		UserID = userID;
+	}
 
+	public String getUserName() {
+		return UserName;
+	}
 
-            // Describe our new table
-//            DescribeTableRequest describeTableRequest = new DescribeTableRequest().withTableName(tableName);
-//            TableDescription tableDescription = dynamoDB.describeTable(describeTableRequest).getTable();
-//            System.out.println("Table Description: " + tableDescription);
+	public void setUserName(String userName) {
+		UserName = userName;
+	}
 
-            // Add an item
-//            insert("1003", "Leon", "Leon123", "Leon@gmail.com");
-//
-//            // Add another item
-//            insert("1004", "coen691p", "cloud_computing", "coen691p@gmail.com");
-
-            validate("1002","Pratik");
+	public String getPassword() {
+		return Password;
+	}
+	
+	public void setPassword(String password) {
+		Password = password;
+	}
 
 
-        } catch (AmazonServiceException ase) {
-            System.out.println("Caught an AmazonServiceException, which means your request made it "
-                    + "to AWS, but was rejected with an error response for some reason.");
-            System.out.println("Error Message:    " + ase.getMessage());
-            System.out.println("HTTP Status Code: " + ase.getStatusCode());
-            System.out.println("AWS Error Code:   " + ase.getErrorCode());
-            System.out.println("Error Type:       " + ase.getErrorType());
-            System.out.println("Request ID:       " + ase.getRequestId());
-        } catch (AmazonClientException ace) {
-            System.out.println("Caught an AmazonClientException, which means the client encountered "
-                    + "a serious internal problem while trying to communicate with AWS, "
-                    + "such as not being able to access the network.");
-            System.out.println("Error Message: " + ace.getMessage());
-        }
-    }
     
 
-    private static void insert(String UserID, String UserName, String Password, String Email)
+   
+	public String getEmail() {
+		return Email;
+	}
+	
+	public void setEmail(String email) {
+		Email = email;
+	}
+	
+    private  void insert(String UserID, String UserName, String Password, String Email)
     {
     	 Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
          item.put("UserID", new AttributeValue(UserID));
@@ -132,16 +113,15 @@ public class DynamoUser {
          PutItemResult putItemResult = dynamoDB.putItem(putItemRequest);
 
     }
-    
-    @SuppressWarnings("null")
-	private static void validate(String UserID, String Password){
+
+    private  boolean validate(String Email, String Password){
     	
         
         ScanRequest scanRequest = new ScanRequest("Users");
         scanRequest.setConditionalOperator(ConditionalOperator.AND);
 
         Map<String, Condition> scanFilter = new HashMap<String, Condition>();
-        scanFilter.put("UserID", new Condition().withAttributeValueList(new AttributeValue(UserID)).withComparisonOperator(ComparisonOperator.EQ));
+        scanFilter.put("Email", new Condition().withAttributeValueList(new AttributeValue(Email)).withComparisonOperator(ComparisonOperator.EQ));
         scanFilter.put("Password", new Condition().withAttributeValueList(new AttributeValue(Password)).withComparisonOperator(ComparisonOperator.EQ));
 
         scanRequest.setScanFilter(scanFilter);
@@ -149,13 +129,33 @@ public class DynamoUser {
 
         for(Map<String, AttributeValue> item : scanResult.getItems()) {
             System.out.println(item);
-            if(!item.isEmpty()){
-                CommunicateS3 validates3 = null;
-            	validates3.validatedUser(null);
-            	
-            }
-        }
 
+            if(!item.isEmpty())    	
+            	return true;
+        }
+		return false;
+        
+
+    }
+    
+    public  void getUserID(String UserName)
+    {
+    	 
+        ScanRequest scanRequest = new ScanRequest("Users");
+        scanRequest.setConditionalOperator(ConditionalOperator.OR);
+
+        Map<String, Condition> scanFilter = new HashMap<String, Condition>();
+        scanFilter.put("Email", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
+        scanFilter.put("Password", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
+
+        scanRequest.setScanFilter(scanFilter);
+        ScanResult scanResult = dynamoDB.scan(scanRequest);
+
+        for(Map<String, AttributeValue> item : scanResult.getItems()) {
+            System.out.println(item.get("UserID"));
+            //return item.get("UserID");
+    	
+        }
     }
  
 }
