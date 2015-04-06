@@ -87,16 +87,15 @@
 			
 			//Fetch each Friend-Name and ID send to server - ajax
 			var sendInfo = {
-							UserName:JSON.stringify(FBUserName), 
-							Id:JSON.stringify(FbUserID), 
-							Email:JSON.stringify(FBUserEmail),
-							Friends:JSON.stringify(response.data)
+							UserName:FBUserName, 
+							Id:FbUserID, 
+							Email:FBUserEmail
 						   };
 			  $.ajax({
 	                url:"FBLoginProcessServlet",
 	                type:"POST",
 	                dataType:'json',
-	                data:{userInfo:sendInfo},
+	                data:sendInfo,
 	                success:function(data){
 	                	window.location.replace(data.redirectURL);
 	                }

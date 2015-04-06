@@ -113,7 +113,7 @@
 				            tbody += "<td>";
 				            if(i < <%=l_Folders.size()%>)
 			            	{
-					            tbody += "<a href='#'>"+folder[i]+"</a>";     	
+					            tbody += "<a class='traverseFolder' href='"+folder[i]+"'>"+folder[i]+"</a>";     	
 			            	}
 			          		else
 			            	{
@@ -222,7 +222,15 @@
 			  	  touch: 50
 			  	}
 		  	  });
-	  	});		
+	    	
+			$(".traverseFolder").click(function(){
+				var subFolder = $(this).closest("a").text();
+				$.get("FileDisplayServlet", 
+						{folder: subFolder}, 
+						function(){ location.reload();}
+				);
+			});
+	  	});
 	</script>
 	
 		<div id="logout_btns">

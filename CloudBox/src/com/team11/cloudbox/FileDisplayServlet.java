@@ -44,18 +44,23 @@ public class FileDisplayServlet extends HttpServlet {
 		    	 session.setAttribute("currentDir", userRoot);
 		    }
 		    else
-		    {		    	 
-		    	 session.setAttribute("currentDir", curFolder + subFolderName + "/");
-		    }
+		    	if(subFolderName.compareTo("/")==0)
+		    	{
+		    		session.setAttribute("currentDir", userRoot);
+		    		return;
+		    	}
+			    else
+			    {		    	 
+			    	 session.setAttribute("currentDir", curFolder + subFolderName + "/");
+			    	 return;
+			    }
 		    
-		}else{
+		}
+		else
+		{
 		    nextPage = "Login.jsp";
 		}
 		
-		response.setHeader("Pragma", "No-cache");
-		response.setHeader("Cache-Control", "no-cache");
-		response.setHeader("Cache-Control", "must-revalidate");
-		response.setDateHeader("Expires",0);
 		response.sendRedirect(nextPage);
 	}
 
@@ -63,8 +68,6 @@ public class FileDisplayServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+			
 	}
-
 }
