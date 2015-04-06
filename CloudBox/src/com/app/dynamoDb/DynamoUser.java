@@ -151,7 +151,7 @@ public class DynamoUser {
             System.out.println(item);
             if(!item.isEmpty()){
                 CommunicateS3 validates3 = null;
-            	validates3.validatedUser();
+            	validates3.validatedUser(null);
             	
             }
         }
