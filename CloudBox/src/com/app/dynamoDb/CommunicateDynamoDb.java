@@ -10,8 +10,8 @@ public class CommunicateDynamoDb {
 	public static void main(String args[])
 	{
 		DynamoSharedURL fb = new DynamoSharedURL();
-		//fb.insert("www.gmai.com","1014");
-		fb.remove("www.gmai.com");
+		fb.insert("www.gmai.com");
+		//fb.remove("www.gmai.com");
 	}
 
 }

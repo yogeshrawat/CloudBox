@@ -24,7 +24,6 @@ import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
 public class DynamoSharedURL {
 	
 	public String FileURL;
-	public String Owner;
 	public String TimeCreated;
 	AmazonDynamoDBClient dynamoDB;
 	AWSCredentials credentials;
@@ -44,12 +43,7 @@ public class DynamoSharedURL {
 	public void setFileURL(String fileURL) {
 		FileURL = fileURL;
 	}
-	public String getOwner() {
-		return Owner;
-	}
-	public void setOwner(String owner) {
-		Owner = owner;
-	}
+	
 	
 	public String getTimeCreated() {
 		return TimeCreated;
@@ -59,14 +53,13 @@ public class DynamoSharedURL {
 		TimeCreated = timeCreated;
 	}	
 	
-    public void insert(String FileURL, String Owner){
+    public void insert(String FileURL){
 		
     	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    	Date date = new Date(0);
+    	Date date = new Date(System.currentTimeMillis());
     	System.out.println("time "+dateFormat.format(date));
 		Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
         item.put("FileURL", new AttributeValue(FileURL));
-        item.put("Owner", new AttributeValue(Owner));
         item.put("TimeCreated", new AttributeValue(dateFormat.format(date)));
 
         
