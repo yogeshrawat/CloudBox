@@ -88,11 +88,8 @@ public class DynamoUser {
 	public void setPassword(String password) {
 		Password = password;
 	}
-
-
-    
-
-   
+	
+	
 	public String getEmail() {
 		return Email;
 	}
@@ -138,7 +135,7 @@ public class DynamoUser {
 
     }
     
-    public  void getUserID(String UserName)
+    public void getUserID(String UserName)
     {
     	 
         ScanRequest scanRequest = new ScanRequest("Users");

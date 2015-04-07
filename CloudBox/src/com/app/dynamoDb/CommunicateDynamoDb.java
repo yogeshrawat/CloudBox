@@ -1,12 +1,17 @@
 package com.app.dynamoDb;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+
 public class CommunicateDynamoDb {
 	
 	public static void main(String args[])
 	{
-		DynamoFacebookUsers fb = new DynamoFacebookUsers();
-		//fb.insert("1010", "james", "james@gmail.com");
-		fb.getUserID("james@gmail.com");
+		DynamoSharedURL fb = new DynamoSharedURL();
+		//fb.insert("www.gmai.com","1014");
+		fb.remove("www.gmai.com");
 	}
 
 }

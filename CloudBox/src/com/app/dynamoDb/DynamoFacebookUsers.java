@@ -100,8 +100,6 @@ public class DynamoFacebookUsers
 
     }
     
-    
-
 
 	public AttributeValue getUserID(String UserName)
     {

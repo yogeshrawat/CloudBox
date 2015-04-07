@@ -1,5 +1,8 @@
 package com.app.dynamoDb;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,15 +14,18 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.PutItemResult;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
 
 public class DynamoSharedURL {
 	
-	public String SharedURL;
+	public String FileURL;
 	public String Owner;
+	public String TimeCreated;
 	AmazonDynamoDBClient dynamoDB;
 	AWSCredentials credentials;
 	public DynamoSharedURL(){
@@ -32,11 +38,11 @@ public class DynamoSharedURL {
 	}
 	
 	
-	public String getSharedURL() {
-		return SharedURL;
+	public String getFileURL() {
+		return FileURL;
 	}
 	public void setFileURL(String fileURL) {
-		SharedURL = fileURL;
+		FileURL = fileURL;
 	}
 	public String getOwner() {
 		return Owner;
@@ -45,13 +51,26 @@ public class DynamoSharedURL {
 		Owner = owner;
 	}
 	
-    public void insert(String Owner, String FileURL){
+	public String getTimeCreated() {
+		return TimeCreated;
+	}
+
+	public void setTimeCreated(String timeCreated) {
+		TimeCreated = timeCreated;
+	}	
+	
+    public void insert(String FileURL, String Owner){
 		
+    	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    	Date date = new Date(0);
+    	System.out.println("time "+dateFormat.format(date));
 		Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
         item.put("FileURL", new AttributeValue(FileURL));
         item.put("Owner", new AttributeValue(Owner));
+        item.put("TimeCreated", new AttributeValue(dateFormat.format(date)));
+
         
-        PutItemRequest putItemRequest = new PutItemRequest("FilesURL", item);
+        PutItemRequest putItemRequest = new PutItemRequest("SharedURL", item);
         PutItemResult putItemResult = dynamoDB.putItem(putItemRequest);
 
 		
@@ -59,7 +78,7 @@ public class DynamoSharedURL {
 	
 	public void read(String FileURL){
 		
-		ScanRequest scanRequest = new ScanRequest("FilesURL");
+		ScanRequest scanRequest = new ScanRequest("SharedURL");
 
         Map<String, Condition> scanFilter = new HashMap<String, Condition>();
         scanFilter.put("FileURL", new Condition().withAttributeValueList(new AttributeValue(FileURL)).withComparisonOperator(ComparisonOperator.EQ));
@@ -72,8 +91,27 @@ public class DynamoSharedURL {
         }
 		}
 	
-	public void remove(){
-		
-	}	
+	public void remove(String FileURL){
+
+		ScanRequest scanRequest = new ScanRequest("SharedURL");
+		Map<String, Condition> scanFilter = new HashMap<String, Condition>();
+		scanFilter.put("FileURL", new Condition().withAttributeValueList(new AttributeValue(FileURL)).withComparisonOperator(ComparisonOperator.EQ));
+		scanRequest.setScanFilter(scanFilter);
+		ScanResult scanResult = dynamoDB.scan(scanRequest);
+
+		if(!(scanResult.getCount()==0)){
+			HashMap<String, AttributeValue> key = new HashMap<String, AttributeValue>();
+			key.put("FileURL", new AttributeValue(FileURL));
+			DeleteItemRequest deleteRequest = new DeleteItemRequest().withTableName("SharedURL").withKey(key);
+			dynamoDB.deleteItem(deleteRequest);
+		}
+		else
+		{
+			System.out.println("No item Found");
+		}
+	}
+
+
+	
 
 }
