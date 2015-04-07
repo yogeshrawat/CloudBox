@@ -153,10 +153,10 @@
 				            tbody += "<td>";
 				            if(i >= <%=l_Folders.size()%>)
 				            {
-				            	tbody += "<div class='ui right pointing dropdown icon button' style='display:none;'>"+
+				            	tbody += "<div class='ui right pointing dropdown icon button mainshare' style='display:none;'>"+
 				            	            "<i class='share alternate icon'></i><p>share</p>"+
 				            	            "<div class='menu'>"+
-				            	            "   <div class='item'>"+
+				            	            "   <div class='item fb share'>"+
 				            	            "		<div class='fb-share-button' data-href='https://developers.facebook.com/docs/plugins/' data-layout='button'>"+
 				            	            "		</div>"+
 				            	            "	</div>"+
@@ -178,10 +178,7 @@
 		        			break;
 		        		case 6:
 				            tbody += "<td class='right aligned collapsing'>";
-				            if(i >= <%=l_Folders.size()%>)
-				            {
-					            tbody += "<div class='ui button trash' style='display:none;'><i class='trash red icon'></i></div>";
-			            	}
+					        tbody += "<div class='ui button trash' style='display:none;'><i class='trash red icon'></i></div>";
 				            tbody += "</td>";
 				            break;
 		        	}
@@ -238,7 +235,23 @@
 		  <div id="wrapper"></div>
 		</form>
 		
-		<div class="small ui modal">
+		<div class="small ui modal folder">
+		  <i class="close icon"></i>
+		  <div class="header">
+		    New folder name
+		  </div>
+		  <div class="content">
+		    <div class="ui large fluid input folder">
+		  	<input placeholder="Email/Full Name" type="text">
+		    </div>
+		  </div>
+		  <div class="actions">
+		    <div class="ui button">Cancel</div>
+		    <div class="ui button folder">OK</div>
+		  </div>
+		</div>		
+		
+		<div class="small ui modal share">
 		  <i class="close icon"></i>
 		  <div class="header">
 		    Share to CloudBox user
@@ -250,7 +263,7 @@
 		  </div>
 		  <div class="actions">
 		    <div class="ui button">Cancel</div>
-		    <div class="ui button">OK</div>
+		    <div class="ui button share">OK</div>
 		  </div>
 		</div>
 		

@@ -42,16 +42,32 @@ $(document).ready(function(){
 		$.get("FileDisplayServlet", 
 				{folder: subFolder}, 
 				function(){ 
-				  tempAlert("Abou to open folder:"+subFolder, 2500, "green");
+				  tempAlert("About to open folder:"+subFolder, 2500, "green");
 				  location.reload();
 				}
 		);
 	});
 	
-	$(".ui.button.CB.Share").click(function(){
-		$('.ui.modal')
-		  .modal('show')
-		;
+	$("#newfolder").click(function(){
+		$('.ui.modal.folder')
+		.modal('show');
+	});
+	
+	$(".ui.button.folder").click(function(){
+		var folderName = $(".input.folder").children("input:first-child").val();
+		$.get("CreateFolderServlet", 
+				{NewFolder: folderName}, 
+				function(){ 
+				  tempAlert("Created new folder:"+folderName, 2500, "green");
+				  location.reload();
+				}
+		);		
+	});
+	
+	//TBD-Place marker for upload
+	
+	$(".ui.button.download").click(function(){
+		//TBD
 	});
 	
 	$(".item.version.number").click(function(){
@@ -60,6 +76,57 @@ $(document).ready(function(){
 		console.log("Version is:" + div.getAttribute("data-version"));
 		div.dataset.version = targetVersion;
 		console.log("Current version is:" + div.dataset.version);
+		
+		//TBD-set the actual file link in FB share
+	});
+	
+	$(".ui.button.CB.Share").click(function(){
+		$('.ui.modal.share')
+		  .modal('show');
+		
+		curFocusedFile = $(this).closest("tr").children("td:nth-child(2)").text();
+		console.log("File focused:"+curFocusedFile);
+		curFocuedFileVersion = $(this).closest("tr").find(":nth-child(4)").find(".file.version")[0].dataset.version;		
+		console.log("File version focused:"+curFocuedFileVersion);
+	});
+	
+	$(".ui.button.share").click(function(){
+		//TBD
+	});
+	
+	$(".ui.button.mainshare").click(function(){
+		//TBD
+		console.log("FB share clicked");
+	});
+		
+	$(".ui.button.trash").click(function(){
+		var td = $(this).closest("tr").children("td:nth-child(2)");
+		var a = td.children("a:first-child");
+		if(td.find("a")[0] == null)
+			{
+			  var fileName = td.text();
+			  console.log("fileName="+fileName);
+			  $.get("RemoveServlet", 
+						{FileName: fileName}, 
+						function(){ 
+						  tempAlert("Removed file:"+folderName, 2500, "green");
+						  location.reload();
+						}
+				);
+			}
+		else
+			{
+				var folderName = a.text();
+				console.log("folderName="+folderName);
+				$.get("RemoveServlet", 
+						{Folder: folderName}, 
+						function(){ 
+						  tempAlert("Removed folder:"+folderName, 2500, "green");
+						  location.reload();
+						}
+				);
+			}
+
 	});
 });
 

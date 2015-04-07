@@ -59,4 +59,54 @@
     <servlet-name>FileDisplayServlet</servlet-name>
     <url-pattern>/FileDisplayServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CreateFolderServlet</display-name>
+    <servlet-name>CreateFolderServlet</servlet-name>
+    <servlet-class>com.team11.cloudbox.CreateFolderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreateFolderServlet</servlet-name>
+    <url-pattern>/CreateFolderServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UploadFileServlet</display-name>
+    <servlet-name>UploadFileServlet</servlet-name>
+    <servlet-class>com.team11.cloudbox.UploadFileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UploadFileServlet</servlet-name>
+    <url-pattern>/UploadFileServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RemoveServlet</display-name>
+    <servlet-name>RemoveServlet</servlet-name>
+    <servlet-class>com.team11.cloudbox.RemoveServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoveServlet</servlet-name>
+    <url-pattern>/RemoveServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ShareFileServlet</display-name>
+    <servlet-name>ShareFileServlet</servlet-name>
+    <servlet-class>com.team11.cloudbox.ShareFileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShareFileServlet</servlet-name>
+    <url-pattern>/ShareFileServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DownloadFileServlet</display-name>
+    <servlet-name>DownloadFileServlet</servlet-name>
+    <servlet-class>com.team11.cloudbox.DownloadFileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DownloadFileServlet</servlet-name>
+    <url-pattern>/DownloadFileServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
