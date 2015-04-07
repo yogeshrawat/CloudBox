@@ -37,14 +37,16 @@ public class CBLoginServlet extends HttpServlet {
 			if(cbEmailOrUserName.contains("@"))
 			{
 //				String cbUserEmail = cbEmailOrUserName;
-				//Verify Email and password
+				//TBD-Verify Email and password
+				session.setAttribute("userID", "1");
 				session.setAttribute("isCBLoggedIn", true);
 				response.sendRedirect("CloudBoxHome.jsp");
 			}
 			else
 			{
 //				String cbUserName = cbEmailOrUserName;
-				//Verify user name and password
+				//TBD-Verify user name and password
+				session.setAttribute("userID", 1);
 				session.setAttribute("isCBLoggedIn", true);
 				response.sendRedirect("CloudBoxHome.jsp");
 			}

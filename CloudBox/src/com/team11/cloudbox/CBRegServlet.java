@@ -36,6 +36,8 @@ public class CBRegServlet extends HttpServlet {
 		
 		if(cbUserName!=null && cbUserPwd !=null && cbUserEmail!= null)
 		{
+			//TBD-store and generate UserID
+			session.setAttribute("userID", "1");
 			session.setAttribute("isCBLoggedIn", true);
 			response.sendRedirect("CloudBoxHome.jsp");
 		}

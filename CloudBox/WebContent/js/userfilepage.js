@@ -53,7 +53,7 @@ $(document).ready(function(){
 		.modal('show');
 	});
 	
-	$(".ui.button.folder").click(function(){
+	$(".ui.button.modelfolder").click(function(){
 		var folderName = $(".input.folder").children("input:first-child").val();
 		$.get("CreateFolderServlet", 
 				{NewFolder: folderName}, 
@@ -77,10 +77,24 @@ $(document).ready(function(){
 		div.dataset.version = targetVersion;
 		console.log("Current version is:" + div.dataset.version);
 		
-		//TBD-set the actual file link in FB share
+		var file = $(this).closest("tr").children("td:nth-child(2)").text();
+		var fbShare = $(this).closest("td").next().find(".fb-share-button")[0];
+		var updatedURL="";
+		$.get("FileURlParseServlet", 
+				{FileName: file, Version: targetVersion}, 
+				function(data){ 
+					if(data != null) updatedURL=data.url;
+					
+					//Set the actual file link to FB share					
+					console.log("href is:" + fbShare.getAttribute("data-href"));
+					fbShare.dataset.href = updatedURL;
+					console.log("Current href is:" + fbShare.dataset.href);
+				}
+		);
+		
 	});
 	
-	$(".ui.button.CB.Share").click(function(){
+	$(".ui.button.CBShare").click(function(){
 		$('.ui.modal.share')
 		  .modal('show');
 		
@@ -90,13 +104,33 @@ $(document).ready(function(){
 		console.log("File version focused:"+curFocuedFileVersion);
 	});
 	
-	$(".ui.button.share").click(function(){
-		//TBD
+	$(".ui.button.modelshare").click(function(){
+		//Obtain target client
+		var sharetoUser = $(".input.folder").children("input:first-child").val();
+		
+		//Share file via copy file to another target user S3 bucket
+		$.get("ShareFileServlet", 
+				{User: sharetoUser, FileName: curFocusedFile, Version: curFocuedFileVersion}, 
+				function(){ 
+				  tempAlert("Shared a file:"+FileName, 2500, "green");
+				}
+		);
+		
 	});
 	
 	$(".ui.button.mainshare").click(function(){
-		//TBD
-		console.log("FB share clicked");
+		//Get the file URL that will be shared
+		var fbShare = $(this).find(".fb-share-button")[0];
+		var fileURl = fbShare.dataset.href;
+		console.log("FB will share href="+fileURl);
+		
+		//Add file link to database for access restriction
+		$.get("ShareFileServlet", 
+				{URL: fileURl}, 
+				function(){ 
+				  tempAlert("Track a file sharing", 2500, "green");
+				}
+		);
 	});
 		
 	$(".ui.button.trash").click(function(){
@@ -105,7 +139,6 @@ $(document).ready(function(){
 		if(td.find("a")[0] == null)
 			{
 			  var fileName = td.text();
-			  console.log("fileName="+fileName);
 			  $.get("RemoveServlet", 
 						{FileName: fileName}, 
 						function(){ 
@@ -117,7 +150,6 @@ $(document).ready(function(){
 		else
 			{
 				var folderName = a.text();
-				console.log("folderName="+folderName);
 				$.get("RemoveServlet", 
 						{Folder: folderName}, 
 						function(){ 

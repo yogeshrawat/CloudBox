@@ -109,4 +109,14 @@
     <servlet-name>DownloadFileServlet</servlet-name>
     <url-pattern>/DownloadFileServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>FileURlParseServlet</display-name>
+    <servlet-name>FileURlParseServlet</servlet-name>
+    <servlet-class>com.team11.cloudbox.FileURlParseServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FileURlParseServlet</servlet-name>
+    <url-pattern>/FileURlParseServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -157,11 +157,11 @@
 				            	            "<i class='share alternate icon'></i><p>share</p>"+
 				            	            "<div class='menu'>"+
 				            	            "   <div class='item fb share'>"+
-				            	            "		<div class='fb-share-button' data-href='https://developers.facebook.com/docs/plugins/' data-layout='button'>"+
+				            	            "		<div class='fb-share-button' data-href='' data-layout='button'>"+
 				            	            "		</div>"+
 				            	            "	</div>"+
 				            	            "   <div class='item'>"+
-				            	            "		<div class='mini ui button CB Share'>CB Share</div>"+
+				            	            "		<div class='mini ui button CBShare'>CB Share</div>"+
 				            	            "	</div>"+
 				            	            "</div>"+
 				            	         "</div>";
@@ -247,7 +247,7 @@
 		  </div>
 		  <div class="actions">
 		    <div class="ui button">Cancel</div>
-		    <div class="ui button folder">OK</div>
+		    <div class="ui button modelfolder">OK</div>
 		  </div>
 		</div>		
 		
@@ -263,7 +263,7 @@
 		  </div>
 		  <div class="actions">
 		    <div class="ui button">Cancel</div>
-		    <div class="ui button share">OK</div>
+		    <div class="ui button modelshare">OK</div>
 		  </div>
 		</div>
 		

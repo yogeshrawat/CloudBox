@@ -1,10 +1,12 @@
 package com.team11.cloudbox;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class ShareFileServlet
@@ -16,7 +18,40 @@ public class ShareFileServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
+		HttpSession session = request.getSession(true);
+		String userID = (String) session.getAttribute("userID");
+		
+		String URl= request.getParameter("URL");
+		if(URl != null)
+		{
+			//Add file link to database for access restriction
+			//TBD
+			System.out.println("URl:"+URl+", UserID:"+userID);
+			return;
+		}
+		else
+		{
+		    String targetUser= request.getParameter("User");
+			String fileName= request.getParameter("FileName");
+		    String version= request.getParameter("Version");
+		    
+		    if(targetUser !=null && fileName != null && version != null)
+		    {   
+		    	//Share file via copy file to another target user S3 bucket
+			    //TBD
+			    String curFolder= (String) session.getAttribute("currentDir");
+			    System.out.println("UserID:"+userID+", TargetUser:"+targetUser+", FilePartialURL:"+curFolder+fileName+", Version:"+version);
+			    return;
+		    }
+			else
+		    {
+		    	 response.sendError(HttpServletResponse.SC_NO_CONTENT, "No important parameter");
+		    	 return;
+		    }
+
+		}
+		
 	}
 
 	/**

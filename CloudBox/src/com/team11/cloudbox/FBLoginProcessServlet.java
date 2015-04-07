@@ -81,9 +81,7 @@ public class FBLoginProcessServlet extends HttpServlet {
 		}*/
 		
 		if(fbUserName != null && fbUserID !=null)
-		{
-			session.setAttribute("isFBLoggedIn", true);
-			
+		{			
 			JSONObject redirectURL = new JSONObject();
 			try {
 				
@@ -95,6 +93,9 @@ public class FBLoginProcessServlet extends HttpServlet {
 			System.out.println(redirectURL.toString());
 			response.setContentType("application/json");
 			response.getWriter().write(redirectURL.toString());
+			
+			session.setAttribute("userID", fbUserID);
+			session.setAttribute("isFBLoggedIn", true);
 		}
 	}
 
