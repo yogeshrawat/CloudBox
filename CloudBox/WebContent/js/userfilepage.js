@@ -106,13 +106,13 @@ $(document).ready(function(){
 	
 	$(".ui.button.modelshare").click(function(){
 		//Obtain target client
-		var sharetoUser = $(".input.folder").children("input:first-child").val();
+		var sharetoUser = $(".input.share").children("input:first-child").val();
 		
 		//Share file via copy file to another target user S3 bucket
 		$.get("ShareFileServlet", 
 				{User: sharetoUser, FileName: curFocusedFile, Version: curFocuedFileVersion}, 
 				function(){ 
-				  tempAlert("Shared a file:"+FileName, 2500, "green");
+				  tempAlert("Shared a file:"+curFocusedFile, 2500, "green");
 				}
 		);
 		

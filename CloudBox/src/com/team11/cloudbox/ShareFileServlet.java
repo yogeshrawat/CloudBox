@@ -20,7 +20,7 @@ public class ShareFileServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession(true);
-		String userID = (String) session.getAttribute("userID");
+		String userID = session.getAttribute("userID").toString();
 		
 		String URl= request.getParameter("URL");
 		if(URl != null)
