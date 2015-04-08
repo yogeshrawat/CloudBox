@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.app.dynamoDb.*;
+
 /**
  * Servlet implementation class CBRegServlet
  */
@@ -32,12 +34,16 @@ public class CBRegServlet extends HttpServlet {
 		String cbUserPwd= request.getParameter("Password");
 		String cbUserEmail = request.getParameter("Email");
 		
-		System.out.println(cbUserName+","+cbUserPwd+","+cbUserEmail);
-		
 		if(cbUserName!=null && cbUserPwd !=null && cbUserEmail!= null)
 		{
-			//TBD-store and generate UserID
-			session.setAttribute("userID", "1");
+			DynamoUser  user= new DynamoUser();
+			user.insert(cbUserName, cbUserPwd, cbUserEmail);
+			
+			String userID = user.getUserID();
+			
+			System.out.println(user.getUserID()+","+user.getUserName());
+			
+			session.setAttribute("userID", userID);
 			session.setAttribute("isCBLoggedIn", true);
 			response.sendRedirect("CloudBoxHome.jsp");
 		}
