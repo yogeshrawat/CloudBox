@@ -86,7 +86,25 @@ public class DynamoSharedURL {
         for(Map<String, AttributeValue> item : scanResult.getItems()) {
             System.out.println(item.get("UserID"));
         }
+	}
+	
+	
+	public boolean isExist(String FileURL)
+	{
+		ScanRequest scanRequest = new ScanRequest("SharedURL");
+
+		Map<String, Condition> scanFilter = new HashMap<String, Condition>();
+		scanFilter.put("FileURL", new Condition().withAttributeValueList(new AttributeValue(FileURL)).withComparisonOperator(ComparisonOperator.EQ));
+
+		scanRequest.setScanFilter(scanFilter);
+		ScanResult scanResult = dynamoDB.scan(scanRequest);
+
+		for(Map<String, AttributeValue> item : scanResult.getItems()) {
+		if(!(item.isEmpty()))
+			return true;
 		}
+		return false;
+	}
 	
 	public void remove(String FileURL){
 
