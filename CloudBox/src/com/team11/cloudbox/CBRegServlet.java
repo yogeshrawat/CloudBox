@@ -45,10 +45,10 @@ public class CBRegServlet extends HttpServlet {
 			
 			System.out.println(user.getUserID()+","+user.getUserName());
 			
+			s3Obj.createRootBucket(userID);
 			session.setAttribute("userID", userID);
 			session.setAttribute("isCBLoggedIn", true);
 			response.sendRedirect("CloudBoxHome.jsp");
-			s3Obj.createRootBucket(userID);
 			
 		}
 	}
