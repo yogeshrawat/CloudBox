@@ -9,9 +9,10 @@ public class CommunicateDynamoDb {
 	
 	public static void main(String args[])
 	{
-		DynamoSharedURL fb = new DynamoSharedURL();
-		fb.insert("www.gmai.com");
+		DynamoUser fb = new DynamoUser();
+		fb.insert("leon","leon123","leon@gmail.com");
 		//fb.remove("www.gmai.com");
+		//fb.read();
 	}
 
 }

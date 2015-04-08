@@ -17,6 +17,14 @@ import com.app.amazonS3.CommunicateS3;
  * permissions and limitations under the License.
  */
 
+
+
+
+
+
+
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +56,7 @@ import com.amazonaws.services.dynamodbv2.util.Tables;
 
 public class DynamoUser {
 
-   
+
 	public String UserID;
 	public String UserName;
 	public String Password;
@@ -57,15 +65,15 @@ public class DynamoUser {
 	public AmazonDynamoDBClient dynamoDB;
 	public AWSCredentials credentials;
 	public DynamoUser(){
-	   
-	    credentials = new ProfileCredentialsProvider("default").getCredentials();
-	    dynamoDB = new AmazonDynamoDBClient(credentials);
-	    Region usWest2 = Region.getRegion(Regions.US_WEST_2);
-	    dynamoDB.setRegion(usWest2);		    
-	}
-	
 
-    public String getUserID() {
+		credentials = new ProfileCredentialsProvider("default").getCredentials();
+		dynamoDB = new AmazonDynamoDBClient(credentials);
+		Region usWest2 = Region.getRegion(Regions.US_WEST_2);
+		dynamoDB.setRegion(usWest2);		    
+	}
+
+
+	public String getUserID() {
 		return UserID;
 	}
 
@@ -84,75 +92,91 @@ public class DynamoUser {
 	public String getPassword() {
 		return Password;
 	}
-	
+
 	public void setPassword(String password) {
 		Password = password;
 	}
-	
-	
+
+
 	public String getEmail() {
 		return Email;
 	}
-	
+
 	public void setEmail(String email) {
 		Email = email;
 	}
-	
-    private  void insert(String UserID, String UserName, String Password, String Email)
-    {
-    	 Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
-         item.put("UserID", new AttributeValue(UserID));
-         item.put("UserName", new AttributeValue(UserName));
-         item.put("Password", new AttributeValue(Password));
-         item.put("Email", new AttributeValue(Email));
-         
-         PutItemRequest putItemRequest = new PutItemRequest("Users", item);
-         PutItemResult putItemResult = dynamoDB.putItem(putItemRequest);
 
-    }
+	@SuppressWarnings("null")
+	public  void insert(String UserName, String Password, String Email)
+	{
 
-    private  boolean validate(String Email, String Password){
-    	
-        
-        ScanRequest scanRequest = new ScanRequest("Users");
-        scanRequest.setConditionalOperator(ConditionalOperator.AND);
+		ScanRequest scanRequest = new ScanRequest("Users");
+		ScanResult scanResult = dynamoDB.scan(scanRequest);
+		int s[]=new int[100];
+		int i =0;
 
-        Map<String, Condition> scanFilter = new HashMap<String, Condition>();
-        scanFilter.put("Email", new Condition().withAttributeValueList(new AttributeValue(Email)).withComparisonOperator(ComparisonOperator.EQ));
-        scanFilter.put("Password", new Condition().withAttributeValueList(new AttributeValue(Password)).withComparisonOperator(ComparisonOperator.EQ));
+		for(Map<String, AttributeValue> item : scanResult.getItems()) {
+			s[i] = Integer.valueOf(item.get("UserID").getS());
+			i++;
+		}       
+		Arrays.sort(s);
+		int max= s[s.length-1];
+		String userid = String.valueOf(max+1);        
 
-        scanRequest.setScanFilter(scanFilter);
-        ScanResult scanResult = dynamoDB.scan(scanRequest);
+		Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
+		item.put("UserID", new AttributeValue(userid));
+		item.put("UserName", new AttributeValue(UserName));
+		item.put("Password", new AttributeValue(Password));
+		item.put("Email", new AttributeValue(Email));
 
-        for(Map<String, AttributeValue> item : scanResult.getItems()) {
-            System.out.println(item);
+		PutItemRequest putItemRequest = new PutItemRequest("Users", item);
+		PutItemResult putItemResult = dynamoDB.putItem(putItemRequest);
 
-            if(!item.isEmpty())    	
-            	return true;
-        }
+	}
+
+	private  boolean validate(String Email, String Password){
+
+
+		ScanRequest scanRequest = new ScanRequest("Users");
+		scanRequest.setConditionalOperator(ConditionalOperator.AND);
+
+		Map<String, Condition> scanFilter = new HashMap<String, Condition>();
+		scanFilter.put("Email", new Condition().withAttributeValueList(new AttributeValue(Email)).withComparisonOperator(ComparisonOperator.EQ));
+		scanFilter.put("Password", new Condition().withAttributeValueList(new AttributeValue(Password)).withComparisonOperator(ComparisonOperator.EQ));
+
+		scanRequest.setScanFilter(scanFilter);
+		ScanResult scanResult = dynamoDB.scan(scanRequest);
+
+		for(Map<String, AttributeValue> item : scanResult.getItems()) {
+			System.out.println(item);
+
+			if(!item.isEmpty())    	
+				return true;
+		}
 		return false;
-        
 
-    }
-    
-    public void getUserID(String UserName)
-    {
-    	 
-        ScanRequest scanRequest = new ScanRequest("Users");
-        scanRequest.setConditionalOperator(ConditionalOperator.OR);
 
-        Map<String, Condition> scanFilter = new HashMap<String, Condition>();
-        scanFilter.put("Email", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
-        scanFilter.put("Password", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
+	}
 
-        scanRequest.setScanFilter(scanFilter);
-        ScanResult scanResult = dynamoDB.scan(scanRequest);
 
-        for(Map<String, AttributeValue> item : scanResult.getItems()) {
-            System.out.println(item.get("UserID"));
-            //return item.get("UserID");
-    	
-        }
-    }
- 
+	public void getUserID(String UserName)
+	{
+
+		ScanRequest scanRequest = new ScanRequest("Users");
+		scanRequest.setConditionalOperator(ConditionalOperator.OR);
+
+		Map<String, Condition> scanFilter = new HashMap<String, Condition>();
+		scanFilter.put("Email", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
+		scanFilter.put("Password", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
+
+		scanRequest.setScanFilter(scanFilter);
+		ScanResult scanResult = dynamoDB.scan(scanRequest);
+
+		for(Map<String, AttributeValue> item : scanResult.getItems()) {
+			System.out.println(item.get("UserID"));
+			//return item.get("UserID");
+
+		}
+	}
+
 }
