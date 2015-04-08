@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.app.amazonS3.S3Folder;
+import com.app.dynamoDb.DynamoFacebookUsers;
 
 /**
  * Servlet implementation class FBLoginProcessServlet
@@ -34,13 +35,18 @@ public class FBLoginProcessServlet extends HttpServlet {
 		System.out.println(fbUserName+","+fbUserID+","+fbUserEmail);
 		
 		if(!fbUserName.isEmpty() && !fbUserID.isEmpty())
-		{		
-			System.out.println(fbUserName+","+fbUserID);
-			s3Obj.createRootBucket(fbUserID);
+		{	
+			DynamoFacebookUsers dynamoFbUser = new DynamoFacebookUsers();
+			
+			if(!dynamoFbUser.isExist(fbUserID))
+			{
+				dynamoFbUser.insert(fbUserID, fbUserName, fbUserEmail);
+				
+				s3Obj.createRootBucket(fbUserID);
+			}	
+			
 			session.setAttribute("userID", fbUserID);
 			session.setAttribute("isFBLoggedIn", true);
-			
-			//response.sendRedirect("CloudBoxHome.jsp");
 		}
 	
 	}

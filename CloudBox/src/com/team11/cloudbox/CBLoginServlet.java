@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.app.dynamoDb.DynamoUser;
+
 /**
  * Servlet implementation class CBLoginServlet
  */
@@ -34,22 +36,41 @@ public class CBLoginServlet extends HttpServlet {
 
 		if(cbEmailOrUserName!=null && cbUserPwd !=null)
 		{
+			DynamoUser  user= new DynamoUser();
+			
 			if(cbEmailOrUserName.contains("@"))
 			{
-//				String cbUserEmail = cbEmailOrUserName;
-				//TBD-Verify Email and password
-				session.setAttribute("userID", "1");
-				session.setAttribute("isCBLoggedIn", true);
-				response.sendRedirect("CloudBoxHome.jsp");
+
+				if(user.validateEmail(cbEmailOrUserName, cbUserPwd))
+				{
+					session.setAttribute("userID", "1");
+					session.setAttribute("isCBLoggedIn", true);
+					response.sendRedirect("CloudBoxHome.jsp");
+				}
+				else
+				{
+					response.sendRedirect("Login.jsp");
+				}
+				
 			}
 			else
 			{
-//				String cbUserName = cbEmailOrUserName;
-				//TBD-Verify user name and password
-				session.setAttribute("userID", 1);
-				session.setAttribute("isCBLoggedIn", true);
-				response.sendRedirect("CloudBoxHome.jsp");
+				if(user.validateName(cbEmailOrUserName, cbUserPwd))
+				{
+					session.setAttribute("userID", 1);
+					session.setAttribute("isCBLoggedIn", true);
+					response.sendRedirect("CloudBoxHome.jsp");
+				}
+				else
+				{
+					response.sendRedirect("Login.jsp");
+				}
+
 			}
+		}
+		else
+		{
+			response.sendRedirect("Login.jsp");
 		}
 
 	}
