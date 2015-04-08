@@ -100,7 +100,7 @@ public class DownloadFileServlet extends HttpServlet {
 			
 			//Download logic
 	        File downloadFile = new File(folder+file);
-	        FileInputStream inStream = new FileInputStream(downloadFile);
+	        FileInputStream inStream = new FileInputStream(downloadFile);//Create a file input stream from S3 file-Parameter-relative path to the file-S2
 	        
 			response.setContentType("application/octet-stream");	        
 	        response.setContentLength((int) downloadFile.length());

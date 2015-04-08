@@ -35,7 +35,7 @@ public class FileDisplayServlet extends HttpServlet {
 		
 		if(isCredentialValid){
 		    nextPage = "UserMain.jsp";
-		    String userRoot= "/home/leon/Documents/SOEN6441/";
+		    String userRoot= "/home/leon/Documents/SOEN6441/";//Bucket root of user-S3
 		    String curFolder= (String) session.getAttribute("currentDir");
 		    
 		    String subFolderName= request.getParameter("folder");

@@ -32,7 +32,7 @@ public class CreateFolderServlet extends HttpServlet {
 	    	File newSubFolder = new File(curFolder+newFolderName);
 	    	if(!newSubFolder.exists())
 	    	{
-	    		if(newSubFolder.mkdir())
+	    		if(newSubFolder.mkdir())//Add a new sub folder to S3 under current folder shown-Parameter-relative path to root-S1
 	    		{
 	    			return;
 	    		}

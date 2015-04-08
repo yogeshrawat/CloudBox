@@ -99,7 +99,7 @@ public class UploadFileServlet extends HttpServlet {
 							file = new File(filePath + fileName);
 						}
 					
-					fi.write(file);
+					fi.write(file);//Upload to S3 with path and name-S5
 					out.write("Uploaded Filename: " + fileName);
 				}
 			}			

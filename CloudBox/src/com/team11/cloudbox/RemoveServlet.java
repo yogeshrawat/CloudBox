@@ -38,8 +38,8 @@ public class RemoveServlet extends HttpServlet {
 	    {
 	    	try
 	    	{
-		        Path path = FileSystems.getDefault().getPath(curFolder, FileName);	       
-		        boolean result = Files.deleteIfExists(path);
+		        Path path = FileSystems.getDefault().getPath(curFolder, FileName);//Need change-remove from s3 	       
+		        boolean result = Files.deleteIfExists(path);//need change-S4
 		        if(result)
 		        {
 		        	return;

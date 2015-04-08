@@ -43,7 +43,7 @@ public class ShareFileServlet extends HttpServlet {
 		    
 		    if(targetUser !=null && fileName != null && version != null)
 		    {   
-		    	//Share file via copy file to another target user S3 bucket
+		    	//Share file via copy file to another target user S3 bucket-S7
 			    //TBD
 			    String curFolder= (String) session.getAttribute("currentDir");
 			    System.out.println("UserID:"+userID+", TargetUser:"+targetUser+", FilePartialURL:"+curFolder+fileName+", Version:"+version);

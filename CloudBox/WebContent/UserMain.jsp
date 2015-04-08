@@ -19,7 +19,7 @@
 	response.setDateHeader("Expires",0);
 %>
 	<%!        
-		public void GetDirectory(String a_Path, Vector<String> a_files, Vector<String> a_folders) {
+		public void GetDirectory(String a_Path, Vector<String> a_files, Vector<String> a_folders) {//Retrieve the information from a specific folder-S6
 		    File l_Directory = new File(a_Path);
 		    File[] l_files = l_Directory.listFiles();
 		
