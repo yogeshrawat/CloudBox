@@ -31,6 +31,8 @@ public class RemoveServlet extends HttpServlet {
 	    System.out.println("FolderName=" + FolderName);
 	    String FileName = request.getParameter("FileName");
 	    System.out.println("FileName=" + FileName);
+	    String FileVersion = request.getParameter("FileVersion");
+	    System.out.println("FileVersion=" + FileVersion);
 
 	    if(FileName != null && !FileName.isEmpty())
 	    {

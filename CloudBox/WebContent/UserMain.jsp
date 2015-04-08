@@ -126,7 +126,9 @@
 		        			tbody += "<td>";
 		        			 if(i >= <%=l_Folders.size()%>)
 		        			 {
-						            tbody += "<div class='ui button download' style='display:none;'><i class='download blue icon'></i></div>";    	
+						            tbody += "<a href='' class='ui button download' style='display:none;'>"+
+						            		 "	<i class='download blue icon'></i>"+
+						            		 "</a>";    	
 				             }
 				            tbody += "</td>";
 		        			break;

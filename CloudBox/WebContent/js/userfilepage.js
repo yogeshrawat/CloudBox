@@ -85,9 +85,13 @@ $(document).ready(function(){
 		.modal('show');
 	});
 	
-	$(".ui.button.download").click(function(){
-		//TBD
-	});
+//	$(".ui.button.download").click(function(){
+//		
+//		var fileName = $(this).closest("td").prev().text();
+//		var version = $(this).closest("td").next().find(".file.version")[0].dataset.version;
+//		
+//		console.log(fileName+","+version);
+//	});
 	
 	$(".item.version.number").click(function(){
 		var targetVersion = $(this).closest("div").text();
@@ -98,16 +102,21 @@ $(document).ready(function(){
 		
 		var file = $(this).closest("tr").children("td:nth-child(2)").text();
 		var fbShare = $(this).closest("td").next().find(".fb-share-button")[0];
+		var downloadlink = $(this).closest("tr").children("td:nth-child(3)").children("a:first-child");
 		var updatedURL="";
 		$.get("FileURlParseServlet", 
 				{FileName: file, Version: targetVersion}, 
 				function(data){ 
 					if(data != null) updatedURL=data.url;
 					
-					//Set the actual file link to FB share					
-					console.log("href is:" + fbShare.getAttribute("data-href"));
+					//Set the actual file link to FB share and download				
+					console.log("fb-href is:" + fbShare.getAttribute("data-href"));
 					fbShare.dataset.href = updatedURL;
-					console.log("Current href is:" + fbShare.dataset.href);
+					console.log("Current fb-href is:" + fbShare.dataset.href);
+					
+					console.log("download href is:" + downloadlink.attr("href"));
+					downloadlink.attr("href", updatedURL);
+					console.log("Current download href is:" + downloadlink.attr("href"));
 				}
 		);
 		
@@ -158,8 +167,9 @@ $(document).ready(function(){
 		if(td.find("a")[0] == null)
 			{
 			  var fileName = td.text();
+			  var fileVersion = $(this).closest("tr").find(":nth-child(4)").find(".file.version")[0].dataset.version;
 			  $.get("RemoveServlet", 
-						{FileName: fileName}, 
+						{FileName: fileName, FileVersion: fileVersion}, 
 						function(){ 
 						  tempAlert("Removed file:"+folderName, 2500, "green");
 						  location.reload();
