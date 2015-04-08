@@ -34,6 +34,7 @@ public class WorkerServlet extends HttpServlet {
      * Instance Profile associated with the EC2 instance on which it is
      * run.
      */
+
     private final AmazonS3Client s3 = new AmazonS3Client(
         new AWSCredentialsProviderChain(
             new InstanceProfileCredentialsProvider(),
