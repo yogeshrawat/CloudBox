@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.app.dynamoDb.DynamoSharedURL;
+
 /**
  * Servlet implementation class ShareFileServlet
  */
@@ -26,8 +28,11 @@ public class ShareFileServlet extends HttpServlet {
 		if(URl != null)
 		{
 			//Add file link to database for access restriction
-			//TBD
 			System.out.println("URl:"+URl+", UserID:"+userID);
+			
+			DynamoSharedURL  dynamoSharetable = new DynamoSharedURL();
+			dynamoSharetable.insert(URl);
+			
 			return;
 		}
 		else

@@ -95,6 +95,10 @@
     <display-name>DownloadFileServlet</display-name>
     <servlet-name>DownloadFileServlet</servlet-name>
     <servlet-class>com.team11.cloudbox.DownloadFileServlet</servlet-class>
+    <init-param>
+      <param-name>downloadEntry</param-name>
+      <param-value>http://travellogenv-5bwgdxfrha.elasticbeanstalk.com/download</param-value>
+    </init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>DownloadFileServlet</servlet-name>
@@ -107,7 +111,7 @@
     <servlet-class>com.team11.cloudbox.FileURlParseServlet</servlet-class>
     <init-param>
       <param-name>downloadEntry</param-name>
-      <param-value>http://localhost:8080/CloudBox/download</param-value>
+      <param-value>http://travellogenv-5bwgdxfrha.elasticbeanstalk.com/download</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>

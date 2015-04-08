@@ -41,8 +41,6 @@ public class FileURlParseServlet extends HttpServlet {
 	    	 return;
 	    }
 
-	    //TBD-Use curFolder+fileName & version & userID to fetch URL from S3
-//	    String userID = session.getAttribute("userID").toString();
 	    String curFolder= (String) session.getAttribute("currentDir");
 	    
 	    String folderUrl = urlSpecialCharReplace(curFolder);

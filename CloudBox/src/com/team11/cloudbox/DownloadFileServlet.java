@@ -5,18 +5,30 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.app.dynamoDb.DynamoSharedURL;
+
 /**
  * Servlet implementation class DownloadFileServlet
  */
 public class DownloadFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	protected String downloadEntry = null;
 
+	/**
+	 * @see Servlet#init(ServletConfig)
+	 */
+	public void init(ServletConfig config) throws ServletException {
+		this.downloadEntry = config.getInitParameter("downloadEntry");
+	}
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -45,6 +57,15 @@ public class DownloadFileServlet extends HttpServlet {
 				String queryUrl=(String) session.getAttribute("downloadUrl");
 				if(!queryUrl.isEmpty())
 				{
+					//Check if URL in sharedTable
+					String URLOfSDownload = downloadEntry+"?"+queryUrl;
+					DynamoSharedURL  dynamoSharetable = new DynamoSharedURL();
+					if(!dynamoSharetable.isExist(URLOfSDownload))
+					{
+						session.removeAttribute("downloadUrl");
+						return;
+					}
+					
 					String[] parameters = queryUrl.split("&");
 					if(parameters.length >= 3)
 					{
