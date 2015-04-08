@@ -13,6 +13,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.app.dynamoDb.DynamoUser;
 
 public class S3Folder {
 	private static final String BUCKET = "s3-bucket-location";
@@ -41,8 +42,9 @@ public class S3Folder {
       s3client.putObject(pr);
 	}
 public void createRootBucket(String userID){
+		DynamoUser du = new DynamoUser();
 		
-		s3client.createBucket(userID);
+		s3client.createBucket(userID + du.getUserName(userID).replaceAll("\\W", "").trim().toLowerCase());
 	}
 
 	public void create(String foldername, String userID) {
@@ -66,8 +68,8 @@ public void createRootBucket(String userID){
 
 	public static void main(String[] args) {
 		S3Folder s3Folder = new S3Folder();
-		//s3Folder.createRootBucket("unitedawesome");
+		s3Folder.createRootBucket("1001");
 		//s3Folder.create("myfolder","1001");
-		s3Folder.uploadFile("1001", "D:\\cloud computing (c691p)\\userauthority.png");
+		//s3Folder.uploadFile("1001", "D:\\cloud computing (c691p)\\userauthority.png");
 	}
 }

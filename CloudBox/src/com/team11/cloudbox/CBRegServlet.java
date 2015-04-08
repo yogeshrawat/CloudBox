@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.app.amazonS3.S3Folder;
 import com.app.dynamoDb.*;
 
 /**
@@ -15,6 +16,7 @@ import com.app.dynamoDb.*;
  */
 public class CBRegServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	S3Folder s3Obj = new S3Folder();
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,6 +48,8 @@ public class CBRegServlet extends HttpServlet {
 			session.setAttribute("userID", userID);
 			session.setAttribute("isCBLoggedIn", true);
 			response.sendRedirect("CloudBoxHome.jsp");
+			s3Obj.createRootBucket(userID);
+			
 		}
 	}
 

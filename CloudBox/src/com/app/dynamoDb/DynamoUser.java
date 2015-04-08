@@ -17,14 +17,6 @@ import com.app.amazonS3.CommunicateS3;
  * permissions and limitations under the License.
  */
 
-
-
-
-
-
-
-
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -168,9 +160,9 @@ public class DynamoUser {
 	}
 
 
-	public void getUserID(String UserName)
+	public String getUserID(String UserName)
 	{
-
+		String result = "";
 		ScanRequest scanRequest = new ScanRequest("Users");
 		scanRequest.setConditionalOperator(ConditionalOperator.OR);
 
@@ -183,9 +175,30 @@ public class DynamoUser {
 
 		for(Map<String, AttributeValue> item : scanResult.getItems()) {
 			System.out.println(item.get("UserID"));
-			//return item.get("UserID");
-
+		
+			result = item.get("UserID").toString();
 		}
+		return result;
 	}
+
+	public String getUserName(String UserID)
+	{
+		String result = "";
+		ScanRequest scanRequest = new ScanRequest("Users");
+
+		Map<String, Condition> scanFilter = new HashMap<String, Condition>();
+		scanFilter.put("UserID", new Condition().withAttributeValueList(new AttributeValue(UserID)).withComparisonOperator(ComparisonOperator.EQ));
+
+		scanRequest.setScanFilter(scanFilter);
+		ScanResult scanResult = dynamoDB.scan(scanRequest);
+
+		for(Map<String, AttributeValue> item : scanResult.getItems()) {
+			System.out.println(item.get("UserName"));
+		
+			result = item.get("UserName").toString();
+		}
+		return result;
+	}
+
 
 }

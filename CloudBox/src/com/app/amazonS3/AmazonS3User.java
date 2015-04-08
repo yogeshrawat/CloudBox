@@ -19,13 +19,8 @@ public class AmazonS3User {
 	private String email = "";
 	private String uid = "";
 	
-	
-	
 	public AmazonS3User(String uid){
-		
-		
 		setUid(uid);
-		
 	}
 
 	
