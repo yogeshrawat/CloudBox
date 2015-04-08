@@ -5,6 +5,7 @@
 //Global variable
 var curFocusedFile;
 var curFocuedFileVersion;
+var uploadFileSuccess = false
 
 $(document).ready(function(){
 	$("#logout").click(function(){
@@ -64,7 +65,25 @@ $(document).ready(function(){
 		);		
 	});
 	
-	//TBD-Place marker for upload
+	$("#upload").click(function(){
+		$('.ui.modal.upload')
+		.modal({
+			closable: false,
+	        onApprove: function () 
+	        {
+	            return true;
+	        },
+			onHidden: function()
+			{
+				if(uploadFileSuccess)
+				{
+					uploadFileSuccess = false;
+					location.reload();
+				}
+			}
+		})
+		.modal('show');
+	});
 	
 	$(".ui.button.download").click(function(){
 		//TBD
@@ -184,3 +203,39 @@ function tempAlert(msg,duration, fontcolor)
 //	  }
 //}
 
+function uploadFile() {
+    var fd = new FormData();
+    fd.append("fileToUpload", document.getElementById('fileToUpload').files[0]);
+    
+    var xhr = new XMLHttpRequest();
+    xhr.upload.addEventListener("progress", uploadProgress, false);
+    xhr.addEventListener("load", uploadComplete, false);
+    xhr.addEventListener("error", uploadFailed, false);
+    xhr.addEventListener("abort", uploadCanceled, false);
+    xhr.open("POST", "UploadFileServlet");
+
+    xhr.send(fd);
+  }
+
+  function uploadProgress(evt) {
+    if (evt.lengthComputable) {
+      var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+      document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
+    }
+    else {
+      document.getElementById('progressNumber').innerHTML = 'unable to compute';
+    }
+  }
+
+  function uploadComplete(evt) {
+	  uploadFileSuccess = true;
+	  tempAlert(evt.target.responseText, 2500, "green");
+    }
+  
+  function uploadFailed(evt) {
+    tempAlert("There was an error attempting to upload:"+folderName, 2500, "red");
+  }
+
+  function uploadCanceled(evt) {
+    tempAlert("Upload has been canceled or the browser dropped the connection.", 2500, "yellow");
+  }

@@ -267,5 +267,22 @@
 		  </div>
 		</div>
 		
+		<div class="ui modal upload">
+			  <div class="header">
+			    Upload a file to CloudBox
+			  </div>
+				<div class="ui fluid form segment upload" id="uploadForm" enctype="multipart/form-data" method="post">
+				    <div class="field">
+				      <label>First Name</label>
+				      <input type="file" name="fileToUpload" id="fileToUpload">
+				    </div>
+				  <div class="ui submit button" onclick="uploadFile()">Upload</div>
+				  <div id="progressNumber"></div>
+				</div>
+		      <div class="actions">
+		         <div class="ui button approve green" data-value="easy">Close</div>
+		      </div>
+		</div>		
+		
 	</body>
 </html>
