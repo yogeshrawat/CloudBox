@@ -36,11 +36,11 @@ public class S3Folder {
 		s3client.setRegion(usWest2);
 	}
 	
-	public void uploadFile(String userID, String folderLocation){
+	public void uploadFile(String userID, String folderLocation,String fileName){
 		File file = new File(folderLocation);
 		System.out.println(file.getName());
 		//String fileName = "myfolder" + FOLDER_SUFFIX + "userauthority.png";
-		PutObjectRequest pr = new PutObjectRequest(s3oprnObj.getBucketFromID(userID).getName(), "user", file);
+		PutObjectRequest pr = new PutObjectRequest(s3oprnObj.getBucketFromID(userID).getName(),fileName, file);
         
       s3client.putObject(pr);
 	}
@@ -76,6 +76,6 @@ public void createRootBucket(String userID){
 		S3Folder s3Folder = new S3Folder();
 		//s3Folder.createRootBucket("1001");
 		//s3Folder.create("myfolder","1001");
-		s3Folder.uploadFile("1001", "C:\\mytext.txt");
+		s3Folder.uploadFile("1001", "C:\\mytext.txt","mytext.txt");
 	}
 }
