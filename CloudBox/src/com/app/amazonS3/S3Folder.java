@@ -11,8 +11,10 @@ import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 import com.app.dynamoDb.DynamoUser;
 
 public class S3Folder {
@@ -21,7 +23,7 @@ public class S3Folder {
 	//final static AmazonS3Client client;
 	private static AmazonS3Client s3client = null;
 	private final static Region usWest2 = Region.getRegion(Regions.US_WEST_2);
-
+	S3Operations s3oprnObj = new S3Operations();
 
 
 	static {
@@ -36,11 +38,13 @@ public class S3Folder {
 	
 	public void uploadFile(String userID, String folderLocation){
 		File file = new File(folderLocation);
+		System.out.println(file.getName());
 		//String fileName = "myfolder" + FOLDER_SUFFIX + "userauthority.png";
-		PutObjectRequest pr = new PutObjectRequest("unitedawesome", "user", file);
+		PutObjectRequest pr = new PutObjectRequest(s3oprnObj.getBucketFromID(userID).getName(), "user", file);
         
       s3client.putObject(pr);
 	}
+	
 public void createRootBucket(String userID){
 		DynamoUser du = new DynamoUser();
 		
@@ -65,11 +69,13 @@ public void createRootBucket(String userID){
 		// Send request to S3 to create folder
 		s3client.putObject(putObjectRequest);
 	}
+	
+
 
 	public static void main(String[] args) {
 		S3Folder s3Folder = new S3Folder();
-		s3Folder.createRootBucket("1001");
+		//s3Folder.createRootBucket("1001");
 		//s3Folder.create("myfolder","1001");
-		//s3Folder.uploadFile("1001", "D:\\cloud computing (c691p)\\userauthority.png");
+		s3Folder.uploadFile("1001", "C:\\mytext.txt");
 	}
 }
