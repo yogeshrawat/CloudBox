@@ -24,6 +24,7 @@ import com.app.amazonS3.CommunicateS3;
 
 
 
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,9 @@ import java.util.Map;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProviderChain;
+import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -66,8 +70,9 @@ public class DynamoUser {
 	public AWSCredentials credentials;
 	public DynamoUser(){
 
-		credentials = new ProfileCredentialsProvider("default").getCredentials();
-		dynamoDB = new AmazonDynamoDBClient(credentials);
+		//credentials = new ProfileCredentialsProvider("default").getCredentials();
+		dynamoDB = new AmazonDynamoDBClient(new AWSCredentialsProviderChain(new InstanceProfileCredentialsProvider(),
+				new ClasspathPropertiesFileCredentialsProvider()));
 		Region usWest2 = Region.getRegion(Regions.US_WEST_2);
 		dynamoDB.setRegion(usWest2);		    
 	}
@@ -128,6 +133,10 @@ public class DynamoUser {
 		item.put("UserName", new AttributeValue(UserName));
 		item.put("Password", new AttributeValue(Password));
 		item.put("Email", new AttributeValue(Email));
+		this.setUserID(userid);
+		this.setUserName(UserName);
+		this.setPassword(Password);
+		this.setEmail(Email);
 
 		PutItemRequest putItemRequest = new PutItemRequest("Users", item);
 		PutItemResult putItemResult = dynamoDB.putItem(putItemRequest);

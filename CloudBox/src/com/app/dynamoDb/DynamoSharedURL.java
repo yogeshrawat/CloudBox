@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProviderChain;
+import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -29,8 +32,9 @@ public class DynamoSharedURL {
 	AWSCredentials credentials;
 	public DynamoSharedURL(){
 	   
-	    credentials = new ProfileCredentialsProvider("default").getCredentials();
-	    dynamoDB = new AmazonDynamoDBClient(credentials);
+	   // credentials = new ProfileCredentialsProvider("default").getCredentials();
+	    dynamoDB = new AmazonDynamoDBClient(new AWSCredentialsProviderChain(new InstanceProfileCredentialsProvider(),
+				new ClasspathPropertiesFileCredentialsProvider()));
 	    Region usWest2 = Region.getRegion(Regions.US_WEST_2);
 	    dynamoDB.setRegion(usWest2);	
 	    
