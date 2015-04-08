@@ -135,7 +135,7 @@ public class DynamoUser {
 
 	}
 
-	public  boolean validate(String Email, String Password){
+	public  boolean validateEmail(String Email, String Password){
 
 
 		ScanRequest scanRequest = new ScanRequest("Users");
@@ -149,7 +149,30 @@ public class DynamoUser {
 		ScanResult scanResult = dynamoDB.scan(scanRequest);
 
 		for(Map<String, AttributeValue> item : scanResult.getItems()) {
-			System.out.println(item);
+			//System.out.println(item);
+
+			if(!item.isEmpty())    	
+				return true;
+		}
+		return false;
+
+	}
+	
+	public  boolean validateName(String UserName, String Password){
+
+
+		ScanRequest scanRequest = new ScanRequest("Users");
+		scanRequest.setConditionalOperator(ConditionalOperator.AND);
+
+		Map<String, Condition> scanFilter = new HashMap<String, Condition>();
+		scanFilter.put("UserName", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
+		scanFilter.put("Password", new Condition().withAttributeValueList(new AttributeValue(Password)).withComparisonOperator(ComparisonOperator.EQ));
+
+		scanRequest.setScanFilter(scanFilter);
+		ScanResult scanResult = dynamoDB.scan(scanRequest);
+
+		for(Map<String, AttributeValue> item : scanResult.getItems()) {
+			//System.out.println(item);
 
 			if(!item.isEmpty())    	
 				return true;
