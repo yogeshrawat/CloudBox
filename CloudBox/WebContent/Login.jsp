@@ -76,21 +76,28 @@
 	  FbUserID = response.id;
 	  FBUserEmail = response.email;
 	  console.log(FBUserName+","+FbUserID+","+FBUserEmail);
+	  
+		$.get("FBLoginProcessServlet", 
+				{UserName:FBUserName, Id:FbUserID,Email:FBUserEmail}, 
+				function(){ 
+					window.location.replace("CloudBoxHome.jsp");
+				}
+		);
+	  
     });
     
-	/* make the API call */
-	FB.api(
+	/* FB.api(
 		"/me/friends",
 		function (response) {
 		  if (response && !response.error) {
 			console.log(JSON.stringify(response.data));
 			
 			//Fetch each Friend-Name and ID send to server - ajax
-			var sendInfo = {
+			  var sendInfo = {
 							UserName:FBUserName, 
 							Id:FbUserID, 
 							Email:FBUserEmail
-						   };
+						   }; 
 			  $.ajax({
 	                url:"FBLoginProcessServlet",
 	                type:"POST",
@@ -99,11 +106,10 @@
 	                success:function(data){
 	                	window.location.replace(data.redirectURL);
 	                }
-	               });
-					
+	               }); 	
 		  }
 		}
-	);
+	); */
   }   
 </script>
 
