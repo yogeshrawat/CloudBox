@@ -120,6 +120,25 @@ public class DynamoFacebookUsers
 		}
 		return false;
 	}
+	
+	public String getUserName(String UserID)
+	{
+		String result = "";
+		ScanRequest scanRequest = new ScanRequest("FacebookUsers");
+
+		Map<String, Condition> scanFilter = new HashMap<String, Condition>();
+		scanFilter.put("UserID", new Condition().withAttributeValueList(new AttributeValue(UserID)).withComparisonOperator(ComparisonOperator.EQ));
+
+		scanRequest.setScanFilter(scanFilter);
+		ScanResult scanResult = dynamoDB.scan(scanRequest);
+
+		for(Map<String, AttributeValue> item : scanResult.getItems()) {
+			System.out.println(item.get("UserName"));
+		
+			result = item.get("UserName").toString();
+		}
+		return result;
+	}
     
 
 	public AttributeValue getUserID(String UserName)
