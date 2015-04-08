@@ -135,7 +135,7 @@ public class DynamoUser {
 
 	}
 
-	private  boolean validate(String Email, String Password){
+	public  boolean validate(String Email, String Password){
 
 
 		ScanRequest scanRequest = new ScanRequest("Users");
