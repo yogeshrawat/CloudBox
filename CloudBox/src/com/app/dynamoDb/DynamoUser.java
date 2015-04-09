@@ -197,7 +197,7 @@ public class DynamoUser {
 		ScanResult scanResult = dynamoDB.scan(scanRequest);
 
 		for(Map<String, AttributeValue> item : scanResult.getItems()) {
-			System.out.println(item.get("UserID"));
+//			System.out.println(item.get("UserID"));
 		
 			result = item.get("UserID").toString().replaceAll("\\W", "").trim().toLowerCase();
 			result = result.replaceAll("\\D", "");
@@ -217,7 +217,7 @@ public class DynamoUser {
 		ScanResult scanResult = dynamoDB.scan(scanRequest);
 
 		for(Map<String, AttributeValue> item : scanResult.getItems()) {
-			System.out.println(item.get("UserID"));
+//			System.out.println(item.get("UserID"));
 		
 			result = item.get("UserID").toString().replaceAll("\\W", "").trim().toLowerCase();
 			result = result.replaceAll("\\D", "");
@@ -237,7 +237,7 @@ public class DynamoUser {
 		ScanResult scanResult = dynamoDB.scan(scanRequest);
 
 		for(Map<String, AttributeValue> item : scanResult.getItems()) {
-			System.out.println(item.get("UserName"));
+//			System.out.println(item.get("UserName"));
 		
 			result = item.get("UserName").toString().replaceAll("\\W", "").trim().toLowerCase();
 		}

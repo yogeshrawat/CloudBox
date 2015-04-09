@@ -37,12 +37,13 @@
      	 String userId = (String) session.getAttribute("userID");
     	 S3Operations s3Operations = new S3Operations();
     	 
+    	 String S3BucketHome = s3Operations.getBucketNameFromUserID(userId);
     	 String S3BucketFolder = (String)session.getAttribute("currentDir");
     	 
-    	 System.out.println("The user ID of yogesh:"+userId+","+S3BucketFolder);
+    	 System.out.println("The user ID:"+userId+", bucket home:"+S3BucketHome);
     	 
      	 ArrayList<Files> files = s3Operations.getFilesFromBucket(userId, S3BucketFolder);
-     	 ArrayList<Folders> folders = s3Operations.getFolders(S3BucketFolder, S3BucketFolder);
+     	 ArrayList<Folders> folders = s3Operations.getFolders(S3BucketHome, S3BucketFolder);
  		 
      	System.out.println("The files:"+files.size()+", folders:"+folders.size());
      	 
