@@ -80,7 +80,7 @@ public class S3Folder {
 	public static void main(String[] args) {
 		S3Folder s3Folder = new S3Folder();
 		S3Operations oprn = new S3Operations();
-		System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
+		System.out.println(oprn.getFolders("1001syogesh", "1001syogesh/cboxfoo").size());
 		//s3Folder.createRootBucket("1001");
 		//s3Folder.create("new","1001");
 	//	s3Folder.uploadFile("1001", "C:\\mytext.txt","1001syogesh/subfolder");

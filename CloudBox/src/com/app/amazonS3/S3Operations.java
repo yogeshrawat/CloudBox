@@ -23,7 +23,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.app.dynamoDb.DynamoUser;
 
-public class S3Operations implements CommunicateS3{
+public class S3Operations{
 
 	static AmazonS3User s3user = null;
 	private static final String SUFFIX = "/";
@@ -44,7 +44,6 @@ public class S3Operations implements CommunicateS3{
 		
 	}
 	
-	@Override
 	public boolean validatedUser(DynamoUser user) {
 		
 		s3user = new AmazonS3User("1001");
@@ -57,8 +56,7 @@ public class S3Operations implements CommunicateS3{
 		util.getS3Client().createBucket(userID);
 	}
 	
-	@Override
-	public void createFolder(String userID, String folderName, AmazonS3User client ) {
+	public void createFolder(String userID, String folderName ) {
 		// create meta-data for your folder and set content-length to 0
 		ObjectMetadata metadata = new ObjectMetadata();
 		metadata.setContentLength(0);
@@ -136,10 +134,13 @@ public class S3Operations implements CommunicateS3{
 		
 		ArrayList<Folders> folders = new ArrayList<Folders>();
 		Folders temp ;
-		for (final S3ObjectSummary objectSummary: listKeysInDirectory(bucketName.toLowerCase(), prefix)){
+		List<S3ObjectSummary> temporary = listKeysInDirectory(bucketName.toLowerCase(), prefix);
+		for (final S3ObjectSummary objectSummary: temporary)
+			System.out.println(objectSummary.getKey());
+		for (final S3ObjectSummary objectSummary: temporary){
 			String key = objectSummary.getKey();
 			char lastChar = key.charAt(key.length()-1);
-			if(lastChar=='/'){
+			if(lastChar=='/' && key.contains(prefix)){
 				temp = new Folders(bucketName, key.replaceAll("\\W", "").trim().toLowerCase());
 				folders.add(temp);
 			}
