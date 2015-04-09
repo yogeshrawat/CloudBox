@@ -1,6 +1,5 @@
 package com.team11.cloudbox;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -8,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.app.amazonS3.S3Operations;
 
 /**
  * Servlet implementation class CreateFolderServlet
@@ -29,7 +30,7 @@ public class CreateFolderServlet extends HttpServlet {
 	    }
 	    else
 	    {
-	    	File newSubFolder = new File(curFolder+newFolderName);
+	    	/*File newSubFolder = new File(curFolder+newFolderName);
 	    	if(!newSubFolder.exists())
 	    	{
 	    		if(newSubFolder.mkdir())//Add a new sub folder to S3 under current folder shown-Parameter-relative path to root-S1
@@ -44,7 +45,11 @@ public class CreateFolderServlet extends HttpServlet {
 	    	else
 	    	{
 		    	 response.sendError(HttpServletResponse.SC_NOT_MODIFIED, "Folder already exist");
-	    	}
+	    	}*/
+	    	String userId = (String) session.getAttribute("userID");	    	
+	    	S3Operations s3Operations = new S3Operations();
+	    	System.out.println("userId:"+userId+", new subfolder to create:"+curFolder+"/"+newFolderName.toLowerCase());
+	    	s3Operations.createFolder(userId, curFolder+"/"+newFolderName.toLowerCase());
 	    }
 	}
 

@@ -31,7 +31,7 @@
      	 ArrayList<Files> files = s3Operations.getFilesFromBucket(userId, S3BucketFolder);
      	 ArrayList<Folders> folders = s3Operations.getFolders(S3BucketHome, S3BucketFolder);
  		 
-     	System.out.println("In side current folder. The files:"+files.size()+", folders:"+folders.size());
+     	System.out.println("Inside current folder. The files:"+files.size()+", folders:"+folders.size());
      %> 
 <!DOCTYPE html>
 <html>
