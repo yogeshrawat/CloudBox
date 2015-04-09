@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.app.amazonS3.S3Operations;
+
 /**
  * Servlet implementation class FileDisplayServlet
  */
@@ -35,7 +37,13 @@ public class FileDisplayServlet extends HttpServlet {
 		
 		if(isCredentialValid){
 		    nextPage = "UserMain.jsp";
-		    String userRoot= "/unitedawesome";//Bucket root of user-S3
+		    
+		    /*String userId = (String) session.getAttribute("userID");
+		    S3Operations s3AccessObject = new S3Operations();
+		    String userBucketInS3 = s3AccessObject.getBucketNameFromUserID(userId);*/
+		    
+		    String userRoot= "/unitedawesome/";//Bucket root of user-S3
+		    
 		    String curFolder= (String) session.getAttribute("currentDir");
 		    
 		    String subFolderName= request.getParameter("folder");
