@@ -51,12 +51,16 @@
 		    var num_cols = 7;
 		    
 		    var folder=new Array();
+		    var fileSize=new Array();
+		    var fileVersion=new Array();
 		    <% for (int i=0; i<folders.size(); i++) { %>
 		    	folder[<%= i %>] = '<%= folders.get(i).getName()%>'; 
 		    <% } %>
 		    
 		    <% for (int j=folders.size(); j<files.size()+folders.size(); j++) { %>
 	    		folder[<%= j %>] =  '<%=(files.get(j-folders.size()).getFileName())%>'; 
+	    		fileSize[<%= j-folders.size() %>] =  <%=(files.get(j-folders.size()).getSize())%>;
+	    		fileVersion[<%= j-folders.size() %>] =  <%=(files.get(j-folders.size()).getVersion())%>;
 	    	<% } %>		 
 		    
 		    var theader = "<table id='table1' class='ui celled striped table'>";
@@ -131,7 +135,7 @@
 		        			tbody += "<td>";
 		        			if(i >= <%=folders.size()%>)
 		        			{
-		        				var versionNum = <%= 2 %>;//Fix later
+		        				var versionNum = fileVersion[i- <%= folders.size() %>];//Fix later
 		        				var latestVer= versionNum-1;
 		        				var content= "";		        				
 		        				for(var k=0; k<versionNum;k++)
@@ -169,7 +173,8 @@
 		        			tbody += "<td>";
 		        			if(i >= <%=folders.size()%>)
 		        			{
-					            tbody += "<p>3Mb</p>";
+		        				var fileCapacity = fileSize[i- <%= folders.size() %>];
+					            tbody += "<p>"+fileCapacity+"</p>";
 	        				}
 				            tbody += "</td>";
 		        			break;
