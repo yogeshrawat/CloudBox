@@ -39,11 +39,13 @@
     	 
     	 String S3BucketFolder = (String)session.getAttribute("currentDir");
     	 
-    	 System.out.println("The user ID of yogesh:"+userId);
+    	 System.out.println("The user ID of yogesh:"+userId+","+S3BucketFolder);
     	 
      	 ArrayList<Files> files = s3Operations.getFilesFromBucket(userId, S3BucketFolder);
-     	 ArrayList<Folders> folders = s3Operations.getFolders(userId, S3BucketFolder);
+     	 ArrayList<Folders> folders = s3Operations.getFolders(S3BucketFolder, S3BucketFolder);
  		 
+     	System.out.println("The files:"+files.size()+", folders:"+folders.size());
+     	 
          /* Vector<String> l_Files = new Vector<String>(), l_Folders = new Vector<String>();
          GetDirectory(S3BucketFolder, l_Files, l_Folders);
          int versions= 2; */
@@ -67,11 +69,11 @@
 		    
 		    var folder=new Array();
 		    <% for (int i=0; i<folders.size(); i++) { %>
-		    	folder[<%= i %>] = '<%= folders.get(i).getName() %> '; 
+		    	folder[<%= i %>] = '<%= folders.get(i).getName()%>'; 
 		    <% } %>
 		    
 		    <% for (int j=folders.size(); j<files.size()+folders.size(); j++) { %>
-	    		folder[<%= j %>] =  <%= (files.get(j - folders.size()).getFileName()) %> ; 
+	    		folder[<%= j %>] =  '<%=(files.get(j-folders.size()).getFileName())%>'; 
 	    	<% } %>		 
 		    
 		    var theader = "<table id='table1' class='ui celled striped table'>";

@@ -136,7 +136,7 @@ public class S3Operations implements CommunicateS3{
 		
 		ArrayList<Folders> folders = new ArrayList<Folders>();
 		Folders temp ;
-		for (final S3ObjectSummary objectSummary: listKeysInDirectory(bucketName, prefix)){
+		for (final S3ObjectSummary objectSummary: listKeysInDirectory(bucketName.toLowerCase(), prefix)){
 			String key = objectSummary.getKey();
 			char lastChar = key.charAt(key.length()-1);
 			if(lastChar=='/'){
