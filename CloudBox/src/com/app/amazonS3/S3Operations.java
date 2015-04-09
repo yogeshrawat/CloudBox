@@ -139,7 +139,7 @@ public class S3Operations implements CommunicateS3{
 		for (final S3ObjectSummary objectSummary: listKeysInDirectory(bucketName.toLowerCase(), prefix)){
 			String key = objectSummary.getKey();
 			char lastChar = key.charAt(key.length()-1);
-			if(lastChar=='/' && key.startsWith(prefix)){
+			if(lastChar=='/'){
 				temp = new Folders(bucketName, key.replaceAll("\\W", "").trim().toLowerCase());
 				folders.add(temp);
 			}
@@ -172,7 +172,7 @@ public class S3Operations implements CommunicateS3{
 			String key = objectSummary.getKey();
 			
 			String f = null;
-			if(!key.contains("/") && key.startsWith(prefix)){
+			if(!key.contains("/")){
 				 f = key.replaceAll(prefix, "").trim();
 				 if(f.length()!=0)
 				 {temp = new Files(f,1,objectSummary.getSize());
