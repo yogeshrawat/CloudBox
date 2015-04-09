@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.io.*" %> 
 <%@ page import="java.util.*" %>
+<%@ page import="com.app.amazonS3.*" %>
 <%
 	boolean fBLogin=false;
 	if(session.getAttribute("isFBLoggedIn")!=null && session.getAttribute("isFBLoggedIn").equals(true))
@@ -33,10 +34,19 @@
 		}
 	 %>
      <%
- 		String S3BucketFolder = (String)session.getAttribute("currentDir");
-         Vector<String> l_Files = new Vector<String>(), l_Folders = new Vector<String>();
+     	 String userId = (String) session.getAttribute("userID");
+    	 S3Operations s3Operations = new S3Operations();
+    	 
+    	 String S3BucketFolder = (String)session.getAttribute("currentDir");
+    	 
+    	 System.out.println("The user ID of yogesh:"+userId);
+    	 
+     	 ArrayList<Files> files = s3Operations.getFilesFromBucket(userId, S3BucketFolder);
+     	 ArrayList<Folders> folders = s3Operations.getFolders(userId, S3BucketFolder);
+ 		 
+         /* Vector<String> l_Files = new Vector<String>(), l_Folders = new Vector<String>();
          GetDirectory(S3BucketFolder, l_Files, l_Folders);
-         int versions= 2;
+         int versions= 2; */
      %> 
 <!DOCTYPE html>
 <html>
@@ -52,16 +62,16 @@
 		<script type="text/javascript">
 		function insertTable()
 		{
-		    var num_rows = <%=l_Folders.size()+l_Files.size()%>;
+		    var num_rows = <%=folders.size()+files.size()%>;
 		    var num_cols = 7;
 		    
 		    var folder=new Array();
-		    <% for (int i=0; i<l_Folders.size(); i++) { %>
-		    	folder[<%= i %>] = "<%=l_Folders.elementAt(i).toString()%>"; 
+		    <% for (int i=0; i<folders.size(); i++) { %>
+		    	folder[<%= i %>] = '<%= folders.get(i).getName() %> '; 
 		    <% } %>
 		    
-		    <% for (int j=l_Folders.size(); j<l_Files.size()+l_Folders.size(); j++) { %>
-	    		folder[<%= j %>] = "<%=l_Files.elementAt(j-l_Folders.size()).toString()%>"; 
+		    <% for (int j=folders.size(); j<files.size()+folders.size(); j++) { %>
+	    		folder[<%= j %>] =  <%= (files.get(j - folders.size()).getFileName()) %> ; 
 	    	<% } %>		 
 		    
 		    var theader = "<table id='table1' class='ui celled striped table'>";
@@ -100,7 +110,7 @@
 		        	{
 		        		case 0:
 				            tbody += "<td class='collapsing' >";
-				            if(i < <%=l_Folders.size()%>)
+				            if(i < <%=folders.size()%>)
 				            	{
 					       	     	tbody += "<i class='folder icon' ></i>";      	
 				            	}
@@ -112,7 +122,7 @@
 				            break;
 		        		case 1:
 				            tbody += "<td>";
-				            if(i < <%=l_Folders.size()%>)
+				            if(i < <%=folders.size()%>)
 			            	{
 					            tbody += "<a class='traverseFolder'>"+folder[i]+"</a>";     	
 			            	}
@@ -124,7 +134,7 @@
 				            break;
 		        		case 2:
 		        			tbody += "<td>";
-		        			 if(i >= <%=l_Folders.size()%>)
+		        			 if(i >= <%=folders.size()%>)
 		        			 {
 						            tbody += "<a href='' class='ui button download' style='display:none;'>"+
 						            		 "	<i class='download blue icon'></i>"+
@@ -134,9 +144,9 @@
 		        			break;
 		        		case 3:
 		        			tbody += "<td>";
-		        			if(i >= <%=l_Folders.size()%>)
+		        			if(i >= <%=folders.size()%>)
 		        			{
-		        				var versionNum = <%= versions %>;
+		        				var versionNum = <%= 2 %>;//Fix later
 		        				var latestVer= versionNum-1;
 		        				var content= "";		        				
 		        				for(var k=0; k<versionNum;k++)
@@ -153,7 +163,7 @@
 		        			break;
 		        		case 4:
 				            tbody += "<td>";
-				            if(i >= <%=l_Folders.size()%>)
+				            if(i >= <%=folders.size()%>)
 				            {
 				            	tbody += "<div class='ui right pointing dropdown icon button mainshare' style='display:none;'>"+
 				            	            "<i class='share alternate icon'></i><p>share</p>"+
@@ -172,7 +182,7 @@
 				            break;
 		        		case 5:
 		        			tbody += "<td>";
-		        			if(i >= <%=l_Folders.size()%>)
+		        			if(i >= <%=folders.size()%>)
 		        			{
 					            tbody += "<p>3Mb</p>";
 	        				}

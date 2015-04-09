@@ -38,11 +38,11 @@ public class FileDisplayServlet extends HttpServlet {
 		if(isCredentialValid){
 		    nextPage = "UserMain.jsp";
 		    
-		    /*String userId = (String) session.getAttribute("userID");
+		    String userId = (String) session.getAttribute("userID");
 		    S3Operations s3AccessObject = new S3Operations();
-		    String userBucketInS3 = s3AccessObject.getBucketNameFromUserID(userId);*/
+		    String userRoot = s3AccessObject.getBucketNameFromUserID(userId);
 		    
-		    String userRoot= "/unitedawesome/";//Bucket root of user-S3
+//		    String userRoot= "unitedawesome";//Bucket root of user-S3
 		    
 		    String curFolder= (String) session.getAttribute("currentDir");
 		    
@@ -59,7 +59,7 @@ public class FileDisplayServlet extends HttpServlet {
 		    	}
 			    else
 			    {		    	 
-			    	 session.setAttribute("currentDir", curFolder + subFolderName + "/");
+			    	 session.setAttribute("currentDir", curFolder +"/"+ subFolderName);
 			    	 return;
 			    }
 		    

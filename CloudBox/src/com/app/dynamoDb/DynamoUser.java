@@ -199,7 +199,7 @@ public class DynamoUser {
 		for(Map<String, AttributeValue> item : scanResult.getItems()) {
 			System.out.println(item.get("UserID"));
 		
-			result = item.get("UserID").toString();
+			result = item.get("UserID").toString().replaceAll("\\W", "").trim().toLowerCase();
 		}
 		return result;
 	}
@@ -218,7 +218,7 @@ public class DynamoUser {
 		for(Map<String, AttributeValue> item : scanResult.getItems()) {
 			System.out.println(item.get("UserID"));
 		
-			result = item.get("UserID").toString();
+			result = item.get("UserID").toString().replaceAll("\\W", "").trim().toLowerCase();
 		}
 		return result;
 	}

@@ -57,7 +57,7 @@ public class CBLoginServlet extends HttpServlet {
 			{
 				if(user.validateName(cbEmailOrUserName, cbUserPwd))
 				{
-					session.setAttribute("userID", 1);
+					session.setAttribute("userID", user.getUserIDfromUserName(cbEmailOrUserName));
 					session.setAttribute("isCBLoggedIn", true);
 					response.sendRedirect("CloudBoxHome.jsp");
 				}
