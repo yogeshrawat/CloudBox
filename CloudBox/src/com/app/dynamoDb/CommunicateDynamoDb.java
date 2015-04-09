@@ -10,7 +10,8 @@ public class CommunicateDynamoDb {
 	public static void main(String args[])
 	{
 		DynamoUser fb = new DynamoUser();
-		fb.insert("leon","leon123","leon@gmail.com");
+		fb.getUserIDfromEmail("yogesh.rawat89@gmail.com")
+		//fb.insert("leon","leon123","leon@gmail.com");
 		//fb.remove("www.gmai.com");
 		//fb.read();
 	}

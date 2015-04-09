@@ -183,15 +183,34 @@ public class DynamoUser {
 	}
 
 
-	public String getUserID(String UserName)
+	public String getUserIDfromUserName(String UserName)
 	{
 		String result = "";
 		ScanRequest scanRequest = new ScanRequest("Users");
-		scanRequest.setConditionalOperator(ConditionalOperator.OR);
+		//scanRequest.setConditionalOperator(ConditionalOperator.OR);
 
 		Map<String, Condition> scanFilter = new HashMap<String, Condition>();
-		scanFilter.put("Email", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
-		scanFilter.put("Password", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
+		scanFilter.put("UserName", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
+		//scanFilter.put("Password", new Condition().withAttributeValueList(new AttributeValue(UserName)).withComparisonOperator(ComparisonOperator.EQ));
+
+		scanRequest.setScanFilter(scanFilter);
+		ScanResult scanResult = dynamoDB.scan(scanRequest);
+
+		for(Map<String, AttributeValue> item : scanResult.getItems()) {
+			System.out.println(item.get("UserID"));
+		
+			result = item.get("UserID").toString();
+		}
+		return result;
+	}
+	
+	public String getUserIDfromEmail(String Email)
+	{
+		String result = "";
+		ScanRequest scanRequest = new ScanRequest("Users");
+
+		Map<String, Condition> scanFilter = new HashMap<String, Condition>();
+		scanFilter.put("Email", new Condition().withAttributeValueList(new AttributeValue(Email)).withComparisonOperator(ComparisonOperator.EQ));
 
 		scanRequest.setScanFilter(scanFilter);
 		ScanResult scanResult = dynamoDB.scan(scanRequest);
