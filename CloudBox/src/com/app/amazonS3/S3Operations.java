@@ -55,8 +55,30 @@ public class S3Operations{
 		
 		util.getS3Client().createBucket(userID);
 	}
-	
-	
+	/**
+	 * 
+	 * @param bucketName - bucketname of the user eg. 1010sdarwin 
+	 * @param folderName - exact path eg. sdarwin/subfolder1
+	 * Note - sdarwin is a big folder created by default.
+	 */
+	public void createFolder(String bucketName, String folderName) {
+		// TODO validate foldername 
+
+		// Create metadata for your folder & set content-length to 0
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentLength(0);
+
+		// Create empty content
+		InputStream emptyContent = new ByteArrayInputStream(new byte[0]);
+
+		// Create a PutObjectRequest passing the foldername suffixed by /
+		PutObjectRequest putObjectRequest =
+				new PutObjectRequest(bucketName,  folderName + S3Operations.SUFFIX,
+						emptyContent, metadata);
+
+		// Send request to S3 to create folder
+		s3client.putObject(putObjectRequest);
+	}
 	/*public void uploadFile(String userID, String folderLocation){
 		File file = new File(folderLocation);
 		PutObjectRequest pr = new PutObjectRequest(getBucketFromID(userID).getName(), userID, file);

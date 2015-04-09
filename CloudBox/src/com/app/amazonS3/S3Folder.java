@@ -54,42 +54,15 @@ public class S3Folder {
 		DynamoUser du = new DynamoUser();
 		String name = du.getUserName(userID).replaceAll("\\W", "").trim().toLowerCase();
 		s3client.createBucket(userID + name);
-		createFolder(userID+name,userID);
+		s3oprnObj.createFolder(userID+name,userID);
 	}
-
-	/**
-	 * 
-	 * @param bucketName - bucketname of the user eg. 1010sdarwin 
-	 * @param folderName - exact path eg. sdarwin/subfolder1
-	 * Note - sdarwin is a big folder created by default.
-	 */
-	public void createFolder(String bucketName, String folderName) {
-		// TODO validate foldername 
-
-		// Create metadata for your folder & set content-length to 0
-		ObjectMetadata metadata = new ObjectMetadata();
-		metadata.setContentLength(0);
-
-		// Create empty content
-		InputStream emptyContent = new ByteArrayInputStream(new byte[0]);
-
-		// Create a PutObjectRequest passing the foldername suffixed by /
-		PutObjectRequest putObjectRequest =
-				new PutObjectRequest(bucketName,  folderName + FOLDER_SUFFIX,
-						emptyContent, metadata);
-
-		// Send request to S3 to create folder
-		s3client.putObject(putObjectRequest);
-	}
-	
-
 
 	public static void main(String[] args) {
 		S3Folder s3Folder = new S3Folder();
 		S3Operations oprn = new S3Operations();
 		//System.out.println(oprn.getFolders("1001syogesh", "cboxfoo/testing").size());
 		//s3Folder.createRootBucket("1001");
-		s3Folder.createFolder("1010sdarwin","sdarwin/subfolder1");
+		s3oprnObj.createFolder("1010sdarwin","sdarwin/subfolder1");
 	//	s3Folder.uploadFile("1001", "C:\\mytext.txt","1001syogesh/subfolder");
 	//	s3client.deleteBucket("1005spratikbidkar");
 		
