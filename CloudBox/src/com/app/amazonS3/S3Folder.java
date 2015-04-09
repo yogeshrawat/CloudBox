@@ -40,12 +40,12 @@ public class S3Folder {
 		s3client.setRegion(usWest2);
 	}
 	
-	public void uploadFile(String userID, String folderLocation,String fileName){
+	public void uploadFile(String userId, String folderLocation,String exactLocation){
 		File file = new File(folderLocation);
 		System.out.println(file.getName());
 		//String fileName = "myfolder" + FOLDER_SUFFIX + "userauthority.png";
-		PutObjectRequest pr = new PutObjectRequest(s3oprnObj.getBucketFromID(userID).getName(),
-				FILE_NAME_PREFIX+fileName, file);
+		PutObjectRequest pr = new PutObjectRequest(s3oprnObj.getBucketNameFromUserID(userId),
+				exactLocation + FOLDER_SUFFIX, file);
         
       s3client.putObject(pr);
 	}
@@ -68,7 +68,7 @@ public class S3Folder {
 
 		// Create a PutObjectRequest passing the foldername suffixed by /
 		PutObjectRequest putObjectRequest =
-				new PutObjectRequest("unitedawesome", foldername + FOLDER_SUFFIX,
+				new PutObjectRequest("unitedawesome",  foldername + FOLDER_SUFFIX,
 						emptyContent, metadata);
 
 		// Send request to S3 to create folder
@@ -79,27 +79,32 @@ public class S3Folder {
 
 	public static void main(String[] args) {
 		S3Folder s3Folder = new S3Folder();
+		S3Operations oprn = new S3Operations();
+		System.out.println(oprn.getFolders("unitedawesome", "unitedawesome"));
 		//s3Folder.createRootBucket("1001");
-		//s3Folder.create("myfolder","1001");
-		//s3Folder.uploadFile("1001", "C:\\mytext.txt","mytext.txt");
+		//s3Folder.create("new","1001");
+	//	s3Folder.uploadFile("1001", "C:\\mytext.txt","1001syogesh/subfolder");
 	//	s3client.deleteBucket("1005spratikbidkar");
 		
 	//	System.out.println(s3oprnObj.listKeysInDirectory("1001syogesh", FILE_NAME_PREFIX));
 		
 //		ObjectListing objectListing = s3client.listObjects(new ListObjectsRequest().
 //			    withBucketName("1001syogesh"));
-		
-		for (final S3ObjectSummary objectSummary: s3oprnObj.listKeysInDirectory("1001syogesh", FILE_NAME_PREFIX)) {
-		    final String key = objectSummary.getKey();
+		System.out.println(oprn.getFilesFromBucket("unitedawesome", "unitedawesome"));
+		//for (final S3ObjectSummary objectSummary: s3oprnObj.listKeysInDirectory("unitedawesome", "unitedawesome/myfolder")){
+		 //   final String key = objectSummary.getKey();
+		     //if(key.contains(FOLDER_SUFFIX))
+		    	 //System.out.println(key);
+		     
+		  //  System.out.println(key);
+		//}
 		    
-		    System.out.println(key);
 		    /*
 		    //if (S3Asset.isImmediateDescendant(prefix, key)) {
 		 //       final String relativePath = getRelativePath("j", key);
-		    //}
 		}*/
 		
 		
 	}
 }
-}
+

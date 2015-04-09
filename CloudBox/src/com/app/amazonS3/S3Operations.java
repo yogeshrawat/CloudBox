@@ -3,6 +3,7 @@ package com.app.amazonS3;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.amazonaws.auth.AWSCredentialsProviderChain;
@@ -30,7 +31,15 @@ public class S3Operations implements CommunicateS3{
 	DynamoUser du = new DynamoUser();
 	private static AmazonS3Client s3client = null;
 	private final static Region usWest2 = Region.getRegion(Regions.US_WEST_2);
-	
+	static {
+		// Create S3 Client object using AWS KEY & SECRET
+//		client = new AmazonS3Client(
+//				new BasicAWSCredentials(AWS_KEY, AWS_SECRET));
+		
+		s3client = new AmazonS3Client(new AWSCredentialsProviderChain(new InstanceProfileCredentialsProvider(),
+				new ClasspathPropertiesFileCredentialsProvider()));
+		s3client.setRegion(usWest2);
+	}
 	public S3Operations(){
 		
 	}
@@ -59,20 +68,18 @@ public class S3Operations implements CommunicateS3{
 		PutObjectRequest putObjectRequest = new PutObjectRequest(userID,
 		folderName + SUFFIX, emptyContent, metadata);
 		// send request to S3 to create folder
-		util.getS3Client().putObject(putObjectRequest);
+		s3client.putObject(putObjectRequest);
 		}
 	
-	public void uploadFile(String userID, String folderLocation){
+	/*public void uploadFile(String userID, String folderLocation){
 		File file = new File(folderLocation);
 		PutObjectRequest pr = new PutObjectRequest(getBucketFromID(userID).getName(), userID, file);
         
         util.getS3Client().putObject(pr);
-	}
+	}*/
 
 	public Bucket getBucketFromID(String userID) {
-		s3client = new AmazonS3Client(new AWSCredentialsProviderChain(new InstanceProfileCredentialsProvider(),
-				new ClasspathPropertiesFileCredentialsProvider()));
-		s3client.setRegion(usWest2);
+		
 		
 		List<Bucket> blist = s3client.listBuckets();
 		Bucket retBucket=null;
@@ -85,12 +92,11 @@ public class S3Operations implements CommunicateS3{
 	}
 	
 	public void getFileFromBucket(String userID){
-		s3client = new AmazonS3Client(new AWSCredentialsProviderChain(new InstanceProfileCredentialsProvider(),
-				new ClasspathPropertiesFileCredentialsProvider()));
-		s3client.setRegion(usWest2);
+		
 		
 		File localFile = new File("localFilename");
-
+		
+		//s3client.getObject(new getObjectRequest("unitedawesome"," "),localFile);
 		ObjectMetadata object = s3client.getObject(new GetObjectRequest("bucket", "s3FileName"), localFile);
 	}
 	
@@ -100,18 +106,120 @@ public class S3Operations implements CommunicateS3{
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param bucketName - bucket Name
+	 * @param prefix - exact path about which you need the information
+	 * @return List - Collection of items inside the given location
+	 */
 	public List<S3ObjectSummary> listKeysInDirectory(String bucketName, String prefix) {
-		s3client = new AmazonS3Client(new AWSCredentialsProviderChain(new InstanceProfileCredentialsProvider(),
-				new ClasspathPropertiesFileCredentialsProvider()));
-		s3client.setRegion(usWest2);
+		
 	    String delimiter = "/";
 	    if (!prefix.endsWith(delimiter)) {
-	       // prefix += delimiter;
+	        prefix += delimiter;
 	    }
 
 	    ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
-	            .withBucketName(bucketName).withPrefix(prefix);
+	            .withBucketName(bucketName);
 	    ObjectListing objects = s3client.listObjects(listObjectsRequest);
+	    
 	     return objects.getObjectSummaries();
 	}
+	
+	/**
+	 * 
+	 * @param bucketName
+	 * @param prefix
+	 * @return List of folders in a bucket
+	 */
+	public ArrayList<Folders> getFolders(String bucketName, String prefix){
+		
+		ArrayList<Folders> folders = new ArrayList<Folders>();
+		Folders temp ;
+		for (final S3ObjectSummary objectSummary: listKeysInDirectory(bucketName, prefix)){
+			String key = objectSummary.getKey();
+			char lastChar = key.charAt(key.length()-1);
+			if(lastChar=='/'){
+				temp = new Folders(bucketName, key.replaceAll("\\W", "").trim().toLowerCase());
+				folders.add(temp);
+			}
+			
+		}
+		return folders;
+	}
+	
+	/**
+	 * 
+	 * @param bucketName
+	 * @param prefix - the path upto the folder level eg. unitedawesome/myfolder
+	 * @return - List of files from a subfolder inside a bucket
+	 */
+	public ArrayList<Files> getFilesFromFolder(String bucketName, String prefix){
+		
+		ArrayList<Files> files = new ArrayList<Files>();
+		Files temp ;
+		String delimiter = "/";
+	    if (!prefix.endsWith(delimiter)) {
+	        prefix += delimiter;
+	    }
+
+	    ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+	            .withBucketName(bucketName);
+	    ObjectListing objects = s3client.listObjects(listObjectsRequest);
+	    
+	    List<S3ObjectSummary> temporary = objects.getObjectSummaries();
+		for (final S3ObjectSummary objectSummary: temporary){
+			String key = objectSummary.getKey();
+			
+			String f = null;
+			if(key.contains(prefix)){
+				 f = key.replaceAll(prefix, "").trim();
+				 if(f.length()!=0)
+				 {temp = new Files(f,1,objectSummary.getSize());
+				 files.add(temp);
+				 }
+			}
+			
+		}
+		return files;
+		
+	}
+
+	/**
+	 * 
+	 * @param bucketName
+	 * @param prefix - for bucket level should be the bucketname itself
+	 * @return List of file objects that are present in the bucket level
+	 */
+	public ArrayList<Files> getFilesFromBucket(String bucketName, String prefix){
+		
+		ArrayList<Files> files = new ArrayList<Files>();
+		Files temp ;
+		String delimiter = "/";
+	    if (!prefix.endsWith(delimiter)) {
+	        prefix += delimiter;
+	    }
+
+	    ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+	            .withBucketName(bucketName);
+	    ObjectListing objects = s3client.listObjects(listObjectsRequest);
+	    
+	    List<S3ObjectSummary> temporary = objects.getObjectSummaries();
+		for (final S3ObjectSummary objectSummary: temporary){
+			String key = objectSummary.getKey();
+			
+			if(!key.contains("/")){
+				 {temp = new Files(key,1,objectSummary.getSize());
+				 files.add(temp);
+				 }
+			}
+			
+		}
+		return files;
+		
+	}
+
+
+	
+	
 }
