@@ -80,7 +80,7 @@ public class S3Folder {
 	public static void main(String[] args) {
 		S3Folder s3Folder = new S3Folder();
 		S3Operations oprn = new S3Operations();
-		System.out.println(oprn.getFolders("1001syogesh", "1001syogesh/subfolder").get(0));
+		System.out.println(oprn.getFolders("1001syogesh", "1001syogesh/cboxfoo").size());
 		//s3Folder.createRootBucket("1001");
 		//s3Folder.create("new","1001");
 	//	s3Folder.uploadFile("1001", "C:\\mytext.txt","1001syogesh/subfolder");
@@ -90,7 +90,7 @@ public class S3Folder {
 		
 //		ObjectListing objectListing = s3client.listObjects(new ListObjectsRequest().
 //			    withBucketName("1001syogesh"));
-		System.out.println(oprn.getFilesFromBucket("unitedawesome", "unitedawesome"));
+		System.out.println(oprn.getFilesFromFolder("1001syogesh", "1001syogesh/cboxfoo").size());
 		//for (final S3ObjectSummary objectSummary: s3oprnObj.listKeysInDirectory("unitedawesome", "unitedawesome/myfolder")){
 		 //   final String key = objectSummary.getKey();
 		     //if(key.contains(FOLDER_SUFFIX))
