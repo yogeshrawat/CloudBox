@@ -56,18 +56,6 @@ public class S3Operations{
 		util.getS3Client().createBucket(userID);
 	}
 	
-	public void createFolder(String userID, String folderName ) {
-		// create meta-data for your folder and set content-length to 0
-		ObjectMetadata metadata = new ObjectMetadata();
-		metadata.setContentLength(0);
-		// create empty content
-		InputStream emptyContent = new ByteArrayInputStream(new byte[0]);
-		// create a PutObjectRequest passing the folder name suffixed by /
-		PutObjectRequest putObjectRequest = new PutObjectRequest(userID,
-		folderName + SUFFIX, emptyContent, metadata);
-		// send request to S3 to create folder
-		s3client.putObject(putObjectRequest);
-		}
 	
 	/*public void uploadFile(String userID, String folderLocation){
 		File file = new File(folderLocation);
@@ -118,7 +106,7 @@ public class S3Operations{
 	    }
 
 	    ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
-	            .withBucketName(bucketName);
+	            .withBucketName(bucketName).withPrefix(prefix).withDelimiter(delimiter);
 	    ObjectListing objects = s3client.listObjects(listObjectsRequest);
 	    
 	     return objects.getObjectSummaries();
@@ -132,15 +120,26 @@ public class S3Operations{
 	 */
 	public ArrayList<Folders> getFolders(String bucketName, String prefix){
 		
+		/*String delimiter = "/";
+	    if (!prefix.endsWith(delimiter)) {
+	        prefix += delimiter;
+	    }
+
+	    ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+	            .withBucketName(bucketName);
+	    ObjectListing objects = s3client.listObjects(listObjectsRequest);
+		List<S3ObjectSummary> str = objects.getObjectSummaries();*/
+		
 		ArrayList<Folders> folders = new ArrayList<Folders>();
 		Folders temp ;
 		List<S3ObjectSummary> temporary = listKeysInDirectory(bucketName.toLowerCase(), prefix);
-		for (final S3ObjectSummary objectSummary: temporary)
-			System.out.println(objectSummary.getKey());
+		//for (final S3ObjectSummary objectSummary: str)
+		//	System.out.println(objectSummary.getKey());
 		for (final S3ObjectSummary objectSummary: temporary){
 			String key = objectSummary.getKey();
+			System.out.println(key);
 			char lastChar = key.charAt(key.length()-1);
-			if(lastChar=='/' && key.contains(prefix)){
+			if(lastChar=='/'){
 				temp = new Folders(bucketName, key.replaceAll("\\W", "").trim().toLowerCase());
 				folders.add(temp);
 			}
