@@ -42,8 +42,6 @@ public class FileDisplayServlet extends HttpServlet {
 		    S3Operations s3AccessObject = new S3Operations();
 		    String userRoot = s3AccessObject.getBucketNameFromUserID(userId);
 		    
-//		    String userRoot= "unitedawesome";//Bucket root of user-S3
-		    
 		    String curFolder= (String) session.getAttribute("currentDir");
 		    
 		    String subFolderName= request.getParameter("folder");

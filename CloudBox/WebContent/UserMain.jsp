@@ -19,20 +19,6 @@
 	response.setHeader("Cache-Control", "must-revalidate");
 	response.setDateHeader("Expires",0);
 %>
-	<%!        
-		public void GetDirectory(String a_Path, Vector<String> a_files, Vector<String> a_folders) {//Retrieve the information from a specific folder-S6
-		    File l_Directory = new File(a_Path);
-		    File[] l_files = l_Directory.listFiles();
-		
-		    for (int c = 0; c < l_files.length; c++) {
-		        if (l_files[c].isDirectory()) {
-		            a_folders.add(l_files[c].getName());
-		        } else {
-		            a_files.add(l_files[c].getName());
-		        }
-		    }
-		}
-	 %>
      <%
      	 String userId = (String) session.getAttribute("userID");
     	 S3Operations s3Operations = new S3Operations();
@@ -40,16 +26,12 @@
     	 String S3BucketHome = s3Operations.getBucketNameFromUserID(userId);
     	 String S3BucketFolder = (String)session.getAttribute("currentDir");
     	 
-    	 System.out.println("The user ID:"+userId+", bucket home:"+S3BucketHome);
+    	 System.out.println("The user ID:"+userId+", bucket home:"+S3BucketHome+", current folder:"+S3BucketFolder);
     	 
      	 ArrayList<Files> files = s3Operations.getFilesFromBucket(userId, S3BucketFolder);
      	 ArrayList<Folders> folders = s3Operations.getFolders(S3BucketHome, S3BucketFolder);
  		 
-     	System.out.println("The files:"+files.size()+", folders:"+folders.size());
-     	 
-         /* Vector<String> l_Files = new Vector<String>(), l_Folders = new Vector<String>();
-         GetDirectory(S3BucketFolder, l_Files, l_Folders);
-         int versions= 2; */
+     	System.out.println("In side current folder. The files:"+files.size()+", folders:"+folders.size());
      %> 
 <!DOCTYPE html>
 <html>
