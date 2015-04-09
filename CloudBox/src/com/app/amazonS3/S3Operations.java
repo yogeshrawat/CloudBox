@@ -191,8 +191,8 @@ public class S3Operations implements CommunicateS3{
 	 * @param prefix - for bucket level should be the bucketname itself
 	 * @return List of file objects that are present in the bucket level
 	 */
-	public ArrayList<Files> getFilesFromBucket(String bucketName, String prefix){
-		
+	public ArrayList<Files> getFilesFromBucket(String userId, String prefix){
+		String bucketName = getBucketNameFromUserID(userId);
 		ArrayList<Files> files = new ArrayList<Files>();
 		Files temp ;
 		String delimiter = "/";
