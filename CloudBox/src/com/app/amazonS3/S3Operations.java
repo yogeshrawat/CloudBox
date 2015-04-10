@@ -33,6 +33,8 @@ public class S3Operations{
 	static AmazonS3User s3user = null;
 	private static final String SUFFIX = "/";
 	AmazonS3ClientUtil util;
+	private int inputStreamLength = 0;
+	
 	DynamoUser du = new DynamoUser();
 	private static AmazonS3Client s3client = null;
 	private final static Region usWest2 = Region.getRegion(Regions.US_WEST_2);
@@ -56,6 +58,7 @@ public class S3Operations{
 	}
 	
 	
+
 	public void createRootBucket(String userID){
 		
 		util.getS3Client().createBucket(userID);
@@ -224,6 +227,7 @@ public class S3Operations{
 		
 		S3Object object = s3client.getObject(new GetObjectRequest(bucketName, finalPath));
 		
+		setInputStreamLength((int)object.getObjectMetadata().getContentLength());
 		return object.getObjectContent();
 		/*File file = new File("C:\\my.txt");
 		s3client.getObject(new GetObjectRequest(bucketName, filePath) , file);
@@ -231,6 +235,20 @@ public class S3Operations{
 		GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, filePath);
 		return s3client.generatePresignedUrl(req);*/
 		
+	}
+
+	/**
+	 * @return the inputStreamLength
+	 */
+	public int getInputStreamLength() {
+		return inputStreamLength;
+	}
+
+	/**
+	 * @param inputStreamLength the inputStreamLength to set
+	 */
+	public void setInputStreamLength(int inputStreamLength) {
+		this.inputStreamLength = inputStreamLength;
 	} 
 	
 	
