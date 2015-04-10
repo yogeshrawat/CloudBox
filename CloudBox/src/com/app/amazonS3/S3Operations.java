@@ -2,6 +2,7 @@ package com.app.amazonS3;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,8 +24,8 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
-
 import com.app.dynamoDb.DynamoUser;
 
 public class S3Operations{
@@ -217,12 +218,18 @@ public class S3Operations{
 	 * @param filePath - the locaiton from where the file needs to be downloaded
 	 * @return - public URL of the file
 	 */
-	public URL downloadFile(String bucketName, String filePath){
-		File file = new File("C:\\my.txt");
+	public S3ObjectInputStream downloadFile(String bucketName, String filePath,String fileName, String version){
+		
+		String finalPath = filePath+version+fileName;
+		
+		S3Object object = s3client.getObject(new GetObjectRequest(bucketName, finalPath));
+		
+		return object.getObjectContent();
+		/*File file = new File("C:\\my.txt");
 		s3client.getObject(new GetObjectRequest(bucketName, filePath) , file);
 		
 		GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, filePath);
-		return s3client.generatePresignedUrl(req);
+		return s3client.generatePresignedUrl(req);*/
 		
 	} 
 	

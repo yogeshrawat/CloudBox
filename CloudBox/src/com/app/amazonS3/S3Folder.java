@@ -3,7 +3,9 @@ package com.app.amazonS3;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import com.amazonaws.auth.AWSCredentialsProviderChain;
@@ -14,6 +16,8 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.app.dynamoDb.DynamoFilesURL;
 import com.app.dynamoDb.DynamoUser;
 
@@ -94,10 +98,51 @@ public class S3Folder {
 		
 		m.setContentLength(file.length());
 		
-		s3Folder.uploadFile("1001syogesh", file.getName(),input,"cboxfoo/testing/",m);
+		//s3Folder.uploadFile("1001syogesh", file.getName(),input,"cboxfoo/testing/",m);
 	
 		
+		S3ObjectInputStream s3 = s3oprnObj.downloadFile("1001syogesh", "cboxfoo/testing/", "vcredist.bmp", "1");
 		
+		InputStream inputStream = null;
+		OutputStream outputStream = null;
+	 
+		/*try {
+			// read this file into InputStream
+			inputStream = s3;
+	 
+			// write the inputStream to a FileOutputStream
+			outputStream = 
+	                    new FileOutputStream(new File("/Users/mkyong/Downloads/holder-new.js"));
+	 
+			int read = 0;
+			byte[] bytes = new byte[1024];
+	 
+			while ((read = inputStream.read(bytes)) != -1) {
+				outputStream.write(bytes, 0, read);
+			}
+	 
+			System.out.println("Done!");
+	 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (outputStream != null) {
+				try {
+					// outputStream.flush();
+					outputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	 
+			}
+		}*/
 		//	s3client.deleteBucket("1005spratikbidkar");
 		/*ArrayList<Files> f = s3oprnObj.getFiles("1001syogesh", "");
 		for(Files fr : f){
