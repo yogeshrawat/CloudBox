@@ -11,6 +11,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.app.dynamoDb.DynamoFilesURL;
 import com.app.dynamoDb.DynamoUser;
 
 public class S3Folder {
@@ -37,8 +38,8 @@ public class S3Folder {
 	 * @param locationOnS3 - path where the file has to be stored
 	 * @throws FileNotFoundException
 	 */
-	public void uploadFile(String bucketName, String fileName, String locationOnS3) throws FileNotFoundException{
-		
+	public void uploadFile(String bucketName, String fileName, File file,String locationOnS3 ) throws FileNotFoundException{
+		DynamoFilesURL dfu = new DynamoFilesURL();
 		ArrayList<Files> temp = s3oprnObj.getFiles(bucketName, locationOnS3);
 		int version = 0;
 		String versionFileName = null;
@@ -53,15 +54,17 @@ public class S3Folder {
 			else{
 				 versionFileName = "1"+fileName;
 				 PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + versionFileName, 
-						 new File("E:\\er.txt"));
+						 file);
 				 s3client.putObject(pr);
 				 
 				 break;
 			}
 		}
 		versionFileName = ""+version+fileName;
+		System.out.println("path"+(locationOnS3+versionFileName));
+		dfu.insert((locationOnS3+versionFileName),"1");
 		PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + versionFileName, 
-				new File("E:\\er.txt"));
+				file);
 		s3client.putObject(pr);
 	}
 	
@@ -79,11 +82,11 @@ public class S3Folder {
 	public static void main(String[] args) throws FileNotFoundException {
 		S3Folder s3Folder = new S3Folder();
 		S3Operations oprn = new S3Operations();
-		System.out.println(oprn.downloadFile("1001syogesh","cboxfoo/cboximage"));
+	//	System.out.println(oprn.downloadFile("1001syogesh","cboxfoo/cboximage"));
 	//	System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
 		//s3Folder.createRootBucket("1001");
 	//	s3oprnObj.createFolder("1011syogesh1","new/pratik");
-	//	s3Folder.uploadFile("1001syogesh", "sample.txt","cboxfoo/testing");
+	//	s3Folder.uploadFile("1001syogesh", "pita.txt","cboxfoo/testing/");
 	//	s3client.deleteBucket("1005spratikbidkar");
 	//	s3oprnObj.getFiles("1001syogesh", "cboxfoo/testing");
 	//	System.out.println(s3oprnObj.listKeysInDirectory("1001syogesh", FILE_NAME_PREFIX));
