@@ -88,9 +88,10 @@ public class UploadFileServlet extends HttpServlet {
 					// Get the uploaded file parameters
 					String fileName = fi.getName();
 					
-					String fieldName = fi.getFieldName();
+					/*String fieldName = fi.getFieldName();
+					boolean isInMemory = fi.isInMemory();*/
+					
 					String contentType = fi.getContentType();
-					boolean isInMemory = fi.isInMemory();
 					long sizeInBytes = fi.getSize();
 					InputStream input =fi.getInputStream();
 					
@@ -105,10 +106,6 @@ public class UploadFileServlet extends HttpServlet {
 							//file = new File(fileName.substring(fileName.lastIndexOf("/")));
 							fileName = fileName.substring(fileName.lastIndexOf("/"));
 						}
-						else
-						{
-							//file = new File(fileName);
-						}
 					
 					//fi.write(file);//Upload to S3 with path and name-S5
 					
@@ -117,7 +114,7 @@ public class UploadFileServlet extends HttpServlet {
 					meta.setContentLength(sizeInBytes);
 					meta.setContentType(contentType);
 					
-					s3Folder.uploadFile(s3BucketHome,fileName , input, curFolder, meta);
+					s3Folder.uploadFile(s3BucketHome, fileName, input, curFolder, meta);
 					
 					out.write("Uploaded Filename: " + fileName);
 				}
