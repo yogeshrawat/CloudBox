@@ -155,7 +155,7 @@
 		        			if(i >= <%=folders.size()%>)
 		        			{
 		        				var versionNum = fileVersion[i- <%= folders.size() %>];//Fix later
-		        				var latestVer= versionNum-1;
+		        				var latestVer= versionNum;
 		        				var content= "";		        				
 		        				for(var k=0; k<versionNum;k++)
 		        				{
