@@ -73,6 +73,9 @@ public class S3Folder {
 	public static void main(String[] args) throws FileNotFoundException {
 		S3Folder s3Folder = new S3Folder();
 		S3Operations oprn = new S3Operations();
+		
+		//"10vcredist".substring(0,"abc.def.ghi".indexOf(c)-1);
+		
 	//	System.out.println(oprn.downloadFile("1001syogesh","cboxfoo/cboximage"));
 	//	System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
 		//s3Folder.createRootBucket("1001");
@@ -80,7 +83,7 @@ public class S3Folder {
 		File file = new File("E:\\vcredist.bmp");
 	//	s3Folder.uploadFile("1001syogesh", file.getName(),file,"cboxfoo/testing/");
 	//	s3client.deleteBucket("1005spratikbidkar");
-		ArrayList<Files> f = s3oprnObj.getFiles("1001syogesh", "cboxfoo/testing/");
+		ArrayList<Files> f = s3oprnObj.getFiles("1001syogesh", "");
 		for(Files fr : f){
 			System.out.println(fr.getFileName());
 			System.out.println(fr.getVersion());
