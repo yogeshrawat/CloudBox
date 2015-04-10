@@ -132,7 +132,7 @@ $(document).ready(function(){
 		$.get("ShareFileServlet", 
 				{User: sharetoUser, FileName: curFocusedFile, Version: curFocuedFileVersion}, 
 				function(){ 
-				  tempAlert("Shared a file:"+curFocusedFile, 2500, "green");
+				  tempAlert("Shared a file:"+curFocusedFile, 1000, "green");
 				}
 		);
 		
@@ -148,7 +148,7 @@ $(document).ready(function(){
 		$.get("ShareFileServlet", 
 				{URL: fileURl}, 
 				function(){ 
-				  tempAlert("Track a file sharing", 2500, "green");
+				  tempAlert("Track a file sharing", 1000, "green");
 				}
 		);
 	});

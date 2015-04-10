@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.app.amazonS3.S3Operations;
 import com.app.dynamoDb.DynamoSharedURL;
+import com.app.dynamoDb.DynamoUser;
 
 /**
  * Servlet implementation class ShareFileServlet
@@ -32,8 +34,6 @@ public class ShareFileServlet extends HttpServlet {
 			
 			DynamoSharedURL  dynamoSharetable = new DynamoSharedURL();
 			dynamoSharetable.insert(URl);
-			
-			return;
 		}
 		else
 		{
@@ -44,15 +44,21 @@ public class ShareFileServlet extends HttpServlet {
 		    if(targetUser !=null && fileName != null && version != null)
 		    {   
 		    	//Share file via copy file to another target user S3 bucket-S7
-			    //TBD
+		    	DynamoUser  user= new DynamoUser();
+		    	String targetId = user.getUserIDfromUserName(targetUser);
+		    	
+		    	S3Operations s3Operations = new S3Operations();
+		    	String from = s3Operations.getBucketNameFromUserID(userID);
+		    	String to = s3Operations.getBucketNameFromUserID(targetId);
+		    	
 			    String curFolder= (String) session.getAttribute("currentDir");
-			    System.out.println("UserID:"+userID+", TargetUser:"+targetUser+", FilePartialURL:"+curFolder+fileName+", Version:"+version);
-			    return;
+			    System.out.println("From:"+from+", To:"+to+", FilePartialURL:"+curFolder+", File:"+fileName+", Version:"+version);
+		    
+			    s3Operations.shareFile(from, curFolder, fileName, version, to);
 		    }
 			else
 		    {
 		    	 response.sendError(HttpServletResponse.SC_NO_CONTENT, "No important parameter");
-		    	 return;
 		    }
 
 		}

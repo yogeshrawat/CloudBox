@@ -36,8 +36,8 @@ public class DownloadFileServlet extends HttpServlet {
 		boolean isCredentialValid;
 		HttpSession session = request.getSession(true);
 		
-		if((session.getAttribute("isFBLoggedIn")!=null && session.getAttribute("isFBLoggedIn").equals(true))
-				||(session.getAttribute("isCBLoggedIn") != null && session.getAttribute("isCBLoggedIn").equals(true)))
+		if(((session.getAttribute("isFBLoggedIn")!=null && session.getAttribute("isFBLoggedIn").equals(true)))
+				||((session.getAttribute("isCBLoggedIn") != null && session.getAttribute("isCBLoggedIn").equals(true))))
 		{
 			isCredentialValid = true;
 		}
@@ -113,8 +113,6 @@ public class DownloadFileServlet extends HttpServlet {
 	    	
 	    	InputStream inStream = s3Operations.downloadFile(s3BucketHome, folder, file, version);
 	    	int fileLength = s3Operations.getInputStreamLength();
-//	        File downloadFile = new File(folder+file);
-//	        FileInputStream inStream = new FileInputStream(downloadFile);//Create a file input stream from S3 file-Parameter-relative path to the file-S2
 	        
 			response.setContentType("application/octet-stream");	        
 	        response.setContentLength(fileLength);
@@ -134,19 +132,13 @@ public class DownloadFileServlet extends HttpServlet {
 	        inStream.close();
 	        outStream.close();  
 			
-	        /*if(isDownloadSharelink)
-	        {
-	        	RequestDispatcher requestDispatcher= request.getRequestDispatcher("CloudBoxHome.jsp");
-			    requestDispatcher.forward(request, response);
-	        }*/
 		}
 		else
 		{
 			session.setAttribute("downloadUrl", request.getQueryString());
+			System.out.println("Add download Url session attribute="+request.getQueryString());
 		    String nextPage = "Login.jsp";
 		    response.sendRedirect(nextPage);
-		 /* RequestDispatcher requestDispatcher= request.getRequestDispatcher(nextPage);
-		    requestDispatcher.forward(request, response);*/
 		}
 		
 	}

@@ -98,14 +98,14 @@
 		    		var defaultFileDir;
 		    		if(loc != "/")
 		    		{
-		    			defaultFileDir = "http://localhost:8080/CloudBox/download?"+
+		    			defaultFileDir = "http://travellogenv-5bwgdxfrha.elasticbeanstalk.com/download?"+
 		    			 "loc="+loc+
 						 "&name="+folder[i]+
  						 "&ver="+(fileVersion[i-<%= folders.size() %>]);
 		    		}
 		    		else
 		    		{
-		    			defaultFileDir = "http://localhost:8080/CloudBox/download?"+
+		    			defaultFileDir = "http://travellogenv-5bwgdxfrha.elasticbeanstalk.com/download?"+
 		    			 "name="+folder[i]+
  						 "&ver="+(fileVersion[i-<%= folders.size() %>]);
 		    		}
@@ -177,8 +177,10 @@
 				            	            "<i class='share alternate icon'></i><p>share</p>"+
 				            	            "<div class='menu'>"+
 				            	            "   <div class='item fb share'>"+
+				            	            "     <div id='fb-root'>"+
 				            	            "		<div class='fb-share-button' data-href='"+defaultFileDir+"' data-layout='button'>"+
 				            	            "		</div>"+
+				            	            "     </div>"+
 				            	            "	</div>"+
 				            	            "   <div class='item'>"+
 				            	            "		<div class='mini ui button CBShare'>CB Share</div>"+
@@ -239,7 +241,9 @@
 		  		<div class="visible content"><i class="sign out icon"></i></div>
 		  		<div class="hidden content">Logout</div>
 			</div>
-    		<div class="fb-login-button" data-max-rows="1" data-size="large" data-auto-logout-link="true"></div>
+			<div id="fb-root">
+    			<div class="fb-login-button" data-max-rows="1" data-size="large" data-auto-logout-link="true"></div>
+			</div>
 		</div>
 		
 		<div id="home" class="ui animated fade button">
