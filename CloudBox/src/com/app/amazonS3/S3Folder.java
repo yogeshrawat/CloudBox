@@ -1,7 +1,9 @@
 package com.app.amazonS3;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import com.amazonaws.auth.AWSCredentialsProviderChain;
@@ -10,6 +12,7 @@ import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.app.dynamoDb.DynamoFilesURL;
 import com.app.dynamoDb.DynamoUser;
@@ -38,7 +41,8 @@ public class S3Folder {
 	 * @param locationOnS3 - path where the file has to be stored
 	 * @throws FileNotFoundException
 	 */
-	public void uploadFile(String bucketName, String fileName, File file,String locationOnS3 ) throws FileNotFoundException{
+	public void uploadFile(String bucketName, String fileName, InputStream input,String locationOnS3 ,
+			ObjectMetadata metadata) throws FileNotFoundException{
 		DynamoFilesURL dfu = new DynamoFilesURL();
 		//ArrayList<Files> temp = s3oprnObj.getFiles(bucketName, locationOnS3);
 		//int version = 0;
@@ -47,14 +51,14 @@ public class S3Folder {
 		
 			dfu.insert((locationOnS3+fileName),"1");
 			PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + ("1"+fileName), 
-					file);
+					input,metadata);
 			s3client.putObject(pr);
 		}
 		else{
 			versionFileName = ""+(Integer.parseInt(versionFileName)+1);
 			dfu.insert((locationOnS3+fileName),versionFileName);
 			PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + (versionFileName+fileName), 
-					file);
+					input,metadata);
 			s3client.putObject(pr);
 		}
 	}
@@ -80,14 +84,24 @@ public class S3Folder {
 	//	System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
 		//s3Folder.createRootBucket("1001");
 	//	s3oprnObj.createFolder("1011syogesh1","new/pratik");
+		
 		File file = new File("E:\\vcredist.bmp");
-	//	s3Folder.uploadFile("1001syogesh", file.getName(),file,"cboxfoo/testing/");
-	//	s3client.deleteBucket("1005spratikbidkar");
-		ArrayList<Files> f = s3oprnObj.getFiles("1001syogesh", "");
+		FileInputStream input = new FileInputStream(file);
+		
+		ObjectMetadata m = new ObjectMetadata();
+		
+		m.setContentLength(file.length());
+		
+		s3Folder.uploadFile("1001syogesh", file.getName(),input,"cboxfoo/testing/",m);
+	
+		
+		
+		//	s3client.deleteBucket("1005spratikbidkar");
+		/*ArrayList<Files> f = s3oprnObj.getFiles("1001syogesh", "");
 		for(Files fr : f){
 			System.out.println(fr.getFileName());
 			System.out.println(fr.getVersion());
-		}
+		}*/
 	//	System.out.println(s3oprnObj.listKeysInDirectory("1001syogesh", FILE_NAME_PREFIX));
 		
 //		ObjectListing objectListing = s3client.listObjects(new ListObjectsRequest().
