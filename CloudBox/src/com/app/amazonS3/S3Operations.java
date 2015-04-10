@@ -205,7 +205,7 @@ public class S3Operations{
 
 	/**
 	 * 
-	 * @param bucketName
+	 * @param bucketName - the bucket name of the user
 	 * @param prefix - for bucket level should be the bucketname itself
 	 * @return List of file objects that are present in the bucket level
 	 */
@@ -237,6 +237,12 @@ public class S3Operations{
 		return files;
 	}
 
+	/**
+	 * This method will return you the files URL you want to download.
+	 * @param bucketName
+	 * @param filePath - the locaiton from where the file needs to be downloaded
+	 * @return - public URL of the file
+	 */
 	public URL downloadFile(String bucketName, String filePath){
 		File file = new File("C:\\my.txt");
 		s3client.getObject(new GetObjectRequest(bucketName, filePath) , file);
