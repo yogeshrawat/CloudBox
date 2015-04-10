@@ -54,7 +54,6 @@ public class S3Folder {
 		DynamoUser du = new DynamoUser();
 		String name = du.getUserName(userID).replaceAll("\\W", "").trim().toLowerCase();
 		s3client.createBucket(userID + name);
-		s3oprnObj.createFolder(s3oprnObj.getBucketNameFromUserID(userID),userID);
 	}
 
 	public static void main(String[] args) {
@@ -62,7 +61,7 @@ public class S3Folder {
 		S3Operations oprn = new S3Operations();
 		//System.out.println(oprn.getFolders("1001syogesh", "cboxfoo/testing").size());
 		//s3Folder.createRootBucket("1001");
-		s3oprnObj.createFolder("1010sdarwin","sdarwin/subfolder1");
+		s3oprnObj.createFolder("1011syogesh1","new/pratik");
 	//	s3Folder.uploadFile("1001", "C:\\mytext.txt","1001syogesh/subfolder");
 	//	s3client.deleteBucket("1005spratikbidkar");
 		
