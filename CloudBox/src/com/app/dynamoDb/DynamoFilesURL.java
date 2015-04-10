@@ -58,8 +58,9 @@ public class DynamoFilesURL {
 
 	}
 
-	public void read(String FileURL){
+	public String read(String FileURL){
 
+		String result = "";
 		ScanRequest scanRequest = new ScanRequest("FilesURL");
 
 		Map<String, Condition> scanFilter = new HashMap<String, Condition>();
@@ -69,8 +70,13 @@ public class DynamoFilesURL {
 		ScanResult scanResult = dynamoDB.scan(scanRequest);
 
 		for(Map<String, AttributeValue> item : scanResult.getItems()) {
-			System.out.println(item.get("Version"));
+			//System.out.println(item.get("Version"));
+		//System.out.println(item.get("Version").toString().replaceAll("\\W\\D", "").trim().toLowerCase());
+			result = item.get("Version").toString().replaceAll("\\W\\D", "").trim().toLowerCase();
+			//result = result.replaceAll("\\D", "");
 		}
+		return result;
+		
 	}
 
 	public void remove(String FileURL){
