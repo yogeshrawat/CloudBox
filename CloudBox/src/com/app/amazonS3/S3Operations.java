@@ -252,8 +252,9 @@ public class S3Operations{
 		this.inputStreamLength = inputStreamLength;
 	}
 	
-	public void removeFile(String bucketName, String filePath){
-		s3client.deleteObject(bucketName, filePath);
+	public void removeFile(String bucketName, String filePath, String fileName, String version){
+		String finalPath= filePath+version+fileName;
+		s3client.deleteObject(bucketName, finalPath);
 	}
 	
 	public void shareFile(String sourceBucketName,String sourceKey,

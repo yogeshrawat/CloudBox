@@ -85,11 +85,11 @@ public class S3Folder {
 		S3Operations oprn = new S3Operations();
 		
 		//"10vcredist".substring(0,"abc.def.ghi".indexOf(c)-1);
-		ArrayList<Files> f = oprn.getFiles("1001syogesh", "cboxfoo/");
+		/*ArrayList<Files> f = oprn.getFiles("1001syogesh", "cboxfoo/");
 		for(Files fr : f){
 			System.out.println(fr.getFileName());
 			System.out.println(fr.getVersion());
-		}
+		}*/
 	//	System.out.println(oprn.downloadFile("1001syogesh","cboxfoo/cboximage"));
 	//	System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
 		//s3Folder.createRootBucket("1001");
@@ -97,7 +97,7 @@ public class S3Folder {
 		
 		File file = new File("E:\\vcredist.bmp");
 		FileInputStream input = new FileInputStream(file);
-		
+		s3oprnObj.removeFile("1001syogesh", "", "issue", "1");
 		ObjectMetadata m = new ObjectMetadata();
 		
 		m.setContentLength(file.length());
