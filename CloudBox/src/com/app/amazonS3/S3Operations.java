@@ -156,8 +156,12 @@ public class S3Operations{
 		Folders temp ;
 		for(String s : str){
 			System.out.println(s);
-			temp = new Folders(bucketName, s.replaceAll("\\W", "").trim().toLowerCase());
-			folders.add(temp);
+			s = s.replaceAll(prefix,"").trim();
+			if(s.length() >0 )
+			{
+				temp = new Folders(bucketName, s.replaceAll("\\W", "").trim().toLowerCase());
+				folders.add(temp);
+			}
 
 		}
 		return folders;
@@ -224,7 +228,7 @@ public class S3Operations{
 			String key = s.getKey().replaceAll(prefix, "").trim();
 			
 			//System.out.println(key);
-			if(key.length()!=0 && !key.contains("/")){
+			if(key.length() > 0 && !key.contains("/")){
 				System.out.println(key);
 				 {temp = new Files(key,1,s.getSize());
 				 files.add(temp);
