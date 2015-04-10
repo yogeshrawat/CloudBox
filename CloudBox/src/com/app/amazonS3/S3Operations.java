@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import com.amazonaws.auth.AWSCredentialsProviderChain;
@@ -142,30 +143,22 @@ public class S3Operations{
 	 */
 	public ArrayList<Folders> getFolders(String bucketName, String prefix){
 		
-		/*String delimiter = "/";
-	    if (!prefix.endsWith(delimiter)) {
+		String delimiter = "/";
+	    /*if (!prefix.endsWith(delimiter)) {
 	        prefix += delimiter;
-	    }
-
+	    }*/
+	    
 	    ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
-	            .withBucketName(bucketName);
+	            .withBucketName(bucketName).withPrefix(prefix).withDelimiter(delimiter);
 	    ObjectListing objects = s3client.listObjects(listObjectsRequest);
-		List<S3ObjectSummary> str = objects.getObjectSummaries();*/
-		
+		List<String> str = objects.getCommonPrefixes();
 		ArrayList<Folders> folders = new ArrayList<Folders>();
 		Folders temp ;
-		List<S3ObjectSummary> temporary = listKeysInDirectory(bucketName.toLowerCase(), prefix);
-		//for (final S3ObjectSummary objectSummary: str)
-		//	System.out.println(objectSummary.getKey());
-		for (final S3ObjectSummary objectSummary: temporary){
-			String key = objectSummary.getKey();
-			System.out.println(key);
-			char lastChar = key.charAt(key.length()-1);
-			if(lastChar=='/' ){
-				temp = new Folders(bucketName, key.replaceAll("\\W", "").trim().toLowerCase());
-				folders.add(temp);
-			}
-			
+		for(String s : str){
+			System.out.println(s);
+			temp = new Folders(bucketName, s.replaceAll("\\W", "").trim().toLowerCase());
+			folders.add(temp);
+
 		}
 		return folders;
 	}
