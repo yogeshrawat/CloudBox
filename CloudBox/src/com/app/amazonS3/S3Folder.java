@@ -97,9 +97,9 @@ public class S3Folder {
 		
 		File file = new File("E:\\vcredist.bmp");
 		FileInputStream input = new FileInputStream(file);
-		s3oprnObj.removeFile("1001syogesh", "", "issue", "1");
+		//s3oprnObj.removeFile("1001syogesh", "", "issue", "1");
 		ObjectMetadata m = new ObjectMetadata();
-		
+		s3oprnObj.shareFile("1001syogesh", "", "yogi", "", "1012sdarwin");
 		m.setContentLength(file.length());
 		
 		//s3Folder.uploadFile("1001syogesh", file.getName(),input,"cboxfoo/testing/",m);

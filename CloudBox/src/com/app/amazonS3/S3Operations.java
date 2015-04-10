@@ -252,14 +252,19 @@ public class S3Operations{
 		this.inputStreamLength = inputStreamLength;
 	}
 	
-	public void removeFile(String bucketName, String filePath, String fileName, String version){
+	public boolean removeFile(String bucketName, String filePath, String fileName, String version){
 		String finalPath= filePath+version+fileName;
 		s3client.deleteObject(bucketName, finalPath);
+		return true;
 	}
 	
-	public void shareFile(String sourceBucketName,String sourceKey,
-			String destinationBucketName, String destinationKey){
-		s3client.copyObject(sourceBucketName, sourceKey, destinationBucketName, destinationKey);
+	public void shareFile( String sourceBucketName, String sourcefilePath, String sourcefileName,
+			String version,
+			String destinationBucketName){
+		
+		String finalPath= sourcefilePath+version+sourcefileName;
+		String destinationFileName = version+sourcefileName;
+		s3client.copyObject(sourceBucketName, finalPath, destinationBucketName, destinationFileName);
 	}
 	
 	
