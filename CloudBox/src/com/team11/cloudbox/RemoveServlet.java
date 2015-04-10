@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.app.amazonS3.S3Operations;
+
 /**
  * Servlet implementation class RemoveServlet
  */
@@ -27,8 +29,8 @@ public class RemoveServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 	    String curFolder= (String) session.getAttribute("currentDir");
 	    
-	    String FolderName= request.getParameter("Folder");
-	    System.out.println("FolderName=" + FolderName);
+	    /*String FolderName= request.getParameter("Folder");
+	    System.out.println("FolderName=" + FolderName);*/
 	    String FileName = request.getParameter("FileName");
 	    System.out.println("FileName=" + FileName);
 	    String FileVersion = request.getParameter("FileVersion");
@@ -36,10 +38,10 @@ public class RemoveServlet extends HttpServlet {
 
 	    if(FileName != null && !FileName.isEmpty())
 	    {
-	    	try
+	    	/*try
 	    	{
-		        Path path = FileSystems.getDefault().getPath(curFolder, FileName);//Need change-remove from s3 	       
-		        boolean result = Files.deleteIfExists(path);//need change-S4
+		        Path path = FileSystems.getDefault().getPath(curFolder, FileName); 	       
+		        boolean result = Files.deleteIfExists(path);
 		        if(result)
 		        {
 		        	return;
@@ -49,10 +51,18 @@ public class RemoveServlet extends HttpServlet {
 	    	{
 	    		System.err.println("Failed to delete file:"+e.getMessage());
 		    	response.sendError(HttpServletResponse.SC_NOT_MODIFIED, "Exception happens on server");
-	    	}
-	        
+	    	}*/
+	    		
+	    		String userId = (String) session.getAttribute("userID");	    	
+		    	S3Operations s3Operations = new S3Operations();
+		    	String s3BucketHome = s3Operations.getBucketNameFromUserID(userId);
+		    	
+		    	s3Operations.removeFile(s3BucketHome, curFolder, FileName, FileVersion);
+		    	
+		    	response.getWriter().write("Removed File:"+FileName);
+				response.setHeader("Refresh","1");        
 	    }
-	    else 
+	    /*else 
 	    	if(FolderName != null && !FolderName.isEmpty())
 	    	{
 		    	try
@@ -105,7 +115,7 @@ public class RemoveServlet extends HttpServlet {
 	    	else
 	    	{
 	    		response.sendError(HttpServletResponse.SC_NO_CONTENT, "No important parameter");
-	    	}
+	    	}*/
 
 	}
 

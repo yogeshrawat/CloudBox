@@ -43,7 +43,7 @@ $(document).ready(function(){
 		$.get("FileDisplayServlet", 
 				{folder: subFolder}, 
 				function(){ 
-				  tempAlert("About to open folder:"+subFolder, 2500, "green");
+				  tempAlert("About to open folder:"+subFolder, 1000, "green");
 				  location.reload();
 				}
 		);
@@ -59,7 +59,7 @@ $(document).ready(function(){
 		$.get("CreateFolderServlet", 
 				{NewFolder: folderName}, 
 				function(){ 
-				  tempAlert("Created new folder:"+folderName, 2500, "green");
+				  tempAlert("Created new folder:"+folderName, 1000, "green");
 				  location.reload();
 				}
 		);		
@@ -75,23 +75,15 @@ $(document).ready(function(){
 	        },
 			onHidden: function()
 			{
-				/*if(uploadFileSuccess)
+				if(uploadFileSuccess)
 				{
 					uploadFileSuccess = false;
 					location.reload();
-				}*/
+				}
 			}
 		})
 		.modal('show');
 	});
-	
-//	$(".ui.button.download").click(function(){
-//		
-//		var fileName = $(this).closest("td").prev().text();
-//		var version = $(this).closest("td").next().find(".file.version")[0].dataset.version;
-//		
-//		console.log(fileName+","+version);
-//	});
 	
 	$(".item.version.number").click(function(){
 		var targetVersion = $(this).closest("div").text();
@@ -163,31 +155,16 @@ $(document).ready(function(){
 		
 	$(".ui.button.trash").click(function(){
 		var td = $(this).closest("tr").children("td:nth-child(2)");
-		var a = td.children("a:first-child");
-		if(td.find("a")[0] == null)
-			{
-			  var fileName = td.text();
-			  var fileVersion = $(this).closest("tr").find(":nth-child(4)").find(".file.version")[0].dataset.version;
-			  $.get("RemoveServlet", 
-						{FileName: fileName, FileVersion: fileVersion}, 
-						function(){ 
-						  tempAlert("Removed file:"+folderName, 2500, "green");
-						  location.reload();
-						}
-				);
-			}
-		else
-			{
-				var folderName = a.text();
-				$.get("RemoveServlet", 
-						{Folder: folderName}, 
-						function(){ 
-						  tempAlert("Removed folder:"+folderName, 2500, "green");
-						  location.reload();
-						}
-				);
-			}
 
+		var fileName = td.text();
+		var fileVersion = $(this).closest("tr").find(":nth-child(4)").find(".file.version")[0].dataset.version;
+		$.get("RemoveServlet", 
+				{FileName: fileName, FileVersion: fileVersion}, 
+				function(data){ 
+					tempAlert(data, 1000, "green");
+					location.reload();
+				}
+		);
 	});
 });
 
@@ -201,17 +178,6 @@ function tempAlert(msg,duration, fontcolor)
      },duration);
      document.body.appendChild(el);
 }
-
-//function updateQueryStringParameter(uri, key, value) {
-//	  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-//	  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
-//	  if (uri.match(re)) {
-//	    return uri.replace(re, '$1' + key + "=" + value + '$2');
-//	  }
-//	  else {
-//	    return uri + separator + key + "=" + value;
-//	  }
-//}
 
 function uploadFile() {
     var fd = new FormData();
@@ -239,7 +205,8 @@ function uploadFile() {
 
   function uploadComplete(evt) {
 	  uploadFileSuccess = true;
-	  tempAlert(evt.target.responseText, 2500, "green");
+	  tempAlert(evt.target.responseText, 1000, "green");
+	  location.reload();
     }
   
   function uploadFailed(evt) {

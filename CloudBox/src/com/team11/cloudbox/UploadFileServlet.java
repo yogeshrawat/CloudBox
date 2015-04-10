@@ -118,7 +118,7 @@ public class UploadFileServlet extends HttpServlet {
 					if(complete)
 					{
 						out.write("Uploaded Filename: " + fileName);
-						response.setHeader("Refresh","2");
+						response.setHeader("Refresh","1");
 					}
 				}
 			}			

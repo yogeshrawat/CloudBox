@@ -101,13 +101,13 @@
 		    			defaultFileDir = "http://localhost:8080/CloudBox/download?"+
 		    			 "loc="+loc+
 						 "&name="+folder[i]+
- 						 "&ver="+(fileVersion[i-<%= folders.size() %>]-1);
+ 						 "&ver="+(fileVersion[i-<%= folders.size() %>]);
 		    		}
 		    		else
 		    		{
 		    			defaultFileDir = "http://localhost:8080/CloudBox/download?"+
 		    			 "name="+folder[i]+
- 						 "&ver="+(fileVersion[i-<%= folders.size() %>]-1);
+ 						 "&ver="+(fileVersion[i-<%= folders.size() %>]);
 		    		}
 		    	}
 		    	
@@ -154,7 +154,7 @@
 		        			tbody += "<td>";
 		        			if(i >= <%=folders.size()%>)
 		        			{
-		        				var versionNum = fileVersion[i- <%= folders.size() %>];//Fix later
+		        				var versionNum = fileVersion[i- <%= folders.size() %>];
 		        				var latestVer= versionNum;
 		        				var content= "";		        				
 		        				for(var k=0; k<versionNum;k++)
@@ -199,8 +199,11 @@
 		        			break;
 		        		case 6:
 				            tbody += "<td class='right aligned collapsing'>";
-					        tbody += "<div class='ui button trash' style='display:none;'><i class='trash red icon'></i></div>";
-				            tbody += "</td>";
+				            if(i >= <%=folders.size()%>)
+		        			{
+					        	tbody += "<div class='ui button trash' style='display:none;'><i class='trash red icon'></i></div>";
+		        			}
+					        tbody += "</td>";
 				            break;
 		        	}
 
