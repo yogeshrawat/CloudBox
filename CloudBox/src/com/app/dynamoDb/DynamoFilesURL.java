@@ -60,7 +60,7 @@ public class DynamoFilesURL {
 
 	public String read(String FileURL){
 
-		String result = "0";
+		String result = "1";
 		ScanRequest scanRequest = new ScanRequest("FilesURL");
 
 		Map<String, Condition> scanFilter = new HashMap<String, Condition>();

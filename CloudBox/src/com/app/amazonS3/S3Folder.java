@@ -43,7 +43,12 @@ public class S3Folder {
 		ArrayList<Files> temp = s3oprnObj.getFiles(bucketName, locationOnS3);
 		int version = 0;
 		String versionFileName = null;
-		for(Files f : temp){
+		String ver = dfu.read(locationOnS3+fileName);
+		dfu.insert((locationOnS3+fileName),ver);
+		PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + versionFileName, 
+				file);
+		s3client.putObject(pr);
+		/*for(Files f : temp){
 			if(f.getFileName().contains(fileName)){
 				//f.setFileName(f.getFileName() + "1");
 				 version = Character.getNumericValue(f.getFileName().charAt(0));
@@ -53,19 +58,15 @@ public class S3Folder {
 			}
 			else{
 				 versionFileName = "1"+fileName;
-				 PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + versionFileName, 
-						 file);
-				 s3client.putObject(pr);
 				 
 				 break;
 			}
 		}
 		versionFileName = ""+version+fileName;
 		System.out.println("path"+(locationOnS3+versionFileName));
-		dfu.insert((locationOnS3+versionFileName),"1");
 		PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + versionFileName, 
 				file);
-		s3client.putObject(pr);
+		s3client.putObject(pr);*/
 	}
 	
 	/**
@@ -86,7 +87,7 @@ public class S3Folder {
 	//	System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
 		//s3Folder.createRootBucket("1001");
 	//	s3oprnObj.createFolder("1011syogesh1","new/pratik");
-	//	s3Folder.uploadFile("1001syogesh", "pita.txt","cboxfoo/testing/");
+		s3Folder.uploadFile("1001syogesh", "pita.txt",new File("E:\\vcredist.bmp"),"cboxfoo/testing/");
 	//	s3client.deleteBucket("1005spratikbidkar");
 	//	s3oprnObj.getFiles("1001syogesh", "cboxfoo/testing");
 	//	System.out.println(s3oprnObj.listKeysInDirectory("1001syogesh", FILE_NAME_PREFIX));
