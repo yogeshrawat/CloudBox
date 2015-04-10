@@ -2,6 +2,7 @@ package com.team11.cloudbox;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,6 +16,10 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.app.amazonS3.S3Folder;
+import com.app.amazonS3.S3Operations;
+
 /**
  * Servlet implementation class UploadFileServlet
  */
@@ -22,10 +27,10 @@ public class UploadFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private boolean isMultipart;
-	private String filePath;
+	//private String filePath;
 	private int maxFileSize = 50 * 1024;
 	private int maxMemSize = 4 * 1024;
-	private File file;
+	//private File file;
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -44,7 +49,10 @@ public class UploadFileServlet extends HttpServlet {
 		String userID = session.getAttribute("userID").toString();
 	    String curFolder= (String) session.getAttribute("currentDir");
 	    
-	    filePath = curFolder;
+	    S3Operations s3Operations = new S3Operations();
+    	String s3BucketHome = s3Operations.getBucketNameFromUserID(userID);
+	    
+	    //filePath = curFolder;
 	    
 		// Check that we have a file upload request
 		response.setContentType("text/html");
@@ -80,26 +88,37 @@ public class UploadFileServlet extends HttpServlet {
 					// Get the uploaded file parameters
 					String fileName = fi.getName();
 					
-					/*String fieldName = fi.getFieldName();
+					String fieldName = fi.getFieldName();
 					String contentType = fi.getContentType();
 					boolean isInMemory = fi.isInMemory();
-					long sizeInBytes = fi.getSize();*/
+					long sizeInBytes = fi.getSize();
+					InputStream input =fi.getInputStream();
 					
 					// Write the file
 					if (fileName.lastIndexOf("\\") >= 0) {
-						file = new File(filePath + fileName.substring(fileName.lastIndexOf("\\")));
+						//file = new File(fileName.substring(fileName.lastIndexOf("\\")));
+						fileName = fileName.substring(fileName.lastIndexOf("\\"));
 					} 
 					else 
 						if(fileName.lastIndexOf("/") >= 0)
 						{
-							file = new File(filePath + fileName.substring(fileName.lastIndexOf("/")));
+							//file = new File(fileName.substring(fileName.lastIndexOf("/")));
+							fileName = fileName.substring(fileName.lastIndexOf("/"));
 						}
 						else
 						{
-							file = new File(filePath + fileName);
+							//file = new File(fileName);
 						}
 					
-					fi.write(file);//Upload to S3 with path and name-S5
+					//fi.write(file);//Upload to S3 with path and name-S5
+					
+					S3Folder s3Folder = new S3Folder();
+					ObjectMetadata meta = new ObjectMetadata();
+					meta.setContentLength(sizeInBytes);
+					meta.setContentType(contentType);
+					
+					s3Folder.uploadFile(s3BucketHome,fileName , input, curFolder, meta);
+					
 					out.write("Uploaded Filename: " + fileName);
 				}
 			}			
