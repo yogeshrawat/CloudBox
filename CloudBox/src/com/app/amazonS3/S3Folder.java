@@ -1,26 +1,16 @@
 package com.app.amazonS3;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import com.amazonaws.auth.AWSCredentialsProviderChain;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.app.dynamoDb.DynamoUser;
 
 public class S3Folder {
@@ -34,20 +24,21 @@ public class S3Folder {
 
 
 	static {
-		// Create S3 Client object using AWS KEY & SECRET
-//		client = new AmazonS3Client(
-//				new BasicAWSCredentials(AWS_KEY, AWS_SECRET));
-		
 		s3client = new AmazonS3Client(new AWSCredentialsProviderChain(new InstanceProfileCredentialsProvider(),
 				new ClasspathPropertiesFileCredentialsProvider()));
 		s3client.setRegion(usWest2);
 	}
 	
+	/**
+	 * Uploads a file to the specified location by the parameters. This also takes care about the 
+	 * file versioning.
+	 * @param bucketName - which bucket the files needs to be uploaded to
+	 * @param fileName - file name (eg. samplefile.txt , image.jpg)
+	 * @param locationOnS3 - path where the file has to be stored
+	 * @throws FileNotFoundException
+	 */
 	public void uploadFile(String bucketName, String fileName, String locationOnS3) throws FileNotFoundException{
 		
-		//File file = new File(folderLocation);
-		//System.out.println(file.getName());
-//		String fileName =  "save.txt";
 		ArrayList<Files> temp = s3oprnObj.getFiles(bucketName, locationOnS3);
 		int version = 0;
 		String versionFileName = null;
@@ -74,6 +65,11 @@ public class S3Folder {
 		s3client.putObject(pr);
 	}
 	
+	/**
+	 * Creates a root bucket for a user when he is registered to system.
+	 * A bucket for the user gets created on S3.
+	 * @param userID - the userID of user
+	 */
 	public void createRootBucket(String userID){
 		DynamoUser du = new DynamoUser();
 		String name = du.getUserName(userID).replaceAll("\\W", "").trim().toLowerCase();

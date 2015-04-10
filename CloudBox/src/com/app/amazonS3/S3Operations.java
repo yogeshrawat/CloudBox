@@ -238,9 +238,12 @@ public class S3Operations{
 	}
 
 	public URL downloadFile(String bucketName, String filePath){
+		File file = new File("C:\\my.txt");
+		s3client.getObject(new GetObjectRequest(bucketName, filePath) , file);
 		
 		GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, filePath);
 		return s3client.generatePresignedUrl(req);
+		
 	} 
 	
 	
