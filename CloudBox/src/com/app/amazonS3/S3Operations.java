@@ -166,46 +166,10 @@ public class S3Operations{
 		return folders;
 	}
 	
+	
 	/**
 	 * 
 	 * @param bucketName
-	 * @param prefix - the path upto the folder level eg. unitedawesome/myfolder
-	 * @return - List of files from a subfolder inside a bucket
-	 */
-	public ArrayList<Files> getFilesFromFolder(String bucketName, String prefix){
-		
-		ArrayList<Files> files = new ArrayList<Files>();
-		Files temp ;
-		String delimiter = "/";
-	    if (!prefix.endsWith(delimiter)) {
-	        prefix += delimiter;
-	    }
-
-	    ListObjectsRequest listObjectsRequest = new ListObjectsRequest().withBucketName(bucketName)
-	            .withPrefix(prefix).withDelimiter(delimiter);
-	    ObjectListing objects = s3client.listObjects(listObjectsRequest);
-	    
-	    List<S3ObjectSummary> temporary = objects.getObjectSummaries();
-		for (final S3ObjectSummary objectSummary: temporary){
-			String key = objectSummary.getKey();
-			
-			String f = null;
-			if(!key.contains("/")){
-				 f = key.replaceAll(prefix, "").trim();
-				 if(f.length()!=0)
-				 {temp = new Files(f,1,objectSummary.getSize());
-				 files.add(temp);
-				 }
-			}
-			
-		}
-		return files;
-		
-	}
-
-	/**
-	 * 
-	 * @param bucketName - the bucket name of the user
 	 * @param prefix - for bucket level should be the bucketname itself
 	 * @return List of file objects that are present in the bucket level
 	 */
@@ -226,11 +190,14 @@ public class S3Operations{
 		for ( S3ObjectSummary s : temporary){
 			String key = s.getKey().replaceAll(prefix, "").trim();
 			
-			//System.out.println(key);
-			if(key.length()!=0 && !key.contains("/")){
+			if(key.length()>0 && !key.contains("/")){
 				System.out.println(key);
-				 {temp = new Files(key,1,s.getSize());
-				 files.add(temp);
+				 {
+					 String t = key;
+					 key = key.replaceAll("[0-9]", "").trim();
+					 int ver = Integer.parseInt(t.replaceAll("\\D+", ""));
+					 temp = new Files(key,ver,s.getSize());
+					 files.add(temp);
 				 }
 			}
 		}
@@ -238,7 +205,7 @@ public class S3Operations{
 	}
 
 	/**
-	 * This method will return you the files URL you want to download.
+	 * This method will 
 	 * @param bucketName
 	 * @param filePath - the locaiton from where the file needs to be downloaded
 	 * @return - public URL of the file

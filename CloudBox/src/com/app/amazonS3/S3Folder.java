@@ -42,34 +42,21 @@ public class S3Folder {
 		DynamoFilesURL dfu = new DynamoFilesURL();
 		//ArrayList<Files> temp = s3oprnObj.getFiles(bucketName, locationOnS3);
 		//int version = 0;
-		String versionFileName = null;
-		if(dfu.read(locationOnS3+fileName)=="1"){
+		String versionFileName = dfu.read(locationOnS3+fileName);
+		if(versionFileName=="0"){
 		
 			dfu.insert((locationOnS3+fileName),"1");
+			PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + ("1"+fileName), 
+					file);
+			s3client.putObject(pr);
 		}
-		String ver = dfu.read(locationOnS3+fileName);
-		PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + (ver+fileName), 
-				file);
-		s3client.putObject(pr);
-		/*for(Files f : temp){
-			if(f.getFileName().contains(fileName)){
-				//f.setFileName(f.getFileName() + "1");
-				 version = Character.getNumericValue(f.getFileName().charAt(0));
-				 version++;
-				//s3client.copyObject(bucketName, f.getFileName(), bucketName+"/"+"cboxfoo", "yogi");
-//				//s3client.deleteObject(bucketName, f.getFileName());
-			}
-			else{
-				 versionFileName = "1"+fileName;
-				 
-				 break;
-			}
+		else{
+			versionFileName = ""+(Integer.parseInt(versionFileName)+1);
+			dfu.insert((locationOnS3+fileName),versionFileName);
+			PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + (versionFileName+fileName), 
+					file);
+			s3client.putObject(pr);
 		}
-		versionFileName = ""+version+fileName;
-		System.out.println("path"+(locationOnS3+versionFileName));
-		PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + versionFileName, 
-				file);
-		s3client.putObject(pr);*/
 	}
 	
 	/**
@@ -91,9 +78,13 @@ public class S3Folder {
 		//s3Folder.createRootBucket("1001");
 	//	s3oprnObj.createFolder("1011syogesh1","new/pratik");
 		File file = new File("E:\\vcredist.bmp");
-		s3Folder.uploadFile("1001syogesh", file.getName(),file,"cboxfoo/testing/");
+	//	s3Folder.uploadFile("1001syogesh", file.getName(),file,"cboxfoo/testing/");
 	//	s3client.deleteBucket("1005spratikbidkar");
-	//	s3oprnObj.getFiles("1001syogesh", "cboxfoo/testing");
+		ArrayList<Files> f = s3oprnObj.getFiles("1001syogesh", "cboxfoo/testing/");
+		for(Files fr : f){
+			System.out.println(fr.getFileName());
+			System.out.println(fr.getVersion());
+		}
 	//	System.out.println(s3oprnObj.listKeysInDirectory("1001syogesh", FILE_NAME_PREFIX));
 		
 //		ObjectListing objectListing = s3client.listObjects(new ListObjectsRequest().
