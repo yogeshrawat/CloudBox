@@ -157,7 +157,7 @@
 		        				var versionNum = fileVersion[i- <%= folders.size() %>];
 		        				var latestVer= versionNum;
 		        				var content= "";		        				
-		        				for(var k=0; k<versionNum;k++)
+		        				for(var k=1; k<=versionNum;k++)
 		        				{
 		        					content += "<div class='item version number'>"+k+"</div>";
 		        				}
