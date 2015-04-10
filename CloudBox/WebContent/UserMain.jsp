@@ -270,7 +270,7 @@
 		  </div>
 		  <div class="content">
 		    <div class="ui large fluid input folder">
-		  	<input placeholder="Email/Full Name" type="text">
+		  	<input placeholder="Folder Name" type="text">
 		    </div>
 		  </div>
 		  <div class="actions">
