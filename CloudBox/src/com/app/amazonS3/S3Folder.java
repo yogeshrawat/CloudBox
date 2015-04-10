@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
@@ -85,11 +86,13 @@ public class S3Folder {
 		S3Operations oprn = new S3Operations();
 		
 		//"10vcredist".substring(0,"abc.def.ghi".indexOf(c)-1);
-		/*ArrayList<Files> f = oprn.getFiles("1001syogesh", "cboxfoo/");
+		ArrayList<Files> f = oprn.getFiles("1001syogesh", "cboxfoo/");
 		for(Files fr : f){
 			System.out.println(fr.getFileName());
-			System.out.println(fr.getVersion());
-		}*/
+			Iterator<String> it = fr.getVersion().iterator();
+				while(it.hasNext())
+					System.out.println(it.next());
+		}
 	//	System.out.println(oprn.downloadFile("1001syogesh","cboxfoo/cboximage"));
 	//	System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
 		//s3Folder.createRootBucket("1001");
@@ -99,7 +102,7 @@ public class S3Folder {
 		FileInputStream input = new FileInputStream(file);
 		//s3oprnObj.removeFile("1001syogesh", "", "issue", "1");
 		ObjectMetadata m = new ObjectMetadata();
-		s3oprnObj.shareFile("1001syogesh", "", "yogi", "", "1012sdarwin");
+		//s3oprnObj.shareFile("1001syogesh", "", "yogi", "", "1012sdarwin");
 		m.setContentLength(file.length());
 		
 		//s3Folder.uploadFile("1001syogesh", file.getName(),input,"cboxfoo/testing/",m);

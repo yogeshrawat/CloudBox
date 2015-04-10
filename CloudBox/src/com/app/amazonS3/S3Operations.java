@@ -26,6 +26,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.app.dynamoDb.DynamoFilesURL;
 import com.app.dynamoDb.DynamoUser;
 
 public class S3Operations{
@@ -198,18 +199,30 @@ public class S3Operations{
 				key = s.getKey().replaceAll(prefix, "").trim();
 				
 				if(key.length()>0 && !key.contains("/") && Character.isDigit(key.charAt(0))){
-					System.out.println(key);
-					
+					//System.out.println(key);
 					String t = key;
 					key = key.substring(1);
 					int ver = (Character.getNumericValue(t.charAt(0)));
 					temp = new Files(key,ver,s.getSize());
 					files.add(temp);
 				}
-				
 		}
-		
-		return files;
+		ArrayList<Files> ret = new ArrayList<Files>();
+		DynamoFilesURL df = new DynamoFilesURL();
+		for(Files s : files){
+			if(!ret.isEmpty()){
+			for(int k =0 ; k < ret.size(); k++){
+				if(!ret.get(k).getFileName().equalsIgnoreCase(s.getFileName())){
+					String version = df.read(prefix+s.getFileName());
+					ret.add(new Files(s.getFileName(),Integer.parseInt(version),s.getSize()));
+				}
+			}
+			}else{
+				String version = df.read(prefix+s.getFileName());
+				ret.add(new Files(s.getFileName(),Integer.parseInt(version),s.getSize()));
+			}
+		}
+		return ret;
 	}
 
 	/**

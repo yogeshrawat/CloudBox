@@ -1,9 +1,11 @@
 package com.app.amazonS3;
 
+import java.util.HashSet;
+
 public class Files {
 	
 	private String fileName;
-	private int version;
+	private HashSet<String> version = new HashSet<String>();
 	private Long size;
 	
 	public Files(String name, int version, long l){
@@ -26,14 +28,14 @@ public class Files {
 	/**
 	 * @return the version
 	 */
-	public int getVersion() {
+	public HashSet getVersion() {
 		return version;
 	}
 	/**
 	 * @param version the version to set
 	 */
 	public void setVersion(int version) {
-		this.version = version;
+		this.version.add(""+version);
 	}
 	/**
 	 * @return the size
