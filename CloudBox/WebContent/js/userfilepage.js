@@ -75,11 +75,11 @@ $(document).ready(function(){
 	        },
 			onHidden: function()
 			{
-				if(uploadFileSuccess)
+				/*if(uploadFileSuccess)
 				{
 					uploadFileSuccess = false;
 					location.reload();
-				}
+				}*/
 			}
 		})
 		.modal('show');

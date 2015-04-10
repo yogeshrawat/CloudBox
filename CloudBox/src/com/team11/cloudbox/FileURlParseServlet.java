@@ -42,11 +42,17 @@ public class FileURlParseServlet extends HttpServlet {
 	    }
 
 	    String curFolder= (String) session.getAttribute("currentDir");
-	    
-	    String folderUrl = urlSpecialCharReplace(curFolder);
+	    String folderUrl = "";
+	    if(!curFolder.isEmpty())
+	    	 folderUrl = urlSpecialCharReplace(curFolder);
 	    String fileUrl = urlSpecialCharReplace(fileName);
 	    String verUrl = urlSpecialCharReplace(version);
-	    String URL = downloadEntry+"?"+"loc="+folderUrl+"&name="+fileUrl+"&ver="+verUrl;
+	    
+	    String URL="";
+	    if(!curFolder.isEmpty())
+	    	URL = downloadEntry+"?"+"loc="+folderUrl+"&name="+fileUrl+"&ver="+verUrl;
+	    else
+	    	URL = downloadEntry+"?"+"name="+fileUrl+"&ver="+verUrl;
 	    
 		JSONObject returnURl = new JSONObject();
 		try {

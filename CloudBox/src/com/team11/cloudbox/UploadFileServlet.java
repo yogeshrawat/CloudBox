@@ -114,9 +114,12 @@ public class UploadFileServlet extends HttpServlet {
 					meta.setContentLength(sizeInBytes);
 					meta.setContentType(contentType);
 					
-					s3Folder.uploadFile(s3BucketHome, fileName, input, curFolder, meta);
-					
-					out.write("Uploaded Filename: " + fileName);
+					boolean complete = s3Folder.uploadFile(s3BucketHome, fileName, input, curFolder, meta);
+					if(complete)
+					{
+						out.write("Uploaded Filename: " + fileName);
+						response.setHeader("Refresh","2");
+					}
 				}
 			}			
 			

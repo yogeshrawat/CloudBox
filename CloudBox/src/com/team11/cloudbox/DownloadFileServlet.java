@@ -1,8 +1,7 @@
 package com.team11.cloudbox;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.servlet.ServletConfig;
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.app.amazonS3.S3Operations;
 import com.app.dynamoDb.DynamoSharedURL;
 
 /**
@@ -73,12 +73,17 @@ public class DownloadFileServlet extends HttpServlet {
 						file  = urlSpecialCharRevert(parameters[1].substring(parameters[1].indexOf('=')+1));
 						version = urlSpecialCharRevert(parameters[2].substring(parameters[2].indexOf('=')+1));
 					}
-					else
-					{
-						session.removeAttribute("downloadUrl");
-				    	response.sendError(HttpServletResponse.SC_NO_CONTENT, "No enough parameters");
-				    	return;
-					}
+					else if(parameters.length >= 2)
+						{
+							file  = urlSpecialCharRevert(parameters[0].substring(parameters[0].indexOf('=')+1));
+							version = urlSpecialCharRevert(parameters[1].substring(parameters[1].indexOf('=')+1));
+						}
+						else
+						{
+							session.removeAttribute("downloadUrl");
+					    	response.sendError(HttpServletResponse.SC_NO_CONTENT, "No enough parameters");
+					    	return;
+						}
 				}
 				else
 				{
@@ -92,20 +97,29 @@ public class DownloadFileServlet extends HttpServlet {
 			else
 			{
 				//Normal download
-				folder=(String) request.getParameter("loc");
+				if(request.getParameter("loc") != null)
+				{
+					folder=(String) request.getParameter("loc");
+				}
 				file=(String) request.getParameter("name");
 				version = (String) request.getParameter("ver");
 				System.out.println(folder+","+file+","+version);
 			}
 			
 			//Download logic
-	        File downloadFile = new File(folder+file);
-	        FileInputStream inStream = new FileInputStream(downloadFile);//Create a file input stream from S3 file-Parameter-relative path to the file-S2
+			String userId = (String) session.getAttribute("userID");	    	
+	    	S3Operations s3Operations = new S3Operations();
+	    	String s3BucketHome = s3Operations.getBucketNameFromUserID(userId);
+	    	
+	    	InputStream inStream = s3Operations.downloadFile(s3BucketHome, folder, file, version);
+	    	int fileLength = s3Operations.getInputStreamLength();
+//	        File downloadFile = new File(folder+file);
+//	        FileInputStream inStream = new FileInputStream(downloadFile);//Create a file input stream from S3 file-Parameter-relative path to the file-S2
 	        
 			response.setContentType("application/octet-stream");	        
-	        response.setContentLength((int) downloadFile.length());
+	        response.setContentLength(fileLength);
 	        String headerKey = "Content-Disposition";
-	        String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
+	        String headerValue = String.format("attachment; filename=\"%s\"", file);
 	        response.setHeader(headerKey, headerValue);
 	        
 	        OutputStream outStream = response.getOutputStream();
