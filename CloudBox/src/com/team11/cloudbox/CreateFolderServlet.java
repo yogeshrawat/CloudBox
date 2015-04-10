@@ -51,7 +51,15 @@ public class CreateFolderServlet extends HttpServlet {
 	    	String s3BucketHome = s3Operations.getBucketNameFromUserID(userId);
 	    	
 	    	System.out.println("s3BucketHome:"+s3BucketHome+", new subfolder to create:"+curFolder+"/"+newFolderName.toLowerCase());
-	    	s3Operations.createFolder(s3BucketHome, curFolder+"/"+newFolderName.toLowerCase());
+	    	if(curFolder.isEmpty())
+	    	{
+	    		s3Operations.createFolder(s3BucketHome, newFolderName.toLowerCase());
+	    	}
+	    	else
+	    	{
+		    	s3Operations.createFolder(s3BucketHome, curFolder+"/"+newFolderName.toLowerCase());	    		
+	    	}
+
 	    }
 	}
 
