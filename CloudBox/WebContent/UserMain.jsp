@@ -125,7 +125,10 @@
 		        			tbody += "<td>";
 		        			 if(i >= <%=folders.size()%>)
 		        			 {
-						            tbody += "<a href='' class='ui button download' style='display:none;'>"+
+						            tbody += "<a href='http://travellogenv-5bwgdxfrha.elasticbeanstalk.com/download?loc="+<%=S3BucketFolder%>+
+						            		      "&name="+folder[i]+
+						            		      "&ver="+(fileVersion[i-<%= folders.size() %>]-1)+
+						            		      "' class='ui button download' style='display:none;'>"+
 						            		 "	<i class='download blue icon'></i>"+
 						            		 "</a>";    	
 				             }
