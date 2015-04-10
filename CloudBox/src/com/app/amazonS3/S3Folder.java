@@ -40,11 +40,11 @@ public class S3Folder {
 		s3client.setRegion(usWest2);
 	}
 	
-	public void uploadFile(String userId, String folderLocation,String exactLocation){
+	public void uploadFile(String bucketName, String folderLocation,String exactLocation){
 		File file = new File(folderLocation);
 		System.out.println(file.getName());
 		//String fileName = "myfolder" + FOLDER_SUFFIX + "userauthority.png";
-		PutObjectRequest pr = new PutObjectRequest(s3oprnObj.getBucketNameFromUserID(userId),
+		PutObjectRequest pr = new PutObjectRequest(bucketName,
 				exactLocation + FOLDER_SUFFIX, file);
         
       s3client.putObject(pr);
@@ -59,10 +59,10 @@ public class S3Folder {
 	public static void main(String[] args) {
 		S3Folder s3Folder = new S3Folder();
 		S3Operations oprn = new S3Operations();
-		//System.out.println(oprn.getFolders("1001syogesh", "cboxfoo/testing").size());
+		System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
 		//s3Folder.createRootBucket("1001");
-		s3oprnObj.createFolder("1011syogesh1","new/pratik");
-	//	s3Folder.uploadFile("1001", "C:\\mytext.txt","1001syogesh/subfolder");
+	//	s3oprnObj.createFolder("1011syogesh1","new/pratik");
+	//	s3Folder.uploadFile("1011syogesh1", "C:\\mytext.txt","/temp");
 	//	s3client.deleteBucket("1005spratikbidkar");
 		
 	//	System.out.println(s3oprnObj.listKeysInDirectory("1001syogesh", FILE_NAME_PREFIX));

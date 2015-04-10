@@ -128,7 +128,7 @@ public class S3Operations{
 	    }
 
 	    ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
-	            .withBucketName(bucketName).withPrefix(prefix).withDelimiter(delimiter);
+	            .withBucketName(bucketName);
 	    ObjectListing objects = s3client.listObjects(listObjectsRequest);
 	    
 	     return objects.getObjectSummaries();
@@ -161,7 +161,7 @@ public class S3Operations{
 			String key = objectSummary.getKey();
 			System.out.println(key);
 			char lastChar = key.charAt(key.length()-1);
-			if(lastChar=='/'){
+			if(lastChar=='/' ){
 				temp = new Folders(bucketName, key.replaceAll("\\W", "").trim().toLowerCase());
 				folders.add(temp);
 			}
