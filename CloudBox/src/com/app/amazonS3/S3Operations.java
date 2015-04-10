@@ -194,22 +194,18 @@ public class S3Operations{
 	    List<S3ObjectSummary> temporary = objects.getObjectSummaries();
 		for ( S3ObjectSummary s : temporary){
 			String key = s.getKey();
-			if( Character.isDigit(key.charAt(0)) ){
-				if(prefix.length()>0)
-					key = s.getKey().replaceAll(prefix, "").trim();
-				
-				if(key.length()>0 && !key.contains("/")){
-					System.out.println(key);
-					{
-						String t = key;
-						key = key.substring(1);
-						int ver = (Character.getNumericValue(t.charAt(0)));
-						temp = new Files(key,ver,s.getSize());
-						files.add(temp);
-					}
-				}
-				
+			if(prefix.length()>0)
+				key = s.getKey().replaceAll(prefix, "").trim();
+			
+			if(key.length()>0 && !key.contains("/") && Character.isDigit(key.charAt(0))){
+				System.out.println(key);
+				String t = key;
+				key = key.substring(1);
+				int ver = Character.getNumericValue(t.charAt(0));
+				temp = new Files(key,ver,s.getSize());
+				files.add(temp);
 			}
+				
 		}
 		
 		return files;
