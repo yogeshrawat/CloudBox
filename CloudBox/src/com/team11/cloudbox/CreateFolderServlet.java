@@ -48,8 +48,10 @@ public class CreateFolderServlet extends HttpServlet {
 	    	}*/
 	    	String userId = (String) session.getAttribute("userID");	    	
 	    	S3Operations s3Operations = new S3Operations();
-	    	System.out.println("userId:"+userId+", new subfolder to create:"+curFolder+"/"+newFolderName.toLowerCase());
-	    	s3Operations.createFolder(userId, curFolder+"/"+newFolderName.toLowerCase());
+	    	String s3BucketHome = s3Operations.getBucketNameFromUserID(userId);
+	    	
+	    	System.out.println("s3BucketHome:"+s3BucketHome+", new subfolder to create:"+curFolder+"/"+newFolderName.toLowerCase());
+	    	s3Operations.createFolder(s3BucketHome, curFolder+"/"+newFolderName.toLowerCase());
 	    }
 	}
 

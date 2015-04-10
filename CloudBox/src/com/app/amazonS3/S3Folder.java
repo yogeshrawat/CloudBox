@@ -54,7 +54,7 @@ public class S3Folder {
 		DynamoUser du = new DynamoUser();
 		String name = du.getUserName(userID).replaceAll("\\W", "").trim().toLowerCase();
 		s3client.createBucket(userID + name);
-		s3oprnObj.createFolder(userID+name,userID);
+		s3oprnObj.createFolder(s3oprnObj.getBucketNameFromUserID(userID),userID);
 	}
 
 	public static void main(String[] args) {
