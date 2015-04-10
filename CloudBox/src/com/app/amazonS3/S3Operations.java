@@ -3,6 +3,7 @@ package com.app.amazonS3;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
@@ -80,9 +82,9 @@ public class S3Operations{
 		// Send request to S3 to create folder
 		s3client.putObject(putObjectRequest);
 	}
-	/*public void uploadFile(String userID, String folderLocation){
+	/*public void uploadFile(String bucketName, String folderLocation){
 		File file = new File(folderLocation);
-		PutObjectRequest pr = new PutObjectRequest(getBucketFromID(userID).getName(), userID, file);
+		PutObjectRequest pr = new PutObjectRequest(bucketName, userID, file);
         
         util.getS3Client().putObject(pr);
 	}*/
@@ -156,12 +158,9 @@ public class S3Operations{
 		Folders temp ;
 		for(String s : str){
 			System.out.println(s);
-			s = s.replaceAll(prefix,"").trim();
-			if(s.length() >0 )
-			{
-				temp = new Folders(bucketName, s.replaceAll("\\W", "").trim().toLowerCase());
-				folders.add(temp);
-			}
+			
+			temp = new Folders(bucketName, s.replaceAll("\\W", "").trim().toLowerCase());
+			folders.add(temp);
 
 		}
 		return folders;
@@ -228,19 +227,21 @@ public class S3Operations{
 			String key = s.getKey().replaceAll(prefix, "").trim();
 			
 			//System.out.println(key);
-			if(key.length() > 0 && !key.contains("/")){
+			if(key.length()!=0 && !key.contains("/")){
 				System.out.println(key);
 				 {temp = new Files(key,1,s.getSize());
 				 files.add(temp);
 				 }
 			}
-			
 		}
 		return files;
-		
 	}
 
-
+	public URL downloadFile(String bucketName, String filePath){
+		
+		GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, filePath);
+		return s3client.generatePresignedUrl(req);
+	} 
 	
 	
 }

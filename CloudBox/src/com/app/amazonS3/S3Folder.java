@@ -2,7 +2,10 @@ package com.app.amazonS3;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -40,14 +43,35 @@ public class S3Folder {
 		s3client.setRegion(usWest2);
 	}
 	
-	public void uploadFile(String bucketName, String folderLocation,String exactLocation){
-		File file = new File(folderLocation);
-		System.out.println(file.getName());
-		//String fileName = "myfolder" + FOLDER_SUFFIX + "userauthority.png";
-		PutObjectRequest pr = new PutObjectRequest(bucketName,
-				exactLocation + FOLDER_SUFFIX, file);
-        
-      s3client.putObject(pr);
+	public void uploadFile(String bucketName, String fileName, String locationOnS3) throws FileNotFoundException{
+		
+		//File file = new File(folderLocation);
+		//System.out.println(file.getName());
+//		String fileName =  "save.txt";
+		ArrayList<Files> temp = s3oprnObj.getFiles(bucketName, locationOnS3);
+		int version = 0;
+		String versionFileName = null;
+		for(Files f : temp){
+			if(f.getFileName().contains(fileName)){
+				//f.setFileName(f.getFileName() + "1");
+				 version = Character.getNumericValue(f.getFileName().charAt(0));
+				 version++;
+				//s3client.copyObject(bucketName, f.getFileName(), bucketName+"/"+"cboxfoo", "yogi");
+//				//s3client.deleteObject(bucketName, f.getFileName());
+			}
+			else{
+				 versionFileName = "1"+fileName;
+				 PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + versionFileName, 
+						 new File("E:\\er.txt"));
+				 s3client.putObject(pr);
+				 
+				 break;
+			}
+		}
+		versionFileName = ""+version+fileName;
+		PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + versionFileName, 
+				new File("E:\\er.txt"));
+		s3client.putObject(pr);
 	}
 	
 	public void createRootBucket(String userID){
@@ -56,20 +80,21 @@ public class S3Folder {
 		s3client.createBucket(userID + name);
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		S3Folder s3Folder = new S3Folder();
 		S3Operations oprn = new S3Operations();
-		System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
+		System.out.println(oprn.downloadFile("1001syogesh","cboxfoo/cboximage"));
+	//	System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
 		//s3Folder.createRootBucket("1001");
 	//	s3oprnObj.createFolder("1011syogesh1","new/pratik");
-	//	s3Folder.uploadFile("1011syogesh1", "C:\\mytext.txt","/temp");
+	//	s3Folder.uploadFile("1001syogesh", "sample.txt","cboxfoo/testing");
 	//	s3client.deleteBucket("1005spratikbidkar");
-		
+	//	s3oprnObj.getFiles("1001syogesh", "cboxfoo/testing");
 	//	System.out.println(s3oprnObj.listKeysInDirectory("1001syogesh", FILE_NAME_PREFIX));
 		
 //		ObjectListing objectListing = s3client.listObjects(new ListObjectsRequest().
 //			    withBucketName("1001syogesh"));
-		System.out.println(oprn.getFiles("1001", "1001syogesh").size());
+//		System.out.println(oprn.getFiles("1001", "1001syogesh").size());
 		//for (final S3ObjectSummary objectSummary: s3oprnObj.listKeysInDirectory("unitedawesome", "unitedawesome/myfolder")){
 		 //   final String key = objectSummary.getKey();
 		     //if(key.contains(FOLDER_SUFFIX))
