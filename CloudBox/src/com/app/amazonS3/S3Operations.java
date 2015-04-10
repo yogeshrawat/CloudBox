@@ -196,9 +196,7 @@ public class S3Operations{
 				
 				if(key.length()>0 && !key.contains("/")){
 					System.out.println(key);
-					
 					{
-						
 						String t = key;
 						key = key.substring(1);
 						int ver = (Character.getNumericValue(t.charAt(0)));
