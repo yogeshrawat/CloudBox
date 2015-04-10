@@ -60,7 +60,7 @@ public class DynamoFilesURL {
 
 	public String read(String FileURL){
 
-		String result = "";
+		String result = "0";
 		ScanRequest scanRequest = new ScanRequest("FilesURL");
 
 		Map<String, Condition> scanFilter = new HashMap<String, Condition>();
@@ -72,7 +72,9 @@ public class DynamoFilesURL {
 		for(Map<String, AttributeValue> item : scanResult.getItems()) {
 			//System.out.println(item.get("Version"));
 		//System.out.println(item.get("Version").toString().replaceAll("\\W\\D", "").trim().toLowerCase());
+			if(!(item.isEmpty()))
 			result = item.get("Version").toString().replaceAll("\\W\\D", "").trim().toLowerCase();
+			
 			//result = result.replaceAll("\\D", "");
 		}
 		return result;
