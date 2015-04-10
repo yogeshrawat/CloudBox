@@ -40,12 +40,15 @@ public class S3Folder {
 	 */
 	public void uploadFile(String bucketName, String fileName, File file,String locationOnS3 ) throws FileNotFoundException{
 		DynamoFilesURL dfu = new DynamoFilesURL();
-		ArrayList<Files> temp = s3oprnObj.getFiles(bucketName, locationOnS3);
-		int version = 0;
+		//ArrayList<Files> temp = s3oprnObj.getFiles(bucketName, locationOnS3);
+		//int version = 0;
 		String versionFileName = null;
+		if(dfu.read(locationOnS3+fileName)=="1"){
+		
+			dfu.insert((locationOnS3+fileName),"1");
+		}
 		String ver = dfu.read(locationOnS3+fileName);
-		dfu.insert((locationOnS3+fileName),ver);
-		PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + versionFileName, 
+		PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + (ver+fileName), 
 				file);
 		s3client.putObject(pr);
 		/*for(Files f : temp){
@@ -87,7 +90,8 @@ public class S3Folder {
 	//	System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
 		//s3Folder.createRootBucket("1001");
 	//	s3oprnObj.createFolder("1011syogesh1","new/pratik");
-		s3Folder.uploadFile("1001syogesh", "pita.txt",new File("E:\\vcredist.bmp"),"cboxfoo/testing/");
+		File file = new File("E:\\vcredist.bmp");
+		s3Folder.uploadFile("1001syogesh", file.getName(),file,"cboxfoo/testing/");
 	//	s3client.deleteBucket("1005spratikbidkar");
 	//	s3oprnObj.getFiles("1001syogesh", "cboxfoo/testing");
 	//	System.out.println(s3oprnObj.listKeysInDirectory("1001syogesh", FILE_NAME_PREFIX));
