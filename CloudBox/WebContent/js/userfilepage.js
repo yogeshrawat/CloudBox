@@ -148,9 +148,10 @@ $(document).ready(function(){
 		$.get("ShareFileServlet", 
 				{URL: fileURl}, 
 				function(){ 
-				  tempAlert("Track a file sharing", 1000, "green");
+				  tempAlert("File url:"+fileURl, 20000, "green");
 				}
 		);
+		
 	});
 		
 	$(".ui.button.trash").click(function(){
