@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
@@ -208,19 +209,27 @@ public class S3Operations{
 				}
 		}
 		ArrayList<Files> ret = new ArrayList<Files>();
+		Set<String> hs = new HashSet<String>();
+		
 		DynamoFilesURL df = new DynamoFilesURL();
 		for(Files s : files){
-			if(!ret.isEmpty()){
-			for(int k =0 ; k < ret.size(); k++){
-				if(!ret.get(k).getFileName().equalsIgnoreCase(s.getFileName())){
-					String version = df.read(prefix+s.getFileName());
-					ret.add(new Files(s.getFileName(),Integer.parseInt(version),s.getSize()));
+			hs.add(s.getFileName());
+		}
+		for(String str : hs){
+			
+			String version = df.read(prefix+str);
+			System.out.println("Version from dynamo "+version+" filename from hashset "+str);
+			for(Files t: files)
+			{
+				System.out.println("Inside loop : original files "+t.getFileName()+ " version "+t.getVersion());
+				if(t.getFileName().compareTo(str)==0 && (""+t.getVersion()).compareTo(version)==0)
+				{
+					
+					ret.add(new Files(t.getFileName(),Integer.parseInt(version),t.getSize()));
 				}
 			}
-			}else{
-				String version = df.read(prefix+s.getFileName());
-				ret.add(new Files(s.getFileName(),Integer.parseInt(version),s.getSize()));
-			}
+			
+			
 		}
 		return ret;
 	}

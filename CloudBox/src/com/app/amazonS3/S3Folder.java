@@ -89,9 +89,9 @@ public class S3Folder {
 		ArrayList<Files> f = oprn.getFiles("1001syogesh", "cboxfoo/");
 		for(Files fr : f){
 			System.out.println(fr.getFileName());
-			Iterator<String> it = fr.getVersion().iterator();
-				while(it.hasNext())
-					System.out.println(it.next());
+			//Iterator<String> it = fr.getVersion().iterator()
+			//	while(it.hasNext())
+			//		System.out.println(it.next());
 		}
 	//	System.out.println(oprn.downloadFile("1001syogesh","cboxfoo/cboximage"));
 	//	System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
