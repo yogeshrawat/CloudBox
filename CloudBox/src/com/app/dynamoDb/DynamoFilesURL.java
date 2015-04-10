@@ -24,7 +24,7 @@ import com.amazonaws.services.dynamodbv2.model.ScanResult;
 public class DynamoFilesURL {
 
 	public String FileURL;
-	public String Owner;
+	public String Version;
 	AmazonDynamoDBClient dynamoDB;
 	AWSCredentials credentials;
 	public DynamoFilesURL(){
@@ -43,18 +43,14 @@ public class DynamoFilesURL {
 	public void setFileURL(String fileURL) {
 		FileURL = fileURL;
 	}
-	public String getOwner() {
-		return Owner;
-	}
-	public void setOwner(String owner) {
-		Owner = owner;
-	}
+	
 
-	public void insert(String FileURL, String Owner){
+	public void insert(String FileURL, String Version){
 
 		Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
 		item.put("FileURL", new AttributeValue(FileURL));
-		item.put("Owner", new AttributeValue(Owner));
+		item.put("Version", new AttributeValue(Version));
+
 
 		PutItemRequest putItemRequest = new PutItemRequest("FilesURL", item);
 		PutItemResult putItemResult = dynamoDB.putItem(putItemRequest);
@@ -73,7 +69,7 @@ public class DynamoFilesURL {
 		ScanResult scanResult = dynamoDB.scan(scanRequest);
 
 		for(Map<String, AttributeValue> item : scanResult.getItems()) {
-			System.out.println(item.get("UserID"));
+			System.out.println(item.get("Version"));
 		}
 	}
 
