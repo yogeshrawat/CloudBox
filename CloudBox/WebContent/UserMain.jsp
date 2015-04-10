@@ -92,6 +92,25 @@
 		    var tbody = "";
 		    for(var i = 0; i < num_rows; i++)
 		    {
+		    	if(i>= <%= folders.size()%>)
+		    	{
+		    		var loc= '<%=S3BucketFolder.isEmpty()?"/":S3BucketFolder%>';
+		    		var defaultFileDir;
+		    		if(loc != "/")
+		    		{
+		    			defaultFileDir = "http://localhost:8080/CloudBox/download?"+
+		    			 "loc="+loc+
+						 "&name="+folder[i]+
+ 						 "&ver="+(fileVersion[i-<%= folders.size() %>]-1);
+		    		}
+		    		else
+		    		{
+		    			defaultFileDir = "http://localhost:8080/CloudBox/download?"+
+						 "name="+folder[i]+
+ 						 "&ver="+(fileVersion[i-<%= folders.size() %>]-1);
+		    		}
+		    	}
+		    	
 		        tbody += "<tr>";
 		        for(var j = 0; j < num_cols; j++)
 		        {
@@ -125,10 +144,7 @@
 		        			tbody += "<td>";
 		        			 if(i >= <%=folders.size()%>)
 		        			 {
-						            tbody += "<a href='http://travellogenv-5bwgdxfrha.elasticbeanstalk.com/download?loc="+<%=S3BucketFolder%>+
-						            		      "&name="+folder[i]+
-						            		      "&ver="+(fileVersion[i-<%= folders.size() %>]-1)+
-						            		      "' class='ui button download' style='display:none;'>"+
+						            tbody += "<a href='"+defaultFileDir+"' class='ui button download' style='display:none;'>"+
 						            		 "	<i class='download blue icon'></i>"+
 						            		 "</a>";    	
 				             }
@@ -161,7 +177,7 @@
 				            	            "<i class='share alternate icon'></i><p>share</p>"+
 				            	            "<div class='menu'>"+
 				            	            "   <div class='item fb share'>"+
-				            	            "		<div class='fb-share-button' data-href='' data-layout='button'>"+
+				            	            "		<div class='fb-share-button' data-href='"+defaultFileDir+"' data-layout='button'>"+
 				            	            "		</div>"+
 				            	            "	</div>"+
 				            	            "   <div class='item'>"+

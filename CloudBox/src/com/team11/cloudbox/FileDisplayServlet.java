@@ -59,11 +59,11 @@ public class FileDisplayServlet extends HttpServlet {
 			    else
 			    {	if(curFolder.isEmpty())
 				    {
-			    		session.setAttribute("currentDir", subFolderName);
+			    		session.setAttribute("currentDir", subFolderName+"/");
 				    }
 				    else
 				    {
-				    	session.setAttribute("currentDir", curFolder +"/"+ subFolderName);
+				    	session.setAttribute("currentDir", curFolder+subFolderName+"/");
 				    }
 			    
 			    	return;
