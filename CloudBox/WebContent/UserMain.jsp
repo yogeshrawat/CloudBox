@@ -98,15 +98,15 @@
 		    		var defaultFileDir;
 		    		if(loc != "/")
 		    		{
-		    			defaultFileDir = "http://localhost:8080/CloudBox/download?"+
+		    			defaultFileDir = "http://travellogenv-5bwgdxfrha.elasticbeanstalk.com/download?"+
 		    			 "loc="+loc+
 						 "&name="+folder[i]+
  						 "&ver="+(fileVersion[i-<%= folders.size() %>]-1);
 		    		}
 		    		else
 		    		{
-		    			defaultFileDir = "http://localhost:8080/CloudBox/download?"+
-						 "name="+folder[i]+
+		    			defaultFileDir = "http://travellogenv-5bwgdxfrha.elasticbeanstalk.com/download?"+
+		    			 "name="+folder[i]+
  						 "&ver="+(fileVersion[i-<%= folders.size() %>]-1);
 		    		}
 		    	}
