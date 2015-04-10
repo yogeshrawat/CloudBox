@@ -163,7 +163,7 @@ public class S3Operations{
 		Folders temp ;
 		for(String s : str){
 			System.out.println(s);
-			
+			s = s.replaceAll(prefix, "").trim();
 			temp = new Folders(bucketName, s.replaceAll("\\W", "").trim().toLowerCase());
 			folders.add(temp);
 
@@ -196,15 +196,16 @@ public class S3Operations{
 			String key = s.getKey();
 			if(prefix.length()>0)
 				key = s.getKey().replaceAll(prefix, "").trim();
-			
-			if(key.length()>0 && !key.contains("/") && Character.isDigit(key.charAt(0))){
-				System.out.println(key);
-				String t = key;
-				key = key.substring(1);
-				int ver = Character.getNumericValue(t.charAt(0));
-				temp = new Files(key,ver,s.getSize());
-				files.add(temp);
-			}
+				
+				if(key.length()>0 && !key.contains("/") && Character.isDigit(key.charAt(0))){
+					System.out.println(key);
+					
+					String t = key;
+					key = key.substring(1);
+					int ver = (Character.getNumericValue(t.charAt(0)));
+					temp = new Files(key,ver,s.getSize());
+					files.add(temp);
+				}
 				
 		}
 		
@@ -218,12 +219,16 @@ public class S3Operations{
 	 * @return - public URL of the file
 	 */
 	public S3ObjectInputStream downloadFile(String bucketName, String filePath,String fileName, String version){
-		
-		String finalPath = filePath+version+fileName;
+		String finalPath;
+		//if(filePath.length()>0)
+		 finalPath= filePath+version+fileName;
+		//else
+		//	finalPath = SUFFIX + version + fileName;
 		
 		S3Object object = s3client.getObject(new GetObjectRequest(bucketName, finalPath));
 		
 		setInputStreamLength((int)object.getObjectMetadata().getContentLength());
+		System.out.println(getInputStreamLength());
 		return object.getObjectContent();
 		/*File file = new File("C:\\my.txt");
 		s3client.getObject(new GetObjectRequest(bucketName, filePath) , file);
@@ -245,7 +250,16 @@ public class S3Operations{
 	 */
 	public void setInputStreamLength(int inputStreamLength) {
 		this.inputStreamLength = inputStreamLength;
-	} 
+	}
+	
+	public void removeFile(String bucketName, String filePath){
+		s3client.deleteObject(bucketName, filePath);
+	}
+	
+	public void shareFile(String sourceBucketName,String sourceKey,
+			String destinationBucketName, String destinationKey){
+		s3client.copyObject(sourceBucketName, sourceKey, destinationBucketName, destinationKey);
+	}
 	
 	
 }

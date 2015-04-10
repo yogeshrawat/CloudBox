@@ -85,7 +85,11 @@ public class S3Folder {
 		S3Operations oprn = new S3Operations();
 		
 		//"10vcredist".substring(0,"abc.def.ghi".indexOf(c)-1);
-		
+		ArrayList<Files> f = oprn.getFiles("1001syogesh", "cboxfoo/");
+		for(Files fr : f){
+			System.out.println(fr.getFileName());
+			System.out.println(fr.getVersion());
+		}
 	//	System.out.println(oprn.downloadFile("1001syogesh","cboxfoo/cboximage"));
 	//	System.out.println(oprn.getFolders("1001syogesh", "1001syogesh").size());
 		//s3Folder.createRootBucket("1001");
@@ -101,7 +105,7 @@ public class S3Folder {
 		//s3Folder.uploadFile("1001syogesh", file.getName(),input,"cboxfoo/testing/",m);
 	
 		
-		S3ObjectInputStream s3 = s3oprnObj.downloadFile("1001syogesh", "cboxfoo/testing/", "vcredist.bmp", "1");
+	//	S3ObjectInputStream s3 = s3oprnObj.downloadFile("1001syogesh", "", "issue", "1");
 		
 		
 		InputStream inputStream = null;
@@ -146,15 +150,12 @@ public class S3Folder {
 		}*/
 		//	s3client.deleteBucket("1005spratikbidkar");
 		/*ArrayList<Files> f = s3oprnObj.getFiles("1001syogesh", "");
-		for(Files fr : f){
-			System.out.println(fr.getFileName());
-			System.out.println(fr.getVersion());
-		}*/
 	//	System.out.println(s3oprnObj.listKeysInDirectory("1001syogesh", FILE_NAME_PREFIX));
 		
 //		ObjectListing objectListing = s3client.listObjects(new ListObjectsRequest().
 //			    withBucketName("1001syogesh"));
 //		System.out.println(oprn.getFiles("1001", "1001syogesh").size());
+		}*/
 		//for (final S3ObjectSummary objectSummary: s3oprnObj.listKeysInDirectory("unitedawesome", "unitedawesome/myfolder")){
 		 //   final String key = objectSummary.getKey();
 		     //if(key.contains(FOLDER_SUFFIX))
