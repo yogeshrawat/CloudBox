@@ -38,7 +38,7 @@ public class S3Folder {
 	 * @param locationOnS3 - path where the file has to be stored
 	 * @throws FileNotFoundException
 	 */
-	public void uploadFile(String bucketName, String fileName, String fileLocation,String locationOnS3 ) throws FileNotFoundException{
+	public void uploadFile(String bucketName, String fileName, File file,String locationOnS3 ) throws FileNotFoundException{
 		DynamoFilesURL dfu = new DynamoFilesURL();
 		ArrayList<Files> temp = s3oprnObj.getFiles(bucketName, locationOnS3);
 		int version = 0;
@@ -54,7 +54,7 @@ public class S3Folder {
 			else{
 				 versionFileName = "1"+fileName;
 				 PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + versionFileName, 
-						 new File(fileLocation));
+						 file);
 				 s3client.putObject(pr);
 				 
 				 break;
@@ -64,7 +64,7 @@ public class S3Folder {
 		System.out.println("path"+(locationOnS3+versionFileName));
 		dfu.insert((locationOnS3+versionFileName),"1");
 		PutObjectRequest pr = new PutObjectRequest(bucketName, locationOnS3 + versionFileName, 
-				new File("E:\\er.txt"));
+				file);
 		s3client.putObject(pr);
 	}
 	
