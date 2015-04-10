@@ -69,7 +69,7 @@ public class S3Folder {
 		
 //		ObjectListing objectListing = s3client.listObjects(new ListObjectsRequest().
 //			    withBucketName("1001syogesh"));
-		System.out.println(oprn.getFilesFromBucket("1001", "1001syogesh").size());
+		System.out.println(oprn.getFiles("1001", "1001syogesh").size());
 		//for (final S3ObjectSummary objectSummary: s3oprnObj.listKeysInDirectory("unitedawesome", "unitedawesome/myfolder")){
 		 //   final String key = objectSummary.getKey();
 		     //if(key.contains(FOLDER_SUFFIX))

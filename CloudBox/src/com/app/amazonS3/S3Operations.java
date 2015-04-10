@@ -206,25 +206,27 @@ public class S3Operations{
 	 * @param prefix - for bucket level should be the bucketname itself
 	 * @return List of file objects that are present in the bucket level
 	 */
-	public ArrayList<Files> getFilesFromBucket(String userId, String prefix){
-		String bucketName = getBucketNameFromUserID(userId);
+	public ArrayList<Files> getFiles(String bucketName, String prefix){
+		//String bucketName = getBucketNameFromUserID(userId);
 		ArrayList<Files> files = new ArrayList<Files>();
 		Files temp ;
 		String delimiter = "/";
-	    if (!prefix.endsWith(delimiter)) {
+	    /*if (!prefix.endsWith(delimiter)) {
 	        prefix += delimiter;
-	    }
+	    }*/
 
 	    ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
-	            .withBucketName(bucketName);
+	            .withBucketName(bucketName).withPrefix(prefix).withDelimiter(delimiter);
 	    ObjectListing objects = s3client.listObjects(listObjectsRequest);
 	    
 	    List<S3ObjectSummary> temporary = objects.getObjectSummaries();
-		for (final S3ObjectSummary objectSummary: temporary){
-			String key = objectSummary.getKey();
+		for ( S3ObjectSummary s : temporary){
+			String key = s.getKey().replaceAll(prefix, "").trim();
 			
-			if(!key.contains("/")){
-				 {temp = new Files(key,1,objectSummary.getSize());
+			//System.out.println(key);
+			if(key.length()!=0 && !key.contains("/")){
+				System.out.println(key);
+				 {temp = new Files(key,1,s.getSize());
 				 files.add(temp);
 				 }
 			}
