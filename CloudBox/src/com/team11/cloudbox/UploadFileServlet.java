@@ -28,8 +28,8 @@ public class UploadFileServlet extends HttpServlet {
 
 	private boolean isMultipart;
 	//private String filePath;
-	private int maxFileSize = 50 * 1024;
-	private int maxMemSize = 4 * 1024;
+//	private int maxFileSize = 50 * 1024;
+//	private int maxMemSize = 4 * 1024;
 	//private File file;
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -66,14 +66,14 @@ public class UploadFileServlet extends HttpServlet {
 		
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		// maximum size that will be stored in memory
-		factory.setSizeThreshold(maxMemSize);
+//		factory.setSizeThreshold(maxMemSize);
 		// Location to save data that is larger than maxMemSize.
-		factory.setRepository(new File("~/temp"));
+//		factory.setRepository(new File("~/temp"));
 
 		// Create a new file upload handler
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		// maximum file size to be uploaded.
-		upload.setSizeMax(maxFileSize);
+//		upload.setSizeMax(maxFileSize);
 
 		try {
 			// Parse the request to get file items.
@@ -91,7 +91,7 @@ public class UploadFileServlet extends HttpServlet {
 					/*String fieldName = fi.getFieldName();
 					boolean isInMemory = fi.isInMemory();*/
 					
-					String contentType = fi.getContentType();
+//					String contentType = fi.getContentType();
 					long sizeInBytes = fi.getSize();
 					InputStream input =fi.getInputStream();
 					
@@ -112,7 +112,7 @@ public class UploadFileServlet extends HttpServlet {
 					S3Folder s3Folder = new S3Folder();
 					ObjectMetadata meta = new ObjectMetadata();
 					meta.setContentLength(sizeInBytes);
-					meta.setContentType(contentType);
+//					meta.setContentType(contentType);
 					
 					boolean complete = s3Folder.uploadFile(s3BucketHome, fileName, input, curFolder, meta);
 					if(complete)

@@ -98,17 +98,20 @@
 		    		var defaultFileDir;
 		    		if(loc != "/")
 		    		{
-		    			defaultFileDir = "http://travellogenv-5bwgdxfrha.elasticbeanstalk.com/download?"+
+		    			defaultFileDir = "http://travellog-env.elasticbeanstalk.com/download?"+
 		    			 "loc="+loc+
 						 "&name="+folder[i]+
- 						 "&ver="+(fileVersion[i-<%= folders.size() %>]);
+ 						 "&ver="+(fileVersion[i-<%= folders.size() %>])+
+ 						 "&defaultDir="+'<%= S3BucketHome%>';
 		    		}
 		    		else
 		    		{
-		    			defaultFileDir = "http://travellogenv-5bwgdxfrha.elasticbeanstalk.com/download?"+
+		    			defaultFileDir = "http://travellog-env.elasticbeanstalk.com/download?"+
 		    			 "name="+folder[i]+
- 						 "&ver="+(fileVersion[i-<%= folders.size() %>]);
+ 						 "&ver="+(fileVersion[i-<%= folders.size() %>])+
+ 						 "&defaultDir="+'<%= S3BucketHome%>';
 		    		}
+		    		
 		    	}
 		    	
 		        tbody += "<tr>";

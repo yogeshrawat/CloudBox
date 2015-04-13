@@ -56,7 +56,7 @@
 	</div>
 	
 	<div id="fbShareLike">
-		<div class="fb-like" data-href="http://travellogenv-5bwgdxfrha.elasticbeanstalk.com/CloudBoxHome.jsp" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+		<div class="fb-like" data-href="http://travellog-env.elasticbeanstalk.com/CloudBoxHome.jsp" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
 	</div>
 	
 	<div id="logout_btns">

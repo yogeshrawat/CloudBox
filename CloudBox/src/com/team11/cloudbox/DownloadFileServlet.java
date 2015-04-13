@@ -35,6 +35,7 @@ public class DownloadFileServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		boolean isCredentialValid;
 		HttpSession session = request.getSession(true);
+    	String s3BucketHome = "";
 		
 		if(((session.getAttribute("isFBLoggedIn")!=null && session.getAttribute("isFBLoggedIn").equals(true)))
 				||((session.getAttribute("isCBLoggedIn") != null && session.getAttribute("isCBLoggedIn").equals(true))))
@@ -67,16 +68,18 @@ public class DownloadFileServlet extends HttpServlet {
 					}
 					
 					String[] parameters = queryUrl.split("&");
-					if(parameters.length >= 3)
+					if(parameters.length >= 4)
 					{
 						folder = urlSpecialCharRevert(parameters[0].substring(parameters[0].indexOf('=')+1));
 						file  = urlSpecialCharRevert(parameters[1].substring(parameters[1].indexOf('=')+1));
 						version = urlSpecialCharRevert(parameters[2].substring(parameters[2].indexOf('=')+1));
+						s3BucketHome = urlSpecialCharRevert(parameters[3].substring(parameters[3].indexOf('=')+1));
 					}
-					else if(parameters.length >= 2)
+					else if(parameters.length >= 3)
 						{
 							file  = urlSpecialCharRevert(parameters[0].substring(parameters[0].indexOf('=')+1));
 							version = urlSpecialCharRevert(parameters[1].substring(parameters[1].indexOf('=')+1));
+							s3BucketHome = urlSpecialCharRevert(parameters[2].substring(parameters[2].indexOf('=')+1));
 						}
 						else
 						{
@@ -103,14 +106,12 @@ public class DownloadFileServlet extends HttpServlet {
 				}
 				file=(String) request.getParameter("name");
 				version = (String) request.getParameter("ver");
-				System.out.println(folder+","+file+","+version);
+				s3BucketHome = (String) request.getParameter("defaultDir");
+				System.out.println(folder+","+file+","+version+","+s3BucketHome);
 			}
 			
 			//Download logic
-			String userId = (String) session.getAttribute("userID");	    	
 	    	S3Operations s3Operations = new S3Operations();
-	    	String s3BucketHome = s3Operations.getBucketNameFromUserID(userId);
-	    	
 	    	InputStream inStream = s3Operations.downloadFile(s3BucketHome, folder, file, version);
 	    	int fileLength = s3Operations.getInputStreamLength();
 	        

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import com.amazonaws.util.json.JSONException;
 import com.amazonaws.util.json.JSONObject;
+import com.app.amazonS3.S3Operations;
 
 /**
  * Servlet implementation class FileURlParseServlet
@@ -32,6 +33,10 @@ public class FileURlParseServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
+		
+		String userId = (String) session.getAttribute("userID");	    	
+    	S3Operations s3Operations = new S3Operations();
+    	String s3BucketHome = s3Operations.getBucketNameFromUserID(userId);
 	    
 	    String fileName= request.getParameter("FileName");
 	    String version= request.getParameter("Version");
@@ -50,9 +55,9 @@ public class FileURlParseServlet extends HttpServlet {
 	    
 	    String URL="";
 	    if(!curFolder.isEmpty())
-	    	URL = downloadEntry+"?"+"loc="+folderUrl+"&name="+fileUrl+"&ver="+verUrl;
+	    	URL = downloadEntry+"?"+"loc="+folderUrl+"&name="+fileUrl+"&ver="+verUrl+"&defaultDir="+s3BucketHome;
 	    else
-	    	URL = downloadEntry+"?"+"name="+fileUrl+"&ver="+verUrl;
+	    	URL = downloadEntry+"?"+"name="+fileUrl+"&ver="+verUrl+"&defaultDir="+s3BucketHome;
 	    
 		JSONObject returnURl = new JSONObject();
 		try {
